@@ -23,13 +23,13 @@ test_async:
   script:
     - npm init -y
     - npm install --save-dev typescript
-    - node ./specs/start.js ./specs/async.spec.js
+    # - node ./specs/start.js ./specs/async.spec.js
 
 test_db:
   script:
     - npm init -y
     - npm install --save-dev typescript
-    - node ./specs/start.js ./specs/db-postgres.spec.js
+    # - node ./specs/start.js ./specs/db-postgres.spec.js
 
 # build-job:
 #   stage: build
