@@ -29,26 +29,26 @@ test_db:
     - npm install
     - node ./specs/start.js ./specs/db-postgres.spec.js
 
-build-job:
-  stage: build
-  script:
-    - echo "Running npm..."
-    - npm run
-    - echo "Finished running npm..."
+# build-job:
+#   stage: build
+#   script:
+#     - echo "Running npm..."
+#     - npm run
+#     - echo "Finished running npm..."
 
 
-unit_test:
-    stage: test
-    script:
-        - echo "Running tests..."
-        - npm test
+# unit_test:
+#     stage: test
+#     script:
+#         - echo "Running tests..."
+#         - npm test
 
-staging_job:
-    stage: staging
-    script: 
-        - npm update
+# staging_job:
+#     stage: staging
+#     script: 
+#         - npm update
 
-deploy_job:
-    stage: deploy
-    script:
-        - echo "Deploying web app..."
+# deploy_job:
+#     stage: deploy
+#     script:
+#         - echo "Deploying web app..."
