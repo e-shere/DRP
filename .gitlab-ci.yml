@@ -36,7 +36,7 @@ deploy-job:
   script:     
     - echo "Deploying application to Heroku..."
     - gem install dpl --verbose # comment this line when shared runners are disabled
-    - dpl --provider=heroku --app=our-beautiful-app --api-key=$HEROKU_API_KEY 
+    - dpl --provider=heroku --app=claraify --api-key=$HEROKU_API_KEY 
     - echo "Application successfully deployed to Heroku" 
 
 
