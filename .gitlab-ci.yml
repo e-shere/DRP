@@ -29,6 +29,17 @@ test_db:
     - npm install --save-dev typescript
     # - node ./specs/start.js ./specs/db-postgres.spec.js
 
+# deploys to production
+deploy-job:
+  image: ruby:latest # comment this line when shared runners are disabled
+  stage: deploy 
+  script:     
+    - echo "Deploying application to Heroku..."
+    - gem install dpl --verbose # comment this line when shared runners are disabled
+    - dpl --provider=heroku --app=our-beautiful-app --api-key=$HEROKU_API_KEY 
+    - echo "Application successfully deployed to Heroku" 
+
+
 # build-job:
 #   stage: build
 #   script:
