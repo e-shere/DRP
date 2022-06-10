@@ -12,15 +12,23 @@ const endpointUri = REDIS_ENDPOINT_URI
     ? sanitizeRedisUrl(REDIS_ENDPOINT_URI)
     : `${sanitizeRedisUrl(REDIS_HOST)}:${REDIS_PORT}`;
 
-const password = REDIS_PASSWORD || undefined
+const password = REDIS_PASSWORD || undefined;
 
 // ==== end of retrieve env variables ====
 
-const PORT = 3001; // process.env.PORT || 3001; uncomment for deployment
+const PORT = 3001; // uncomment for deployment
 
 const app = express();
 
 app.use(express.json());
+
+const path = require('path')
+// Serve static files from the React frontend app
+app.use(express.static(path.join(__dirname, '../client/build')))
+// Anything that doesn't match the above, send back index.html
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname + '/../client/build/index.html'))
+})
 
 app.get("/api", (req, res) => {
     res.json({ message: "Hello from server!" });
