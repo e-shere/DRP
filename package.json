@@ -1,8 +1,12 @@
 {
-  "name": "drp",
-  "version": "1.0.0",
+  "name": "claraify",
+  "version": "0.1.0",
+  "private": true,
   "description": "Designing for Real People project.",
   "main": "index.js",
+  "engines": {
+    "node": "18.3.0"
+  },
   "scripts": {
     "start": "node server/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
