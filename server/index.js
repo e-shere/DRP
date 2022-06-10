@@ -4,19 +4,19 @@ const redis = require('redis');
 // ==== retrieve env variables ====
 require('dotenv').config();
 
-// const sanitizeRedisUrl = url => url.replace(/^(redis\:\/\/)/, '');
+const sanitizeRedisUrl = url => url.replace(/^(redis\:\/\/)/, '');
 
 const { REDIS_ENDPOINT_URI, REDIS_HOST, REDIS_PORT, REDIS_PASSWORD } = process.env;
 
-// const endpointUri = REDIS_ENDPOINT_URI
-//     ? sanitizeRedisUrl(REDIS_ENDPOINT_URI)
-//     : `${sanitizeRedisUrl(REDIS_HOST)}:${REDIS_PORT}`;
+const endpointUri = REDIS_ENDPOINT_URI
+    ? sanitizeRedisUrl(REDIS_ENDPOINT_URI)
+    : `${sanitizeRedisUrl(REDIS_HOST)}:${REDIS_PORT}`;
 
-// const password = REDIS_PASSWORD || undefined
+const password = REDIS_PASSWORD || undefined
 
 // ==== end of retrieve env variables ====
 
-const PORT = process.env.PORT || 3001;
+const PORT = 3001 // process.env.PORT || 3001; uncomment for deployment
 
 const app = express();
 
@@ -25,7 +25,7 @@ app.get("/api", (req, res) => {
 });
 
 app.get("/getall", async (req, res) => {
-    client = redis.createClient();
+    client = redis.createClient(endpointUri, password);
     console.log("getall: checkpoint [1]");
     await client.connect();
     console.log("getall: checkpoint [2]");
