@@ -16,7 +16,7 @@ const { REDIS_ENDPOINT_URI, REDIS_HOST, REDIS_PORT, REDIS_PASSWORD } = process.e
 
 // ==== end of retrieve env variables ====
 
-const PORT = 3001; // process.env.PORT || 3001;
+const PORT = process.env.PORT || 3001;
 
 const app = express();
 
