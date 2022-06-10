@@ -42,12 +42,13 @@ app.get("/getall", async (req, res) => {
     }));
 });
 
-app.get("/set", async (req, res) => {
+app.post("/set", async (req, res) => {
     client = redis.createClient();
     console.log("set: checkpoint [1]");
     await client.connect();
     console.log("set: checkpoint [2]");
-    client.set('demo', req)
+    // const {font, fontSize, bgColor} = req.body;
+    client.set('demo', req.body)
     // res.json({ message: await client.get('demo', (error, styles) => {
     //     if (error) console.error(error);
     //     if (styles != null) {

@@ -59,11 +59,13 @@ function App() {
 }
 
 function Styles(style) {
-  const rows = [];
-  if (style == null) return []
-  else return [(<tr>
-  <td>{"Font: " + style.font + ", font size: " + style.fontSize + ", background color: " + style.bgColor}</td>
-</tr>)];
+  if (style == null) {
+    return [];
+  } else {
+    return [(
+      <tr><td>{"Font: " + style.font + ", font size: " + style.fontSize + ", background color: " + style.bgColor}</td></tr>
+    )];
+  }
 }
 
 function Form() {
@@ -75,20 +77,21 @@ function Form() {
     event.preventDefault(); // Stop page refresh
     // alert("Style: " + font + ", " + fontSize + ", " + bgColor);
 
-    alert(JSON.stringify(new Style(font, fontSize, bgColor)));
+    const style = new Style(font, fontSize, bgColor);
+    // const jsonStyle = JSON.stringify();
+    // alert(jsonStyle);
     
-    /*
-    fetch('http://localhost:3000/game', {
+    
+    fetch("/set", {
       method: 'POST',
-      body: JSON.stringify(formData),
+      body: style,
     })
       .then((res) => res.json())
       .then((result) => {
-        console.log(result)
-        setFormData('')
+        alert("The db has been updated with 'Style(" + font + ", " + fontSize + ", " + bgColor + ")'");
       })
       .catch((err) => console.log('error'))
-    */
+    
 
 
     setFont("");
