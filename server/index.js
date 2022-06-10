@@ -16,7 +16,7 @@ const password = REDIS_PASSWORD || undefined
 
 // ==== end of retrieve env variables ====
 
-const PORT = 3001 // process.env.PORT || 3001; uncomment for deployment
+const PORT = 3001; // process.env.PORT || 3001; uncomment for deployment
 
 const app = express();
 
