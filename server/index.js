@@ -24,18 +24,17 @@ app.get("/api", (req, res) => {
     res.json({ message: "Hello from server!" });
 });
 
-const client = redis.createClient();
-
 app.get("/all", async (req, res) => {
+    client = redis.createClient();
     console.log("I'm here");
     await client.connect();
     console.log("But not here");
-    client.get('demo', (error, styles) => {
-        if (error) console.error(error)
+    res.json({ message: await client.get('demo', (error, styles) => {
+        if (error) console.error(error);
         if (styles != null) {
-            return res.json(JSON.parse(styles))
+            return JSON.parse(styles);
         }
-    })
+    })});
     // res.json({ message: "Hello from server!" });
 });
 
