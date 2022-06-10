@@ -84,7 +84,12 @@ function Form() {
     
     fetch("/set", {
       method: 'POST',
-      body: style,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        data: style, // Use your own property name / key
+      }),
     })
       .then((res) => res.json())
       .then((result) => {

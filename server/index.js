@@ -20,12 +20,14 @@ const PORT = 3001; // process.env.PORT || 3001; uncomment for deployment
 
 const app = express();
 
+app.use(express.json());
+
 app.get("/api", (req, res) => {
     res.json({ message: "Hello from server!" });
 });
 
 app.get("/getall", async (req, res) => {
-    client = redis.createClient(endpointUri, password);
+    client = redis.createClient(); //endpointUri, password);
     console.log("getall: checkpoint [1]");
     await client.connect();
     console.log("getall: checkpoint [2]");
@@ -43,12 +45,15 @@ app.get("/getall", async (req, res) => {
 });
 
 app.post("/set", async (req, res) => {
+    const { data } = req.body;
     client = redis.createClient();
     console.log("set: checkpoint [1]");
     await client.connect();
     console.log("set: checkpoint [2]");
     // const {font, fontSize, bgColor} = req.body;
-    client.set('demo', req.body)
+    console.log(data);
+    client.set('demo', JSON.stringify(data));
+    // client.set('demo', "{\"font\":\"demoStyle\",\"fontSize\":12,\"bgColor\":\"red\"}");
     // res.json({ message: await client.get('demo', (error, styles) => {
     //     if (error) console.error(error);
     //     if (styles != null) {
