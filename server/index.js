@@ -25,7 +25,7 @@ app.get("/api", (req, res) => {
 });
 
 app.get("/getall", async (req, res) => {
-    client = redis.createClient(endpointUri, password);
+    client = redis.createClient();
     console.log("getall: checkpoint [1]");
     await client.connect();
     console.log("getall: checkpoint [2]");
