@@ -1,3 +1,4 @@
+/*
 import React from "react";
 import logo from './logo.svg';
 import './App.css';
@@ -22,11 +23,7 @@ function App() {
 }
 
 export default App;
-
-
-/*
-
-From master:
+*/
 
 import React from 'react';
 import { useState } from 'react';
@@ -42,27 +39,31 @@ class Style {
 
 function App() {
   const testRows = [new Style("Open Sans", 20, "orange"), new Style("Arial", 2, "green")]
+
+  const [styles, setStyles] = React.useState(null);
+
+  React.useEffect(() => {
+    fetch("/getall")
+      .then((res) => res.json())
+      .then((data) => { console.log(JSON.stringify(data)); setStyles(data); });
+  }, []);
+
   return (
     <div className="App">
       <header className="App-header">
-        {Form()}
-        {Styles(testRows)}
+        <div>{Form()}</div>
+        <div>{Styles(styles)}</div>
       </header>
     </div>
   );
 }
 
-function Styles(styles) {
+function Styles(style) {
   const rows = [];
-  for (let i = 0; i < styles.length; i++) {
-    const style = styles[i];
-    rows.push(
-      <tr>
-        <td>{style.font + ", " + style.fontSize + ", " + style.bgColor}</td>
-      </tr>
-    )
-  }
-  return rows;
+  if (style == null) return []
+  else return [(<tr>
+  <td>{JSON.stringify(style)}</td>
+</tr>)];
 }
 
 function Form() {
@@ -72,11 +73,35 @@ function Form() {
 
   const handleSubmit = event => {
     event.preventDefault(); // Stop page refresh
-    alert("Style: " + font + ", " + fontSize + ", " + bgColor);
+    // alert("Style: " + font + ", " + fontSize + ", " + bgColor);
+
+    alert(JSON.stringify(new Style(font, fontSize, bgColor)));
+    
+    /*
+    fetch('http://localhost:3000/game', {
+      method: 'POST',
+      body: JSON.stringify(formData),
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        console.log(result)
+        setFormData('')
+      })
+      .catch((err) => console.log('error'))
+    */
+
 
     setFont("");
     setFontSize("");
     setBgColor("");
+
+    
+    // ["{\"font\":\"io\",\"fontSize\":1,\"bgColor\":\"green\"}", "{\"font\":\"demoStyle\",\"fontSize\":12,\"bgColor\":\"red\"}"]
+    // React.useEffect(() => {
+    //   fetch("/getall")
+    //     .then((res) => res.json())
+    //     .then((data) => setData([]));
+    // }, []);
   }
 
   return (
@@ -94,6 +119,3 @@ function Form() {
 }
 
 export default App;
-
-
-*/

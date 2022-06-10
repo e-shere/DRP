@@ -24,18 +24,36 @@ app.get("/api", (req, res) => {
     res.json({ message: "Hello from server!" });
 });
 
-app.get("/all", async (req, res) => {
+app.get("/getall", async (req, res) => {
     client = redis.createClient();
-    console.log("I'm here");
+    console.log("getall: checkpoint [1]");
     await client.connect();
-    console.log("But not here");
-    res.json({ message: await client.get('demo', (error, styles) => {
+    console.log("getall: checkpoint [2]");
+    // styles = await client.lrange('demo', 0, -1, (error, styles) => {
+        
+    // });
+    // styles.forEach(v => console.log(v));
+    // res.json({});
+    res.json( await client.get('demo', (error, styles) => {
         if (error) console.error(error);
         if (styles != null) {
-            return JSON.parse(styles);
+            return styles;
         }
-    })});
-    // res.json({ message: "Hello from server!" });
+    }));
+});
+
+app.get("/set", async (req, res) => {
+    client = redis.createClient();
+    console.log("set: checkpoint [1]");
+    await client.connect();
+    console.log("set: checkpoint [2]");
+    client.set('demo', req)
+    // res.json({ message: await client.get('demo', (error, styles) => {
+    //     if (error) console.error(error);
+    //     if (styles != null) {
+    //         return JSON.parse(styles);
+    //     }
+    // })});
 });
 
 app.listen(PORT, () => {
