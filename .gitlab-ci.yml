@@ -4,14 +4,10 @@ stages:
   - staging
   - deploy
 
-
 image: node:latest
 
 services:
-  - mysql:latest
   - redis:latest
-  - postgres:latest
-
 
 cache:
   paths:
@@ -38,28 +34,3 @@ deploy-job:
     - gem install dpl --verbose # comment this line when shared runners are disabled
     - dpl --provider=heroku --app=claraify --api-key=$HEROKU_API_KEY 
     - echo "Application successfully deployed to Heroku" 
-
-
-# build-job:
-#   stage: build
-#   script:
-#     - echo "Running npm..."
-#     - npm run
-#     - echo "Finished running npm..."
-
-
-# unit_test:
-#     stage: test
-#     script:
-#         - echo "Running tests..."
-#         - npm test
-
-# staging_job:
-#     stage: staging
-#     script: 
-#         - npm update
-
-# deploy_job:
-#     stage: deploy
-#     script:
-#         - echo "Deploying web app..."
