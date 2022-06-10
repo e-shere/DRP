@@ -15,14 +15,14 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        {form()}
-        {styles(testRows)}
+        {Form()}
+        {Styles(testRows)}
       </header>
     </div>
   );
 }
 
-function styles(styles) {
+function Styles(styles) {
   const rows = [];
   for (let i = 0; i < styles.length; i++) {
     const style = styles[i];
@@ -35,7 +35,7 @@ function styles(styles) {
   return rows;
 }
 
-function form() {
+function Form() {
   const [font, setFont] = useState("Open Sans");
   const [bgColor, setBgColor] = useState("white");
   const [fontSize, setFontSize] = useState(12);
