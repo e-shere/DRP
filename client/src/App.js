@@ -45,7 +45,7 @@ function App() {
   React.useEffect(() => {
     fetch("/getall")
       .then((res) => res.json())
-      .then((data) => { console.log(JSON.stringify(data)); setStyles(data); });
+      .then((data) => { console.log(JSON.stringify(data)); setStyles(JSON.parse(data)); });
   }, []);
 
   return (
@@ -62,7 +62,7 @@ function Styles(style) {
   const rows = [];
   if (style == null) return []
   else return [(<tr>
-  <td>{JSON.stringify(style)}</td>
+  <td>{"Font: " + style.font + ", font size: " + style.fontSize + ", background color: " + style.bgColor}</td>
 </tr>)];
 }
 
