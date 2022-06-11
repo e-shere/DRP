@@ -1,29 +1,15 @@
-import React, { FormEvent, useState } from 'react';
-import './App.css';
+import { FormEvent, useState, useEffect } from "react";
+import { getAll as getStyle, setStyle } from "./styleDB";
+import Style from "./style";
 
-class Style {
-  font: string;
-  fontSize: number;
-  bgColor: string;
+import "./App.css";
 
-  constructor(font: string, fontSize: number, bgColor: string) {
-    this.font = font;
-    this.fontSize = fontSize;
-    this.bgColor = bgColor;
-  }
-}
+const PUSHER_URL = "https://js.pusher.com/7.0.3/pusher.min.js"
 
 function App() {
-  const [style, setStyles] = React.useState(new Style("Open Sans", 12, "white"));
+  const [style, setStyle] = useState(new Style("Open Sans", 12, "white"));
 
-  React.useEffect(() => {
-    fetch("/getall")
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(JSON.stringify(data));
-        setStyles(JSON.parse(data));
-      });
-  }, []);
+  useEffect(() => { setStyle(getStyle()) }, []);
 
   return (
     <div className="App">
@@ -57,14 +43,7 @@ function Form() {
 
   function handleSubmit(event: FormEvent) {
     event.preventDefault(); // Stop page refresh
-
-    fetch("/set", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", },
-      body: JSON.stringify({ data: new Style(font, fontSize, bgColor), }),
-    })
-      .then(res => res.json())
-      .catch(() => console.log("Error when posting style"))
+    setStyle(new Style(font, fontSize, bgColor));
   }
 
   return (
