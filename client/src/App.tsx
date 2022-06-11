@@ -2,9 +2,9 @@ import React, { FormEvent, useState } from 'react';
 import './App.css';
 
 class Style {
-  font: string
-  fontSize: number
-  bgColor: string
+  font: string;
+  fontSize: number;
+  bgColor: string;
 
   constructor(font: string, fontSize: number, bgColor: string) {
     this.font = font;
@@ -19,7 +19,10 @@ function App() {
   React.useEffect(() => {
     fetch("/getall")
       .then((res) => res.json())
-      .then((data) => { console.log(JSON.stringify(data)); setStyles(JSON.parse(data)); });
+      .then((data) => {
+        console.log(JSON.stringify(data));
+        setStyles(JSON.parse(data));
+      });
   }, []);
 
   return (
@@ -28,7 +31,7 @@ function App() {
         <div>
           {Form()}
         </div>
-        <div className="style-table">
+        <div className="Style-table">
           {Styles(style)}
         </div>
         {/* Not sure what to put here */}
@@ -52,36 +55,38 @@ function Form() {
   const [bgColor, setBgColor] = useState("#FFFFFF");
   const [fontSize, setFontSize] = useState(12);
 
-  const handleSubmit: (event: FormEvent) => void = event => {
+  function handleSubmit(event: FormEvent) {
     event.preventDefault(); // Stop page refresh
-    const style = new Style(font, fontSize, bgColor);
 
     fetch("/set", {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        data: style,
-      }),
+      method: "POST",
+      headers: { "Content-Type": "application/json", },
+      body: JSON.stringify({ data: new Style(font, fontSize, bgColor), }),
     })
-      .then((res) => res.json())
-      .then(() => { alert("The db has been updated with 'Style(" + font + ", " + fontSize + ", " + bgColor + ")'") })
-      .catch(() => console.log('error'))
+      .then(res => res.json())
+      .catch(() => console.log("Error when posting style"))
   }
 
   return (
     <form onSubmit={handleSubmit}>
       <label>Font</label>
-      <select value={font} name="font" onChange={event => setFont(event.target.value)}>
+      <select value={font} onChange={event => setFont(event.target.value)}>
         <option value="Open Sans">Open Sans</option>
         <option value="Comic Sans">Comic Sans</option>
         <option value="Roboto">Roboto</option>
       </select>
       <label>Font Size</label>
-      <input type="number" value={fontSize} name="fontSize" onChange={event => setFontSize(Number(event.target.value))} placeholder="font size" />
+      <input
+        type="number"
+        value={fontSize}
+        onChange={event => setFontSize(Number(event.target.value))} placeholder="font size"
+      />
       <label>Background Colour</label>
-      <input type="color" value={bgColor} name="bgColor" onChange={event => setBgColor(event.target.value)} />
+      <input
+        type="color"
+        value={bgColor}
+        onChange={event => setBgColor(event.target.value)}
+      />
       <input type="submit" value="Submit" />
     </form>
   );
