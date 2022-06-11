@@ -25,12 +25,15 @@ function App() {
 export default App;
 */
 
-import React from 'react';
+import React, { FormEvent } from 'react';
 import { useState } from 'react';
 import './App.css';
 
 class Style {
-  constructor(font, fontSize, bgColor) {
+  font: string
+  fontSize: number
+  bgColor: string
+  constructor(font: string, fontSize: number, bgColor: string) {
     this.font = font;
     this.fontSize = fontSize;
     this.bgColor = bgColor;
@@ -40,7 +43,7 @@ class Style {
 function App() {
   const testRows = [new Style("Open Sans", 20, "orange"), new Style("Arial", 2, "green")]
 
-  const [styles, setStyles] = React.useState(null);
+  const [styles, setStyles] = React.useState(new Style("Open Sans", 0, "white"));
 
   React.useEffect(() => {
     fetch("/getall")
@@ -52,13 +55,14 @@ function App() {
     <div className="App">
       <header className="App-header">
         <div>{Form()}</div>
-        <div>{Styles(styles)}</div>
+        <div>{Styles(styles)}</div> 
+        {/* Not sure what to put here */}
       </header>
     </div>
   );
 }
 
-function Styles(style) {
+function Styles(style: Style) {
   if (style == null) {
     return [];
   } else {
@@ -73,7 +77,7 @@ function Form() {
   const [bgColor, setBgColor] = useState("white");
   const [fontSize, setFontSize] = useState(12);
 
-  const handleSubmit = event => {
+  const handleSubmit: (event: FormEvent) => void = event => {
     event.preventDefault(); // Stop page refresh
     // alert("Style: " + font + ", " + fontSize + ", " + bgColor);
 
@@ -100,7 +104,7 @@ function Form() {
 
 
     setFont("");
-    setFontSize("");
+    setFontSize(0);
     setBgColor("");
 
     
@@ -119,7 +123,7 @@ function Form() {
         <option value="Comic Sans">Comic Sans</option>
         <option value="Roboto">Roboto</option>
       </select>
-      <input type="number" value={fontSize} name="font_size" onChange={event => setFontSize(event.target.value)} placeholder="font size" />
+      <input type="number" value={fontSize} name="font_size" onChange={event => setFontSize(Number(event.target.value))} placeholder="font size" />
       <input type="text" value={bgColor} name="bgColor" onChange={event => setBgColor(event.target.value)} />
       <input type="submit" value="Submit" />
     </form>
