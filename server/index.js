@@ -4,29 +4,21 @@ const redis = require('redis');
 // ==== retrieve env variables ====
 require('dotenv').config();
 
-const { REDIS_ENDPOINT_URI, REDIS_HOST, REDIS_PORT, REDIS_PASSWORD, REDIS_USER } = process.env;
-
-const endpointUri = REDIS_ENDPOINT_URI
-    ? REDIS_ENDPOINT_URI
-    : `${REDIS_HOST}:${REDIS_PORT}`;
-
-const password = REDIS_PASSWORD || undefined
+const { REDIS_HOST, REDIS_PORT, REDIS_PASSWORD, REDIS_USER } = process.env;
 
 const REDIS_URL=`redis://${REDIS_USER}:${REDIS_PASSWORD}@${REDIS_HOST}:${REDIS_PORT}`
 
 // ==== end of retrieve env variables ====
 
 const PORT = process.env.PORT || 4001;
-const BUILD = '../client/build/'
-
+const BUILD_DIR = '../client/build/'
 const app = express();
+const path = require('path')
 
 app.use(express.json());
 
-const path = require('path')
-
 // Serve static files from the React frontend app
-app.use(express.static(path.join(__dirname, BUILD)))
+app.use(express.static(path.join(__dirname, BUILD_DIR)))
 
 app.get("/api", (req, res) => {
     res.json({ message: "Hello from server!" });
@@ -49,7 +41,7 @@ app.get("/getall", async (req, res) => {
 
 // Anything that doesn't match the above, send back index.html
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname + BUILD + 'index.html'))
+    res.sendFile(path.join(__dirname + BUILD_DIR + 'index.html'))
 })
 
 app.post("/set", async (req, res) => {
