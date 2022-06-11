@@ -9,6 +9,11 @@
 # testing
 /coverage
 
+# production
+/build
+/client/build
+/extension/build
+
 # misc
 .DS_Store
 .env.local
