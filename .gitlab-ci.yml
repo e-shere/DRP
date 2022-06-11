@@ -1,7 +1,5 @@
 stages:
   - test
-  - build
-  - staging
   - deploy
 
 image: node:latest
@@ -9,21 +7,17 @@ image: node:latest
 services:
   - redis:latest
 
-cache:
-  paths:
-    - node_modules/
-
-test_async:
+test-async:
+  stage: test 
   script:
     - npm init -y
     - npm install --save-dev typescript
-    # - node ./specs/start.js ./specs/async.spec.js
 
-test_db:
+test-db:
+  stage: test 
   script:
     - npm init -y
     - npm install --save-dev typescript
-    # - node ./specs/start.js ./specs/db-postgres.spec.js
 
 # deploys to production
 deploy-job:

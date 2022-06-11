@@ -1,33 +1,26 @@
-import React, { FormEvent } from 'react';
-import { useState } from 'react';
-import './App.css';
+import { FormEvent, useState, useEffect } from "react";
+import { getStyle, setStyle } from "./styleDB";
+import Style from "./style";
 
-class Style {
-  font: string
-  fontSize: number
-  bgColor: string
+import "./App.css";
 
-  constructor(font: string, fontSize: number, bgColor: string) {
-    this.font = font;
-    this.fontSize = fontSize;
-    this.bgColor = bgColor;
-  }
-}
+const PUSHER_URL = "https://js.pusher.com/7.0.3/pusher.min.js"
 
 function App() {
-  const [style, setStyles] = React.useState(new Style("Open Sans", 0, "white"));
+  const [style, setStyle] = useState(new Style("Open Sans", 12, "white"));
 
-  React.useEffect(() => {
-    fetch("/getall")
-      .then((res) => res.json())
-      .then((data) => { console.log(JSON.stringify(data)); setStyles(JSON.parse(data)); });
-  }, []);
+  // Set style from DB on initial load
+  useEffect(() => {getStyle().then(style => setStyle(style))}, []);
 
   return (
     <div className="App">
       <header className="App-header">
-        <div>{Form()}</div>
-        <div>{Styles(style)}</div>
+        <div>
+          {Form()}
+        </div>
+        <div className="Style-table">
+          {Styles(style)}
+        </div>
         {/* Not sure what to put here */}
       </header>
     </div>
@@ -46,40 +39,34 @@ function Styles(style: Style) {
 
 function Form() {
   const [font, setFont] = useState("Open Sans");
-  const [bgColor, setBgColor] = useState("white");
+  const [bgColor, setBgColor] = useState("#FFFFFF");
   const [fontSize, setFontSize] = useState(12);
 
-  const handleSubmit: (event: FormEvent) => void = event => {
+  function handleSubmit(event: FormEvent) {
     event.preventDefault(); // Stop page refresh
-    const style = new Style(font, fontSize, bgColor);
-
-    fetch("/set", {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        data: style,
-      }),
-    })
-      .then((res) => res.json())
-      .then(() => { alert("The db has been updated with 'Style(" + font + ", " + fontSize + ", " + bgColor + ")'") })
-      .catch(() => console.log('error'))
-
-    setFont("");
-    setFontSize(0);
-    setBgColor("");
+    setStyle(new Style(font, fontSize, bgColor));
   }
 
   return (
     <form onSubmit={handleSubmit}>
-      <select value={font} name="font" onChange={event => setFont(event.target.value)}>
+      <label>Font</label>
+      <select value={font} onChange={event => setFont(event.target.value)}>
         <option value="Open Sans">Open Sans</option>
         <option value="Comic Sans">Comic Sans</option>
         <option value="Roboto">Roboto</option>
       </select>
-      <input type="number" value={fontSize} name="font_size" onChange={event => setFontSize(Number(event.target.value))} placeholder="font size" />
-      <input type="text" value={bgColor} name="bgColor" onChange={event => setBgColor(event.target.value)} />
+      <label>Font Size</label>
+      <input
+        type="number"
+        value={fontSize}
+        onChange={event => setFontSize(Number(event.target.value))} placeholder="font size"
+      />
+      <label>Background Colour</label>
+      <input
+        type="color"
+        value={bgColor}
+        onChange={event => setBgColor(event.target.value)}
+      />
       <input type="submit" value="Submit" />
     </form>
   );
