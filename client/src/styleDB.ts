@@ -1,5 +1,14 @@
 import Style from "./style";
 
+function getStyle(): Promise<Style> {
+  return fetch("/getall")
+    .then(res => res.json())
+    .then(data => {
+      console.log(JSON.stringify(data));
+      return JSON.parse(data);
+    });
+}
+
 function setStyle(style: Style) {
   fetch("/set", {
     method: "POST",
@@ -10,14 +19,4 @@ function setStyle(style: Style) {
     .catch(() => console.log("Error when posting style"));
 }
 
-function getAll(): Style {
-  fetch("/getall")
-    .then(res => res.json())
-    .then(data => {
-      console.log(JSON.stringify(data));
-      return JSON.parse(data);
-    })
-  return new Style("Error", 0, "Error");
-}
-
-export { setStyle, getAll };
+export { getStyle, setStyle };

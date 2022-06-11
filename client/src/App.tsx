@@ -1,5 +1,5 @@
 import { FormEvent, useState, useEffect } from "react";
-import { getAll as getStyle, setStyle } from "./styleDB";
+import { getStyle, setStyle } from "./styleDB";
 import Style from "./style";
 
 import "./App.css";
@@ -9,7 +9,8 @@ const PUSHER_URL = "https://js.pusher.com/7.0.3/pusher.min.js"
 function App() {
   const [style, setStyle] = useState(new Style("Open Sans", 12, "white"));
 
-  useEffect(() => { setStyle(getStyle()) }, []);
+  // Set style from DB on initial load
+  useEffect(() => {getStyle().then(style => setStyle(style))}, []);
 
   return (
     <div className="App">
