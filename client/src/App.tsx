@@ -1,30 +1,3 @@
-/*
-import React from "react";
-import logo from './logo.svg';
-import './App.css';
-
-function App() {
-  const [data, setData] = React.useState(null);
-
-  React.useEffect(() => {
-    fetch("/all")
-      .then((res) => res.json())
-      .then((data) => setData(data.message));
-  }, []);
-
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>{!data ? "Loading..." : data}</p>
-      </header>
-    </div>
-  );
-}
-
-export default App;
-*/
-
 import React, { FormEvent } from 'react';
 import { useState } from 'react';
 import './App.css';
@@ -33,6 +6,7 @@ class Style {
   font: string
   fontSize: number
   bgColor: string
+
   constructor(font: string, fontSize: number, bgColor: string) {
     this.font = font;
     this.fontSize = fontSize;
@@ -41,9 +15,7 @@ class Style {
 }
 
 function App() {
-  const testRows = [new Style("Open Sans", 20, "orange"), new Style("Arial", 2, "green")]
-
-  const [styles, setStyles] = React.useState(new Style("Open Sans", 0, "white"));
+  const [style, setStyles] = React.useState(new Style("Open Sans", 0, "white"));
 
   React.useEffect(() => {
     fetch("/getall")
@@ -55,7 +27,7 @@ function App() {
     <div className="App">
       <header className="App-header">
         <div>{Form()}</div>
-        <div>{Styles(styles)}</div> 
+        <div>{Styles(style)}</div>
         {/* Not sure what to put here */}
       </header>
     </div>
@@ -63,13 +35,13 @@ function App() {
 }
 
 function Styles(style: Style) {
-  if (style == null) {
-    return [];
-  } else {
-    return [(
-      <tr><td>{"Font: " + style.font + ", font size: " + style.fontSize + ", background color: " + style.bgColor}</td></tr>
-    )];
-  }
+  return (
+    <table>
+      {(style == null)
+        ? []
+        : [<tr><td>{style.font}</td><td>{style.fontSize}</td><td>{style.bgColor}</td></tr>]}
+    </table>
+  );
 }
 
 function Form() {
@@ -79,41 +51,24 @@ function Form() {
 
   const handleSubmit: (event: FormEvent) => void = event => {
     event.preventDefault(); // Stop page refresh
-    // alert("Style: " + font + ", " + fontSize + ", " + bgColor);
-
     const style = new Style(font, fontSize, bgColor);
-    // const jsonStyle = JSON.stringify();
-    // alert(jsonStyle);
-    
-    
+
     fetch("/set", {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        data: style, // Use your own property name / key
+        data: style,
       }),
     })
       .then((res) => res.json())
-      .then((result) => {
-        alert("The db has been updated with 'Style(" + font + ", " + fontSize + ", " + bgColor + ")'");
-      })
-      .catch((err) => console.log('error'))
-    
-
+      .then(() => { alert("The db has been updated with 'Style(" + font + ", " + fontSize + ", " + bgColor + ")'") })
+      .catch(() => console.log('error'))
 
     setFont("");
     setFontSize(0);
     setBgColor("");
-
-    
-    // ["{\"font\":\"io\",\"fontSize\":1,\"bgColor\":\"green\"}", "{\"font\":\"demoStyle\",\"fontSize\":12,\"bgColor\":\"red\"}"]
-    // React.useEffect(() => {
-    //   fetch("/getall")
-    //     .then((res) => res.json())
-    //     .then((data) => setData([]));
-    // }, []);
   }
 
   return (
