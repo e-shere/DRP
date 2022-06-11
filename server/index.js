@@ -4,13 +4,15 @@ const redis = require('redis');
 // ==== retrieve env variables ====
 require('dotenv').config();
 
-const { REDIS_ENDPOINT_URI, REDIS_HOST, REDIS_PORT, REDIS_PASSWORD } = process.env;
+const { REDIS_ENDPOINT_URI, REDIS_HOST, REDIS_PORT, REDIS_PASSWORD, REDIS_USER } = process.env;
 
 const endpointUri = REDIS_ENDPOINT_URI
     ? REDIS_ENDPOINT_URI
     : `${REDIS_HOST}:${REDIS_PORT}`;
 
 const password = REDIS_PASSWORD || undefined
+
+const REDIS_URL=`redis://${REDIS_USER}:${REDIS_PASSWORD}@${REDIS_HOST}:${REDIS_PORT}`
 
 // ==== end of retrieve env variables ====
 
@@ -31,7 +33,8 @@ app.get("/api", (req, res) => {
 });
 
 app.get("/getall", async (req, res) => {
-    client = redis.createClient(`redis://${endpointUri}`, password);
+
+    client = redis.createClient({ url: REDIS_URL });
     console.log("getall: checkpoint [1]");
     await client.connect();
     console.log("getall: checkpoint [2]");
@@ -51,7 +54,7 @@ app.get('*', (req, res) => {
 
 app.post("/set", async (req, res) => {
     const { data } = req.body;
-    client = redis.createClient(`redis://${endpointUri}`, password);
+    client = redis.createClient({ url: REDIS_URL });
     console.log("set: checkpoint [1]");
     await client.connect();
     console.log("set: checkpoint [2]");
