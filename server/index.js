@@ -35,11 +35,11 @@ app.use(bodyParser.json());
 // Serve static files from the React frontend app
 app.use(express.static(path.join(__dirname, BUILD_DIR)))
 
-app.get("/api", (req, res) => {
+app.get("/api", (_, res) => {
     res.json({ message: "Hello from server!" });
 });
 
-app.get("/getall", async (req, res) => {
+app.get("/getall", async (_, res) => {
     client = redis.createClient({ url: REDIS_URL });
     await client.connect();
     console.log("Connection to redis client established");
@@ -53,7 +53,7 @@ app.get("/getall", async (req, res) => {
 });
 
 // Anything that doesn't match the above, send back index.html
-app.get('*', (req, res) => {
+app.get('*', (_, res) => {
     res.sendFile(path.join(__dirname + BUILD_DIR + "index.html"))
 })
 
@@ -63,7 +63,7 @@ app.post('/' + SUBMIT_EVENT, async (req, res) => {
     res.send(payload);
 });
 
-app.post("/set", async (req, res) => {
+app.post("/set", async (req, _) => {
     const { data } = req.body;
     client = redis.createClient({ url: REDIS_URL });
     await client.connect();

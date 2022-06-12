@@ -20,7 +20,7 @@ function App() {
   useEffect(() => {
     const pusher = new Pusher(PUSHER_KEY, { cluster: PUSHER_CLUSTER })
     pusher.subscribe(PUSHER_CHANNEL).bind(SUBMIT_EVENT, (style: Style) => setStyle(style))
-    return (pusher.unsubscribe(PUSHER_CHANNEL))
+    return (() => pusher.unsubscribe(PUSHER_CHANNEL))
   }, []);
 
   // Set style from DB on initial load
