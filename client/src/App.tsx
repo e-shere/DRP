@@ -15,19 +15,11 @@ const PORT = 4001;
 function App() {
   const [style, setStyle] = useState(new Style("Open Sans", 12, "white"));
 
-  // real time update style binding
+  // Binding to update styles in real time
   useEffect(() => {
-    const pusher = new Pusher(PUSHER_KEY, {
-      cluster: PUSHER_CLUSTER
-    })
-    const channel = pusher.subscribe(CHANNEL);
-    channel.bind("submit", function (style: Style) {
-      setStyle(style);
-    })
-
-    return (() => {
-      pusher.unsubscribe(CHANNEL)
-    })
+    const pusher = new Pusher(PUSHER_KEY, { cluster: PUSHER_CLUSTER })
+    pusher.subscribe(CHANNEL).bind("submit", (style: Style) => setStyle(style))
+    return (pusher.unsubscribe(CHANNEL))
   }, []);
 
   // Set style from DB on initial load
