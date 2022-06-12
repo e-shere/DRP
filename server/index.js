@@ -11,7 +11,7 @@ const { REDIS_HOST, REDIS_PORT, REDIS_PASSWORD, REDIS_USER } = process.env;
 const REDIS_URL = `redis://${REDIS_USER}:${REDIS_PASSWORD}@${REDIS_HOST}:${REDIS_PORT}`;
 const pusher = new Pusher({
     appId: process.env.PUSHER_ID,
-    key: process.env.REACT_APP_PUSHER_KEY,
+    key: process.env.PUSHER_KEY,
     secret: process.env.PUSHER_SECRET,
     cluster: process.env.PUSHER_CLUSTER,
     useTLS: true

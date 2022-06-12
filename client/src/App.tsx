@@ -10,12 +10,12 @@ const PORT = process.env.PORT || 4001;
 
 function App() {
   const [style, setStyle] = useState(new Style("Open Sans", 12, "white"));
-
+  
   // real time update style binding
   useEffect(() => {
-    const pusher = new Pusher(process.env.REACT_APP_PUSHER_KEY || "", {
-      cluster: 'eu',
-      forceTLS: true
+    // TODO: pretty sure this is safe but idk why process.env is not working?
+    const pusher = new Pusher( process.env.PUSHER_KEY || "92e02b3a0a7919063500", {
+      cluster: process.env.PUSHER_CLUSTER || "eu"
     })
     const channel = pusher.subscribe(CHANNEL);
     channel.bind("submit", function (style: Style) {
