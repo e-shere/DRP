@@ -1,15 +1,13 @@
 import Style from "./style";
 
-function getStyle(): Promise<Style> {
-  return fetch("/getall")
-    .then(res => res.json())
-    .then(data => {
-      console.log(JSON.stringify(data));
-      return JSON.parse(data);
-    });
+async function getDbStyle(): Promise<Style> {
+  const res = await fetch("/getall");
+  const data = await res.json();
+  console.log(JSON.stringify(data));
+  return JSON.parse(data);
 }
 
-function setStyle(style: Style) {
+function setDbStyle(style: Style) {
   fetch("/set", {
     method: "POST",
     headers: { "Content-Type": "application/json", },
@@ -19,4 +17,4 @@ function setStyle(style: Style) {
     .catch(() => console.log("Error when posting style"));
 }
 
-export { getStyle, setStyle };
+export { getDbStyle, setDbStyle };

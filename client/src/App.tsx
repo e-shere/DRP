@@ -1,16 +1,29 @@
 import { FormEvent, useState, useEffect } from "react";
-import { getStyle, setStyle } from "./styleDB";
+import Pusher from "pusher-js";
+import axios from "axios";
+import { getDbStyle, setDbStyle } from "./styleDB";
 import Style from "./style";
-
 import "./App.css";
 
-const PUSHER_URL = "https://js.pusher.com/7.0.3/pusher.min.js"
+// TODO: Fetch env vars from the server (they are public so should not be security problem for now)
+const PUSHER_KEY = "92e02b3a0a7919063500"
+const PUSHER_CLUSTER = "eu"
+
+const PUSHER_CHANNEL = "claraify";
+const SUBMIT_EVENT = "submit";
 
 function App() {
   const [style, setStyle] = useState(new Style("Open Sans", 12, "white"));
 
+  // Binding to update styles in real time
+  useEffect(() => {
+    const pusher = new Pusher(PUSHER_KEY, { cluster: PUSHER_CLUSTER })
+    pusher.subscribe(PUSHER_CHANNEL).bind(SUBMIT_EVENT, (style: Style) => setStyle(style))
+    return (() => pusher.unsubscribe(PUSHER_CHANNEL))
+  }, []);
+
   // Set style from DB on initial load
-  useEffect(() => {getStyle().then(style => setStyle(style))}, []);
+  useEffect(() => { getDbStyle().then(style => setStyle(style)) }, []);
 
   return (
     <div className="App">
@@ -21,7 +34,6 @@ function App() {
         <div className="Style-table">
           {Styles(style)}
         </div>
-        {/* Not sure what to put here */}
       </header>
     </div>
   );
@@ -39,12 +51,18 @@ function Styles(style: Style) {
 
 function Form() {
   const [font, setFont] = useState("Open Sans");
-  const [bgColor, setBgColor] = useState("#FFFFFF");
   const [fontSize, setFontSize] = useState(12);
+  const [bgColor, setBgColor] = useState("#FFFFFF");
 
   function handleSubmit(event: FormEvent) {
     event.preventDefault(); // Stop page refresh
-    setStyle(new Style(font, fontSize, bgColor));
+    const style = new Style(font, fontSize, bgColor);
+
+    // Pusher submit event 
+    axios.post(`/${SUBMIT_EVENT}`, style);
+
+    // Update db
+    setDbStyle(style);
   }
 
   return (
