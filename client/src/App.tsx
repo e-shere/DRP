@@ -5,12 +5,13 @@ import { getDbStyle, setDbStyle } from "./styleDB";
 import Style from "./style";
 import "./App.css";
 
-const CHANNEL = "claraify"
-
 // TODO: Fetch env vars from the server (they are public so should not be security problem for now)
+const PORT = 4001;
 const PUSHER_KEY = "92e02b3a0a7919063500"
 const PUSHER_CLUSTER = "eu"
-const PORT = 4001;
+
+const PUSHER_CHANNEL = "claraify";
+const SUBMIT_EVENT = "submit";
 
 function App() {
   const [style, setStyle] = useState(new Style("Open Sans", 12, "white"));
@@ -18,8 +19,8 @@ function App() {
   // Binding to update styles in real time
   useEffect(() => {
     const pusher = new Pusher(PUSHER_KEY, { cluster: PUSHER_CLUSTER })
-    pusher.subscribe(CHANNEL).bind("submit", (style: Style) => setStyle(style))
-    return (pusher.unsubscribe(CHANNEL))
+    pusher.subscribe(PUSHER_CHANNEL).bind(SUBMIT_EVENT, (style: Style) => setStyle(style))
+    return (pusher.unsubscribe(PUSHER_CHANNEL))
   }, []);
 
   // Set style from DB on initial load
@@ -58,10 +59,10 @@ function Form() {
     event.preventDefault(); // Stop page refresh
     const style = new Style(font, fontSize, bgColor);
 
-    // real time pusher
-    axios.post(`http://localhost:${PORT}/submit`, style);
+    // Pusher submit event 
+    axios.post(`http://localhost:${PORT}/${SUBMIT_EVENT}`, style);
 
-    // update db
+    // Update db
     setDbStyle(style);
   }
 
