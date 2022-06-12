@@ -1,16 +1,34 @@
 import { FormEvent, useState, useEffect } from "react";
-import { getStyle, setStyle } from "./styleDB";
+import Pusher from "pusher-js";
+import axios from "axios";
+import { getDbStyle, setDbStyle } from "./styleDB";
 import Style from "./style";
-
 import "./App.css";
 
-const PUSHER_URL = "https://js.pusher.com/7.0.3/pusher.min.js"
+const CHANNEL = "claraify"
+const PORT = process.env.PORT || 4001;
 
 function App() {
   const [style, setStyle] = useState(new Style("Open Sans", 12, "white"));
 
+  // real time update style binding
+  useEffect(() => {
+    const pusher = new Pusher(process.env.REACT_APP_PUSHER_KEY || "", {
+      cluster: 'eu',
+      forceTLS: true
+    })
+    const channel = pusher.subscribe(CHANNEL);
+    channel.bind("submit", function (style: Style) {
+      setStyle(style);
+    })
+
+    return (() => {
+      pusher.unsubscribe(CHANNEL)
+    })
+  }, []);
+
   // Set style from DB on initial load
-  useEffect(() => {getStyle().then(style => setStyle(style))}, []);
+  useEffect(() => { getDbStyle().then(style => setStyle(style)) }, []);
 
   return (
     <div className="App">
@@ -21,7 +39,6 @@ function App() {
         <div className="Style-table">
           {Styles(style)}
         </div>
-        {/* Not sure what to put here */}
       </header>
     </div>
   );
@@ -39,12 +56,18 @@ function Styles(style: Style) {
 
 function Form() {
   const [font, setFont] = useState("Open Sans");
-  const [bgColor, setBgColor] = useState("#FFFFFF");
   const [fontSize, setFontSize] = useState(12);
+  const [bgColor, setBgColor] = useState("#FFFFFF");
 
   function handleSubmit(event: FormEvent) {
     event.preventDefault(); // Stop page refresh
-    setStyle(new Style(font, fontSize, bgColor));
+    const style = new Style(font, fontSize, bgColor);
+
+    // real time pusher
+    axios.post(`http://localhost:${PORT}/submit`, style);
+
+    // update db
+    setDbStyle(style);
   }
 
   return (
