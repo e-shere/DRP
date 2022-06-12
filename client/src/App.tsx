@@ -6,16 +6,19 @@ import Style from "./style";
 import "./App.css";
 
 const CHANNEL = "claraify"
-const PORT = process.env.PORT || 4001;
+
+// TODO: Fetch env vars from the server (they are public so should not be security problem for now)
+const PUSHER_KEY = "92e02b3a0a7919063500"
+const PUSHER_CLUSTER = "eu"
+const PORT = 4001;
 
 function App() {
   const [style, setStyle] = useState(new Style("Open Sans", 12, "white"));
-  
+
   // real time update style binding
   useEffect(() => {
-    // TODO: pretty sure this is safe but idk why process.env is not working?
-    const pusher = new Pusher( process.env.PUSHER_KEY || "92e02b3a0a7919063500", {
-      cluster: process.env.PUSHER_CLUSTER || "eu"
+    const pusher = new Pusher(PUSHER_KEY, {
+      cluster: PUSHER_CLUSTER
     })
     const channel = pusher.subscribe(CHANNEL);
     channel.bind("submit", function (style: Style) {
