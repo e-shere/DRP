@@ -6,8 +6,8 @@ export async function changeColor() {
     let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
       
     chrome.scripting.executeScript({
-        target: { tabId: tab.id },
-        function: setPageBackgroundColor,
+        target: { tabId: tab.id ? tab.id : -1},
+        func: setPageBackgroundColor,
     });
     
 }
@@ -19,12 +19,12 @@ function setPageBackgroundColor() {
 }
 
 export async function changeFont() {
-  chrome.storage.sync.set({font: "Arial"}, ()=>{});
+  chrome.storage.sync.set({font: "Open Sans"}, ()=>{});
   let [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
       
     chrome.scripting.executeScript({
-        target: { tabId: tab.id },
-        function: setPageFont,
+        target: { tabId: tab.id ? tab.id : -1},
+        func: setPageFont,
     });
 }
 

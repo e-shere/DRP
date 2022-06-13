@@ -1,7 +1,7 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import { changeColor, changeFont } from './main.js';
+import { changeColor, changeFont } from './main';
 
 function App() {
   return (
