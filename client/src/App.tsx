@@ -6,6 +6,7 @@ import Style from "./style";
 import "./App.css";
 
 // TODO: Fetch env vars from the server (they are public so should not be security problem for now)
+require("dotenv").config();
 const PUSHER_KEY = "92e02b3a0a7919063500"
 const PUSHER_CLUSTER = "eu"
 
