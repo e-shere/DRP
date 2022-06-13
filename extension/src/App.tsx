@@ -1,23 +1,18 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import { changeColor, changeFont } from './main.js';
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Welcome to Claraify!
-        </p>
-        <a
-          className="App-link"
-          href="http://claraify.com/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Info
-        </a>
+      <button onClick={changeColor}>
+          Background colour
+      </button>
+      <button onClick={changeFont}>
+          Font
+      </button>
       </header>
     </div>
   );

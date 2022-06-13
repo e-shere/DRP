@@ -3,6 +3,9 @@
     "description": "Making the Web accessible for everyone",
     "version": "1.0",
     "manifest_version": 3,
+    "permissions": [
+        "activeTab", "storage", "tabs", "scripting"
+      ],
     "action": {
         "default_popup": "index.html",
         "default_title": "Open the popup"
