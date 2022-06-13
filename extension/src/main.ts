@@ -8,7 +8,15 @@ async function changeBgColor(color: string) {
     target: { tabId: tab.id ? tab.id : -1 },
     func: () => {
       chrome.storage.sync.get("color", ({ color }) => {
-        document.body.style.backgroundColor = color;
+        document.body.style.setProperty('background-color', color,'important');
+      const nodeListP = document.querySelectorAll("p");
+      for (let i = 0; i < nodeListP.length; i++) {
+        nodeListP[i].style.setProperty('background-color', color,'important');
+      }
+      const nodeListLi = document.querySelectorAll("li");
+      for (let i = 0; i < nodeListLi.length; i++) {
+        nodeListLi[i].style.setProperty('background-color', color,'important');
+      }
       })
     }
   });
