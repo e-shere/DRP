@@ -20,11 +20,25 @@ test-db:
     - npm install --save-dev typescript
 
 # deploys to production
-deploy-job:
+deploy-production:
   image: ruby:latest # comment this line when shared runners are disabled
-  stage: deploy 
+  stage: deploy
+  only:
+    - master
   script:     
-    - echo "Deploying application to Heroku..."
+    - echo "Deploying application to production Heroku app..."
     - gem install dpl --verbose # comment this line when shared runners are disabled
-    - dpl --provider=heroku --app=claraify --api-key=$HEROKU_API_KEY 
+    - dpl --provider=heroku --app=claraify --api-key=$HEROKU_PRODUCTION_API_KEY 
+    - echo "Application successfully deployed to Heroku" 
+
+# deploys to production
+deploy-staging:
+  image: ruby:latest # comment this line when shared runners are disabled
+  stage: deploy
+  only:
+    - dev-branch
+  script:     
+    - echo "Deploying application to staging Heroku app..."
+    - gem install dpl --verbose # comment this line when shared runners are disabled
+    - dpl --provider=heroku --app=claraify-staging --api-key=$HEROKU_STAGING_API_KEY 
     - echo "Application successfully deployed to Heroku" 
