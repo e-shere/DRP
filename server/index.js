@@ -59,9 +59,12 @@ app.get('*', (_, res) => {
 })
 
 app.post('/' + SUBMIT_EVENT, async (req, res) => {
-    const payload = req.body;
-    pusher.trigger(PUSHER_CHANNEL, SUBMIT_EVENT, payload);
-    res.send(payload);
+    if (PRODUCTION) {
+        // send to pusher only in production (to be isolated when runnig locally)
+        const payload = req.body;
+        pusher.trigger(PUSHER_CHANNEL, SUBMIT_EVENT, payload);
+        res.send(payload);
+    }
 });
 
 app.post("/set", async (req, _) => {
