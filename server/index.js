@@ -23,6 +23,7 @@ const BUILD_DIR = "../client/build/";
 const PUSHER_CHANNEL = "claraify";
 const SUBMIT_EVENT = "submit";
 const DB_KEY = "demo";
+const PRODUCTION = process.env.PRODUCTION || false;
 
 const app = express();
 const path = require("path")
@@ -40,7 +41,7 @@ app.get("/api", (_, res) => {
 });
 
 app.get("/getall", async (_, res) => {
-    client = redis.createClient({ url: REDIS_URL });
+    client = PRODUCTION ? redis.createClient({ url: REDIS_URL }) : redis.createClient();
     await client.connect();
     console.log("Connection to redis client established");
 
@@ -65,7 +66,7 @@ app.post('/' + SUBMIT_EVENT, async (req, res) => {
 
 app.post("/set", async (req, _) => {
     const { data } = req.body;
-    client = redis.createClient({ url: REDIS_URL });
+    client = PRODUCTION ? redis.createClient({ url: REDIS_URL }) : redis.createClient();
     await client.connect();
     console.log("Connection to redis client established");
     console.log(data);
