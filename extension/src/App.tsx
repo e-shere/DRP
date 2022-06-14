@@ -1,5 +1,8 @@
 import { useState } from "react";
 import Switch from "react-switch";
+import { Button } from "@mui/material";
+import { lookupStyle } from "./main";
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 import "./App.css";
 import { changeBgColor, changeFont } from "./main";
@@ -32,6 +35,11 @@ function App() {
         change => { changeFont(change ? "Arial" : "Comic Sans"); setFontToggle(change) },
         isFontChanged)
       }
+      <Button
+          className="give the button a nice name nick"
+          onClick={lookupStyle}
+          startIcon={<AddCircleIcon />}
+        >GET STYLE</Button>
     </div>
   );
 }

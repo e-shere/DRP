@@ -28,9 +28,10 @@ const STAGING = process.env.NODE_ENV == "test";
 
 const app = express();
 const path = require("path")
+const extension_url = "chrome-extension://ocniifcfdegbgomocloldgbbffnjfann"
 
 app.use(express.json());
-app.use(cors());
+// app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
@@ -57,6 +58,7 @@ app.get("/getall", async (_, res) => {
 // === Communication with chrome extension === //
 
 app.get("/serve-style", (_, res) => {
+    res.setHeader("Access-Control-Allow-Origin", "*");
   res.json({message: "Serving style from database"});
   console.log("Serving style from database...");
 });

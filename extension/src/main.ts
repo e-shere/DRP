@@ -38,9 +38,11 @@ async function changeFont(font: string) {
 }
 
 const herokuURL = "https://claraify.herokuapp.com"
+const localHost = "http://localhost:3000/"
 
 export async function lookupStyle() {
-  const res = axios.get(`${herokuURL + "/serve-style"}`);
+  const res = axios.get(`${herokuURL + "serve-style"}`);
   res.then(res => res.data).then(res => {console.log(res)});
+  return (await res).data;
 }
 export { changeBgColor, changeFont }
