@@ -1,8 +1,8 @@
 import { ChangeEvent } from "react";
 import { Switch, Button } from "@mui/material";
 import SettingsIcon from "@mui/icons-material/Settings";
-
-import { changeBgColor, changeFont } from "./storage";
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import { changeBgColor, changeFont, lookupStyle } from "./storage";
 import { TITLE } from "./App";
 
 const oldFont = document.body.style.fontFamily;
@@ -49,6 +49,11 @@ function Main(state: any) {
           }
         })
       }
+      <Button
+      className="give the button a nice name nick"
+      onClick={lookupStyle}
+      startIcon={<AddCircleIcon />}
+      >GET STYLE</Button>
     </div>
   );
 }
