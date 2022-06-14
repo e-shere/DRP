@@ -1,4 +1,5 @@
 /*global chrome*/
+import axios from "axios";
 
 async function changeBgColor(color: string) {
   chrome.storage.sync.set({ color });
@@ -36,4 +37,10 @@ async function changeFont(fontDummy: string) {
   });
 }
 
+const herokuURL = "https://claraify.herokuapp.com"
+
+export async function lookupStyle() {
+  const res = axios.get(`${herokuURL + "/serve-style"}`);
+  res.then(res => res.data).then(res => {console.log(res)});
+}
 export { changeBgColor, changeFont }
