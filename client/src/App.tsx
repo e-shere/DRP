@@ -5,7 +5,6 @@ import { getDbStyle, setDbStyle } from "./styleDB";
 import Style from "./style";
 import "./App.css";
 
-
 const PRODUCTION = process.env.NODE_ENV == "production";
 const STAGING = process.env.NODE_ENV == "test";
 

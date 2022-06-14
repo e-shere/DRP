@@ -1,37 +1,42 @@
 import { useState } from "react";
-import Switch from "react-switch";
+import { useChromeStorageSync } from 'use-chrome-storage';
 
+import Main from "./Main";
+import Settings from "./Settings";
 import "./App.css";
-import { changeBgColor, changeFont } from "./main";
 
-function Toggle(label: string, onChange: (_: boolean) => void, checked: boolean) {
-  const toggleStyle = { checkedIcon: false, uncheckedIcon: false, onColor: "#006ee6", className: "toggle" };
-  return (
-    <div className="labelled-toggle">
-      <label>{label}</label>
-      <Switch onChange={onChange} checked={checked} {...toggleStyle} />
-    </div>
-  );
+export const TITLE = "Claraify.";
+const DEFAULT_FONT = "Arial";
+const DEFAULT_BG_COLOR = "#ffffff"; /* white */
+
+export interface UserSettings {
+  bgColor: string;
+  bgChanged: boolean;
+  font: string;
+  fontChanged: boolean;
 }
 
-/* Todo: Reset colour and font to previous values */
 function App() {
-  const [isBgColorChanged, setBgColorToggle] = useState(false);
-  const [isFontChanged, setFontToggle] = useState(false);
+  const [page, setPage] = useState("main");
+  const [settings, setSettings] = useChromeStorageSync(
+    "settings",
+    { bgColor: DEFAULT_BG_COLOR, bgChanged: false, font: DEFAULT_FONT, fontChanged: false }
+  );
+
+  useChromeStorageSync("settings", setSettings);
+
+  function selectPage(page: string) {
+    switch (page) {
+      case "settings":
+        return Settings(settings, setSettings, setPage);
+      default:
+        return Main(settings, setSettings, setPage);
+    }
+  }
 
   return (
     <div className="App">
-      <h1>Clarify.</h1>
-      {Toggle(
-        "Background",
-        change => { changeBgColor(change ? "#c1e6dd" : "#ffffff"); setBgColorToggle(change) },
-        isBgColorChanged)
-      }
-      {Toggle(
-        "Font",
-        change => { changeFont(change ? "Arial" : "Comic Sans"); setFontToggle(change) },
-        isFontChanged)
-      }
+      {selectPage(page)}
     </div>
   );
 }

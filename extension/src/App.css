@@ -3,29 +3,52 @@ body {
   margin: 0;
 }
 
+button {
+  padding: 0;
+}
+
+header {
+  display: flex;
+  border-bottom: 0.1em solid black;
+  padding-bottom: 1em;
+  margin-bottom: 4em;
+}
+
 h1 {
-  width: 100%;
-  color: rgb(50, 50, 50);
+  flex-basis: 50%;
   text-align: center;
-  border-bottom: 1px solid black;
-  padding-bottom: 20px;
-  margin-bottom: 50px;
+  color: rgb(50, 50, 50);
+}
+
+.nav-button {
+  flex-basis: 25%;
+}
+
+.form-field {
+  margin-bottom: 4em;
+}
+
+.bg-color-input {
+  margin: auto;
+  margin-left: 1em;
+  flex-grow: 1;
 }
 
 .App {
-  padding: 10px;
-  background-color: rgb(255, 242, 199);
+  width: 22em;
+  height: 30em;
+  background-color: #c1e6dd;
+  padding: 1em;
 }
 
-.labelled-toggle {
+.labelled-item {
   display: flex;
-  align-items: center;
-  padding-left: 20px;
-  padding-right: 20px;
-  padding-bottom: 50px;
+  padding-inline: 0.75em;
+  padding-bottom: 4em;
 }
 
-.labelled-toggle label {
-  width: 224px;
-  font-size: 2em;
+.labelled-item label {
+  padding-right: 1em;
+  margin-right: auto;
+  font-size: 1.5em;
 }
