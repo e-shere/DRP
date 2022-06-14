@@ -22,15 +22,15 @@ async function changeBgColor(color: string) {
   });
 }
 
-async function changeFont(font: string) {
-  chrome.storage.sync.set({ font });
+async function changeFont(fontDummy: string) {
+  chrome.storage.sync.set({ fontDummy });
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
 
   chrome.scripting.executeScript({
     target: { tabId: tab.id ? tab.id : -1 },
     func: () => {
-      chrome.storage.sync.get("font", ({ font }) => {
-        document.body.style.fontFamily = font;
+      chrome.storage.sync.get("fontDummy", ({ fontDummy }) => {
+        document.body.style.fontFamily = fontDummy;
       });
     }
   });
