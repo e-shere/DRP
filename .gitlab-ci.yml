@@ -25,7 +25,7 @@ deploy-production:
   stage: deploy
   only:
     - master
-  script:     
+  script:
     - echo "Deploying application to production Heroku app..."
     - gem install dpl --verbose # comment this line when shared runners are disabled
     - dpl --provider=heroku --app=$PRODUCTION_APP_NAME --api-key=$HEROKU_API_KEY 
@@ -37,7 +37,7 @@ deploy-staging:
   stage: deploy
   only:
     - dev-branch
-  script:     
+  script:
     - echo "Deploying application to staging Heroku app..."
     - gem install dpl --verbose # comment this line when shared runners are disabled
     - dpl --provider=heroku --app=$STAGING_APP_NAME --api-key=$HEROKU_API_KEY 
