@@ -28,7 +28,7 @@ deploy-production:
   script:     
     - echo "Deploying application to production Heroku app..."
     - gem install dpl --verbose # comment this line when shared runners are disabled
-    - dpl --provider=heroku --app=claraify --api-key=$HEROKU_PRODUCTION_API_KEY 
+    - dpl --provider=heroku --app=$PRODUCTION_APP_NAME --api-key=$HEROKU_API_KEY 
     - echo "Application successfully deployed to Heroku" 
 
 # deploys to production
@@ -40,5 +40,5 @@ deploy-staging:
   script:     
     - echo "Deploying application to staging Heroku app..."
     - gem install dpl --verbose # comment this line when shared runners are disabled
-    - dpl --provider=heroku --app=claraify-staging --api-key=$HEROKU_STAGING_API_KEY 
+    - dpl --provider=heroku --app=$STAGING_APP_NAME --api-key=$HEROKU_API_KEY 
     - echo "Application successfully deployed to Heroku" 
