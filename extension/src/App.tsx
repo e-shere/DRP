@@ -1,39 +1,33 @@
 import { useState } from "react";
-import Switch from "react-switch";
+import Main from "./Main"
+import Settings from "./Settings"
 
 import "./App.css";
-import { changeBgColor, changeFont } from "./main";
 
-function Toggle(label: string, onChange: (_: boolean) => void, checked: boolean) {
-  const toggleStyle = { checkedIcon: false, uncheckedIcon: false, onColor: "#006ee6", className: "toggle" };
-  return (
-    <div className="labelled-toggle">
-      <label>{label}</label>
-      <Switch onChange={onChange} checked={checked} {...toggleStyle} />
-    </div>
-  );
-}
+export const TITLE = "Claraify.";
 
-/* Todo: Reset colour and font to previous values */
 function App() {
-  const [isBgColorChanged, setBgColorToggle] = useState(false);
-  const [isFontChanged, setFontToggle] = useState(false);
+  /* Todo: move this state into the settings component? */
+  const [page, setPage] = useState("main");
+  const [bgColor, setBgColor] = useState("");
+  const [font, setFont] = useState("");
+  const [bgChanged, setBgChanged] = useState(false);
+  const [fontChanged, setFontChanged] = useState(false);
+
+  function selectPage(page: string) {
+    switch (page) {
+      case "settings":
+        return Settings({setPage, bgChanged, fontChanged, bgColor, setBgColor, font, setFont});
+      default:
+        return Main({setPage, bgChanged, fontChanged, setBgChanged, setFontChanged });
+    }
+  }
 
   return (
     <div className="App">
-      <h1>Clarify.</h1>
-      {Toggle(
-        "Background",
-        change => { changeBgColor(change ? "#c1e6dd" : "#ffffff"); setBgColorToggle(change) },
-        isBgColorChanged)
-      }
-      {Toggle(
-        "Font",
-        change => { changeFont(change ? "Arial" : "Comic Sans"); setFontToggle(change) },
-        isFontChanged)
-      }
+      {selectPage(page)}
     </div>
-  );
+  )
 }
 
 export default App;
