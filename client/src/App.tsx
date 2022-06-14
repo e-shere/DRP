@@ -5,21 +5,23 @@ import { getDbStyle, setDbStyle } from "./styleDB";
 import Style from "./style";
 import "./App.css";
 
+
+const PRODUCTION = process.env.NODE_ENV == "production";
+const STAGING = process.env.NODE_ENV == "test";
+
 // TODO: Fetch env vars from the server (they are public so should not be security problem for now)
-const PUSHER_KEY = "92e02b3a0a7919063500"
-const PUSHER_CLUSTER = "eu"
+const PUSHER_KEY = PRODUCTION ? "92e02b3a0a7919063500" : "d99fd8c0f4faeacc4709";
+const PUSHER_CLUSTER = "eu";
 
 const PUSHER_CHANNEL = "claraify";
 const SUBMIT_EVENT = "submit";
-
-const PRODUCTION = process.env.NODE_ENV == "production";
 
 function App() {
   const [style, setStyle] = useState(new Style("Open Sans", 12, "white"));
 
   // Binding to update styles in real time
   useEffect(() => {
-    if (PRODUCTION) {
+    if (PRODUCTION || STAGING) {
       // subscribe to pusher only in production (to be isolated when runnig locally)
       const pusher = new Pusher(PUSHER_KEY, { cluster: PUSHER_CLUSTER })
       pusher.subscribe(PUSHER_CHANNEL).bind(SUBMIT_EVENT, (style: Style) => setStyle(style))

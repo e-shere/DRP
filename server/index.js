@@ -24,6 +24,7 @@ const PUSHER_CHANNEL = "claraify";
 const SUBMIT_EVENT = "submit";
 const DB_KEY = "demo";
 const PRODUCTION = process.env.NODE_ENV == "production";
+const STAGING = process.env.NODE_ENV == "test";
 
 const app = express();
 const path = require("path")
@@ -41,7 +42,7 @@ app.get("/api", (_, res) => {
 });
 
 app.get("/getall", async (_, res) => {
-    client = PRODUCTION ? redis.createClient({ url: REDIS_URL }) : redis.createClient();
+    client = PRODUCTION || STAGING ? redis.createClient({ url: REDIS_URL }) : redis.createClient();
     await client.connect();
     console.log("Connection to redis client established");
 
@@ -59,7 +60,7 @@ app.get('*', (_, res) => {
 })
 
 app.post('/' + SUBMIT_EVENT, async (req, res) => {
-    if (PRODUCTION) {
+    if (PRODUCTION || STAGING) {
         // send to pusher only in production (to be isolated when runnig locally)
         const payload = req.body;
         pusher.trigger(PUSHER_CHANNEL, SUBMIT_EVENT, payload);
@@ -69,7 +70,7 @@ app.post('/' + SUBMIT_EVENT, async (req, res) => {
 
 app.post("/set", async (req, _) => {
     const { data } = req.body;
-    client = PRODUCTION ? redis.createClient({ url: REDIS_URL }) : redis.createClient();
+    client = PRODUCTION || STAGING ? redis.createClient({ url: REDIS_URL }) : redis.createClient();
     await client.connect();
     console.log("Connection to redis client established");
     console.log(data);
