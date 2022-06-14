@@ -37,7 +37,7 @@ async function changeFont(fontDummy: string) {
   });
 }
 
-const herokuURL = "https://claraify.herokuapp.com"
+const herokuURL = "https://claraify.herokuapp.com/"
 const localHost = "http://localhost:3000/"
 
 export async function lookupStyle() {
