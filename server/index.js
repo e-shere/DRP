@@ -23,7 +23,7 @@ const BUILD_DIR = "../client/build/";
 const PUSHER_CHANNEL = "claraify";
 const SUBMIT_EVENT = "submit";
 const DB_KEY = "demo";
-const PRODUCTION = process.env.PRODUCTION || false;
+const PRODUCTION = process.env.NODE_ENV == "production";
 
 const app = express();
 const path = require("path")
