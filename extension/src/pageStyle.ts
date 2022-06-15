@@ -6,13 +6,16 @@ async function setPageBgColor(bgColor: string) {
     }
     setNodeBgColor(document.body);
     document.querySelectorAll("p").forEach(setNodeBgColor);
+    document.querySelectorAll("header").forEach(setNodeBgColor);
     document.querySelectorAll("li").forEach(setNodeBgColor);
   });
 }
 
 async function setPageFont(font: string) {
   setPageStyle(font, f => {
-    document.body.style.fontFamily = f;
+    document.querySelectorAll("*").forEach(
+      node => node.setAttribute("style", `font-family:${f} !important`)
+    );
   });
 }
 
