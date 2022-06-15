@@ -19,7 +19,7 @@ function setDbStyle(style: Style) {
 
 async function getAllStyles(): Promise<Style[]> {
   console.log("Fetching styles...");
-  const res = await fetch("/serve-style");
+  const res = await fetch("/serve-styles");
   return await res.json();
 }
 

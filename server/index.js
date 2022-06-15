@@ -24,6 +24,7 @@ const BUILD_DIR = "../client/build/";
 const PUSHER_CHANNEL = "claraify";
 const SUBMIT_EVENT = "submit";
 const DB_KEY = "demo";
+const STYLE_KEY = "styles";
 const PRODUCTION = process.env.NODE_ENV == "production";
 const STAGING = process.env.NODE_ENV == "test";
 var KEY_NUMBER = 0
@@ -58,48 +59,21 @@ app.get("/getall", async (_, res) => {
 
 // === Communication with chrome extension === //
 
-app.get("/serve-style", async (_, res) => {
+app.get("/serve-styles", async (_, res) => {
     client = PRODUCTION || STAGING ? redis.createClient({ url: REDIS_URL }) : redis.createClient();
     await client.connect();
     console.log("Connection to redis client established");
-    console.log("Serving style from database...");
-    const styleset = new Set();
+    console.log("Serving styles from database...");
+    const styles = []
 
-    const entries = KEY_NUMBER + 1;
-    
-    // for (let i = 0; i < entries; i++) {
-        await client.get("demo", (error, styles) => {
-            if (error) console.error(error);
-            if (styles != null) {
-                return [styles];
-            }
-        });
-    // }
-
-    // res.json(() => {return styleset});
-    
-    // res.json();
-    // const scanner = new redisScan(client);
-    // // scanner.scan('demo*', (error, styles) => {
-    // //     if (error) console.log(error)
-    // //     return res.json(() => {return styles});
-    // // })
-    // var styles_res = [];
-
-    
-    
-    // scanner.scan('demo', (error, styles) => {
-    //     if (error) console.log(error);
-    //     console.log("scanning");
-    //     // if (styles != null) {
-    //         styles_res = ["Hello world"];
-            
-    //         res.json(() => {return styles_res});
-    //         // }
-    //     });
-        
-    
-   
+    res.json( await client.lrange('styles', 0, 10, (err, items) => {
+        if (err) throw err
+        items.forEach((item, i) => {
+         console.log(' ' + item);
+         styles.push(JSON.parse(item));
+        })
+        return styles;
+       }));          
 });
 
 // Anything that doesn't match the above, send back index.html
@@ -123,9 +97,7 @@ app.post("/set", async (req, res) => {
     await client.connect();
     console.log("Connection to redis client established");
     console.log(data);
-    client.set(DB_KEY + KEY_NUMBER, JSON.stringify(data));
-    // console.log(`Set ${DB_KEY + KEY_NUMBER} in db`);
-    // KEY_NUMBER++;
+    client.lpush(STYLE_KEY, JSON.stringify(data));
 });
 
 app.listen(PORT, () => {
