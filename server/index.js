@@ -17,7 +17,7 @@ const pusher = new Pusher({
     useTLS: true
 });
 
-// ==== end of retrieve env variables ====
+// === end of retrieve env variables ===
 
 const BUILD_DIR = "../client/build/";
 const PUSHER_CHANNEL = "claraify";
@@ -66,7 +66,7 @@ app.get('*', (_, res) => {
     res.sendFile(path.join(__dirname + BUILD_DIR + "index.html"))
 })
 
-app.post('/' + SUBMIT_EVENT, async (req, res) => {
+app.post(`/${SUBMIT_EVENT}`, async (req, res) => {
     if (PRODUCTION || STAGING) {
         // send to pusher only in production (to be isolated when runnig locally)
         const payload = req.body;

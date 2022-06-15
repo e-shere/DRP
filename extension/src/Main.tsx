@@ -1,23 +1,28 @@
 import { ChangeEvent } from "react";
-import { Switch, Button } from "@mui/material";
+import axios from "axios";
+import { Switch as MuiSwitch, Button } from "@mui/material";
 import SettingsIcon from "@mui/icons-material/Settings";
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import { changeBgColor, changeFont, lookupStyle } from "./storage";
-import { TITLE } from "./App";
 
-const oldFont = document.body.style.fontFamily;
-const TRANSPARENT = "#ff000000";
+import { TITLE, UserSettings } from "./App";
+const HEROKU_URL = `https://${TITLE}.herokuapp.com/`
 
-function Toggle(label: string, isOn: boolean, onChange: (_: ChangeEvent<HTMLInputElement>) => void) {
+function Switch(label: string, isOn: boolean, onChange: (_: ChangeEvent<HTMLInputElement>) => void) {
   return (
     <div className="labelled-item">
       <label>{label}</label>
-      <Switch onChange={onChange} checked={isOn} />
+      <MuiSwitch onChange={onChange} checked={isOn} />
     </div>
   );
 }
 
-function Main(state: any) {
+async function lookupStyle() {
+  const res = axios.get(`${HEROKU_URL}serve-style`);
+  res.then(res => res.data).then(res => { console.log(res) });
+  return (await res).data;
+}
+
+function Main(settings: UserSettings, setSettings: (_: UserSettings) => void, setPage: (_: string) => void) {
   return (
     <div className="Main">
       <header>
@@ -25,35 +30,21 @@ function Main(state: any) {
         <h1>{TITLE}</h1>
         < Button
           className="nav-button"
-          onClick={() => state.setPage("settings")}
+          onClick={() => { setPage("settings") }}
           startIcon={<SettingsIcon />}
         />
       </header>
-      {
-        Toggle("Background", state.bgChanged, event => {
-          state.setBgChanged(event.target.checked);
-          if (event.target.checked) {
-            chrome.storage.sync.get("bgColor", ({ bgColor }) => { changeBgColor(bgColor); });
-          } else {
-            changeBgColor(TRANSPARENT);
-          }
-        })
-      }
-      {
-        Toggle("Font", state.fontChanged, event => {
-          state.setFontChanged(event.target.checked);
-          if (event.target.checked) {
-            chrome.storage.sync.get("font", ({ font }) => { changeFont(font); });
-          } else {
-            changeFont(oldFont);
-          }
-        })
-      }
-      <Button
-      className="give the button a nice name nick"
-      onClick={lookupStyle}
-      startIcon={<AddCircleIcon />}
-      >GET STYLE</Button>
+      {Switch(
+        "Background",
+        settings.bgChanged,
+        event => { setSettings({ ...settings, bgChanged: event.target.checked }) }
+      )}
+      {Switch(
+        "Font",
+        settings.fontChanged,
+        event => { setSettings({ ...settings, fontChanged: event.target.checked }) }
+      )}
+      <Button onClick={lookupStyle} startIcon={<AddCircleIcon />}></Button>
     </div>
   );
 }
