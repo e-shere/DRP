@@ -69,8 +69,7 @@ app.get("/serve-styles", async (_, res) => {
     res.json( await client.lrange('styles', 0, 10, (err, items) => {
         if (err) throw err
         items.forEach((item, i) => {
-         console.log(' ' + item);
-         styles.push(JSON.parse(item));
+         console.log(`Retrieved ${item} : ${styles.push(JSON.parse(item))}`);
         })
         return styles;
        }));          
@@ -96,8 +95,9 @@ app.post("/set", async (req, res) => {
     client = PRODUCTION || STAGING ? redis.createClient({ url: REDIS_URL }) : redis.createClient();
     await client.connect();
     console.log("Connection to redis client established");
-    console.log(data);
-    client.lpush(STYLE_KEY, JSON.stringify(data));
+    const style = JSON.stringify(data);
+    console.log(style);
+    client.lpush(STYLE_KEY, style);
 });
 
 app.listen(PORT, () => {

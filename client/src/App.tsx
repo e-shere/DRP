@@ -32,7 +32,7 @@ function App() {
     if (PRODUCTION || STAGING) {
       // subscribe to pusher only in production (to be isolated when runnig locally)
       const pusher = new Pusher(PUSHER_KEY, { cluster: PUSHER_CLUSTER })
-      pusher.subscribe(PUSHER_CHANNEL).bind(SUBMIT_EVENT, () => getAllStyles().then(setStyles))
+      pusher.subscribe(PUSHER_CHANNEL).bind(SUBMIT_EVENT, () => getDbStyle().then(style => setStyles([style])))
       return (() => pusher.unsubscribe(PUSHER_CHANNEL))
     }
   }, []);
