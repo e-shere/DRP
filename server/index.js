@@ -67,16 +67,16 @@ app.get("/serve-style", async (_, res) => {
 
     const entries = KEY_NUMBER + 1;
     
-    for (let i = 0; i < entries; i++) {
-        await client.get("demo" + i, (error, styles) => {
+    // for (let i = 0; i < entries; i++) {
+        await client.get("demo", (error, styles) => {
             if (error) console.error(error);
             if (styles != null) {
-                styleset.add(styles);
+                return [styles];
             }
-        })
-    }
+        });
+    // }
 
-    res.json(() => {return styleset});
+    // res.json(() => {return styleset});
     
     // res.json();
     // const scanner = new redisScan(client);
