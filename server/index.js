@@ -3,7 +3,6 @@ const cors = require("cors");
 const express = require("express");
 const Pusher = require("pusher");
 const redis = require("redis");
-const redisScan = require("node-redis-scan");
 
 // ==== retrieve env variables ====
 require("dotenv").config();
@@ -69,7 +68,7 @@ app.get("/serve-styles", async (_, res) => {
         if (error) console.error(error);
         if (items != null) {
             console.log("Sending styles...");
-            return res.json(JSON.parse(items));
+            return res.json(items);
         }
     })
 
@@ -102,7 +101,7 @@ app.post("/set", async (req, res) => {
     console.log("Connection to redis client established");
     const style = JSON.stringify(data);
     console.log(style);
-    client.lpush('styles', [style]);
+    // client.lpush('styles', [style]);
 });
 
 app.listen(PORT, () => {
