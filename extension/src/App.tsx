@@ -65,7 +65,7 @@ function App() {
     <div className="App">
       {selectPage()}
     </div>
-  );
+  )
 }
 
 export default App;

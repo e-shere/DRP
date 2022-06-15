@@ -5,11 +5,13 @@ import { getDbStyle, setDbStyle } from "./styleDB";
 import Style from "./style";
 import "./App.css";
 
-const PRODUCTION = process.env.NODE_ENV == "production";
-const STAGING = process.env.NODE_ENV == "test";
+// this hack is required because env variables are not visible from the frontend
+const url = window.location.href;
+const STAGING = url.includes("staging");
+const PRODUCTION = !url.includes("staging") && !url.includes("localhost");
 
 // TODO: Fetch env vars from the server (they are public so should not be security problem for now)
-const PUSHER_KEY = PRODUCTION ? "92e02b3a0a7919063500" : "d99fd8c0f4faeacc4709";
+var PUSHER_KEY = PRODUCTION ? "92e02b3a0a7919063500" : "d99fd8c0f4faeacc4709";
 const PUSHER_CLUSTER = "eu";
 
 const PUSHER_CHANNEL = "claraify";

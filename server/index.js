@@ -54,6 +54,13 @@ app.get("/getall", async (_, res) => {
     }));
 });
 
+// === Communication with chrome extension === //
+
+app.get("/serve-style", (_, res) => {
+  res.json({message: "Serving style from database"});
+  console.log("Serving style from database...");
+});
+
 // Anything that doesn't match the above, send back index.html
 app.get('*', (_, res) => {
     res.sendFile(path.join(__dirname + BUILD_DIR + "index.html"))
