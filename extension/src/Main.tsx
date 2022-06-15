@@ -8,6 +8,8 @@ import { TITLE, UserSettings } from "./App";
 
 const TITLE_URL = "claraify";
 const HEROKU_URL = `https://${TITLE_URL}.herokuapp.com/`;
+const LOCAL_HOSE = `http://localhost:3000/`
+const HEROKU_STAGING = `https://${TITLE_URL}-staging.herokuapp.com/`
 
 function Switch(label: string, isOn: boolean, onChange: (_: ChangeEvent<HTMLInputElement>) => void) {
   return (
@@ -19,9 +21,8 @@ function Switch(label: string, isOn: boolean, onChange: (_: ChangeEvent<HTMLInpu
 }
 
 async function lookupStyle() {
-  const res = axios.get(`${HEROKU_URL}serve-style`);
-  res.then(res => res.data).then(res => { console.log(res) });
-  return (await res).data;
+  const res = axios.get(`${HEROKU_STAGING}serve-styles`);
+  res.then(res => res.data).then(res => { return res.json().map(JSON.parse) });
 }
 
 function Main(settings: UserSettings, setSettings: (_: UserSettings) => void, setPage: (_: string) => void) {

@@ -22,11 +22,11 @@ const pusher = new Pusher({
 const BUILD_DIR = "../client/build/";
 const PUSHER_CHANNEL = "claraify";
 const SUBMIT_EVENT = "submit";
+const ADD_TO_EXTENSION = "addex";
 const DB_KEY = "demo";
 const STYLE_KEY = "styles";
 const PRODUCTION = process.env.NODE_ENV == "production";
 const STAGING = process.env.NODE_ENV == "test";
-var KEY_NUMBER = 0
 
 const app = express();
 const path = require("path")
@@ -64,7 +64,7 @@ app.get("/serve-styles", async (_, res) => {
     console.log("Connection to redis client established");
     console.log("Serving styles from database...");
 
-    res.json(await client.lRange("styles", 0, -1, async (error, items) => {
+    res.json(await client.lRange(STYLE_KEY, 0, -1, async (error, items) => {
         if (error) console.error(error);
         if (items != null) {
             console.log("Sending styles...");
@@ -80,10 +80,21 @@ app.get('*', (_, res) => {
 
 app.post(`/${SUBMIT_EVENT}`, async (req, res) => {
     if (PRODUCTION || STAGING) {
-        // send to pusher only in production (to be isolated when runnig locally)
+        // send to pusher only in production (to be isolated when running locally)
         const payload = req.body;
         pusher.trigger(PUSHER_CHANNEL, SUBMIT_EVENT, payload);
         console.log("Submitting");
+        res.send(payload);
+    }
+});
+
+app.post(`/${ADD_TO_EXTENSION}`, async (req, res) => {
+    if (PRODUCTION || STAGING) {
+        // send to pusher only in production (to be isolated when running locally)
+        const payload = req.body;
+        // to send style to extension 
+        pusher.trigger(PUSHER_CHANNEL, ADD_TO_EXTENSION, payload);
+        console.log("Submitting to extension");
         res.send(payload);
     }
 });

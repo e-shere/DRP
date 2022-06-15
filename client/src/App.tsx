@@ -23,6 +23,7 @@ const PUSHER_CLUSTER = "eu";
 
 const PUSHER_CHANNEL = "claraify";
 const SUBMIT_EVENT = "submit";
+const ADD_TO_EXTENSION = "addex";
 
 function App() {
   const [styles, setStyles] = useState<Style[]>([]);
@@ -55,18 +56,18 @@ interface TableRow {
   entry: number,
   style: Style
 }
+const styles_added: Style[] = []
 
 function BasicTable(styles: Style[]) {
   // some bad code... 
   const rows: TableRow[] = []
-  const styles_added: Style[] = []
   for (let i = 0; i < styles.length; i++) {
     const style = styles[i];
     // NOTE: The database stores duplicates at the moment, we should change to sorted set.
     if (!styles_added.includes(style)) { 
       rows.push({entry: i, style: style});
-    }
-    styles_added.push(style);
+      styles_added.push(style);
+    } 
   }
   return (
     <TableContainer component={Paper}>
@@ -141,6 +142,10 @@ function Form() {
 
     
   );
+}
+
+function submitToExtension(chosen_style: Style) {
+  axios.post(`/${ADD_TO_EXTENSION}`, chosen_style);
 }
 
 export default App;
