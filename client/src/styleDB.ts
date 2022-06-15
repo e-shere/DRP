@@ -17,4 +17,11 @@ function setDbStyle(style: Style) {
     .catch(() => console.log("Error when posting style"));
 }
 
-export { getDbStyle, setDbStyle };
+async function getAllStyles(): Promise<Style[]> {
+  const res = await fetch("/serve-style");
+  const styles = await res.json();
+  console.log(styles);
+  return styles;
+}
+
+export { getDbStyle, setDbStyle, getAllStyles };
