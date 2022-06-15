@@ -64,13 +64,13 @@ app.get("/serve-styles", async (_, res) => {
     console.log("Connection to redis client established");
     console.log("Serving styles from database...");
 
-    client.lRange("styles", 0, -1, async (error, items) => {
+    res.json(await client.lRange("styles", 0, -1, async (error, items) => {
         if (error) console.error(error);
         if (items != null) {
             console.log("Sending styles...");
-            return res.json(items);
+            return items;
         }
-    })
+    }));
 
     // res.json( await client.lrange('styles', 0, -1, (err, items) => {
     //     if (err) throw err
