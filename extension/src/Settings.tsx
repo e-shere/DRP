@@ -22,8 +22,10 @@ function Settings(settings: UserSettings, setSettings: (_: UserSettings) => void
           value={settings.font}
           onChange={event => { setSettings({ ...settings, font: event.target.value }) }}
         >
-          <MenuItem value="Comic Sans">Comic Sans</MenuItem>
           <MenuItem value="Arial">Arial</MenuItem>
+          <MenuItem value="Brush Script MT">Brush Script MT</MenuItem>
+          <MenuItem value="Courier New">Courier New</MenuItem>
+          <MenuItem value="Times New Roman">Times New Roman</MenuItem>
         </Select>
         <div className="labelled-item">
           <label>Background</label>
@@ -39,4 +41,4 @@ function Settings(settings: UserSettings, setSettings: (_: UserSettings) => void
   );
 }
 
-export default Settings
+export default Settings;

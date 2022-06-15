@@ -39,4 +39,4 @@ function Main(settings: UserSettings, setSettings: (_: UserSettings) => void, se
   );
 }
 
-export default Main
+export default Main;
