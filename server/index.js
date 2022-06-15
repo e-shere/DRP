@@ -117,15 +117,15 @@ app.post(`/${SUBMIT_EVENT}`, async (req, res) => {
     }
 });
 
-app.post("/set", async (req, _) => {
+app.post("/set", async (req, res) => {
     const { data } = req.body;
     client = PRODUCTION || STAGING ? redis.createClient({ url: REDIS_URL }) : redis.createClient();
     await client.connect();
     console.log("Connection to redis client established");
     console.log(data);
     client.set(DB_KEY + KEY_NUMBER, JSON.stringify(data));
-    console.log(`Set ${DB_KEY + KEY_NUMBER} in db`);
-    KEY_NUMBER++;
+    // console.log(`Set ${DB_KEY + KEY_NUMBER} in db`);
+    // KEY_NUMBER++;
 });
 
 app.listen(PORT, () => {
