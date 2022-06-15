@@ -62,11 +62,11 @@ function BasicTable(styles: Style[]) {
   const styles_added: Style[] = []
   for (let i = 0; i < styles.length; i++) {
     const style = styles[i];
-    styles_added.push(style);
     // NOTE: The database stores duplicates at the moment, we should change to sorted set.
     if (!styles_added.includes(style)) { 
       rows.push({entry: i, style: style});
     }
+    styles_added.push(style);
   }
   return (
     <TableContainer component={Paper}>
