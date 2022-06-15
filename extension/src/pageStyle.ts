@@ -13,13 +13,9 @@ async function setPageBgColor(bgColor: string) {
 
 async function setPageFont(font: string) {
   setPageStyle(font, f => {
-    function setNodeFont(node: Element) {
-      node.setAttribute("style", `font-family:${f} !important`);
-    }
-    setNodeFont(document.body);
-    document.querySelectorAll("h1, h2, h3, h4, h5, h6").forEach(setNodeFont);
-    document.querySelectorAll("p").forEach(setNodeFont);
-    document.querySelectorAll("li").forEach(setNodeFont);
+    document.querySelectorAll("*").forEach(
+      node => node.setAttribute("style", `font-family:${f} !important`)
+    );
   });
 }
 
