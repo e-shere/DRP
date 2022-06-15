@@ -5,7 +5,9 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 import { TITLE, UserSettings } from "./App";
-const HEROKU_URL = `https://${TITLE}.herokuapp.com/`
+
+const TITLE_URL = "claraify";
+const HEROKU_URL = `https://${TITLE_URL}.herokuapp.com/`;
 
 function Switch(label: string, isOn: boolean, onChange: (_: ChangeEvent<HTMLInputElement>) => void) {
   return (
