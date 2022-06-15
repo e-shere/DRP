@@ -64,15 +64,20 @@ app.get("/serve-styles", async (_, res) => {
     await client.connect();
     console.log("Connection to redis client established");
     console.log("Serving styles from database...");
-    const styles = []
 
-    res.json( await client.lrange('styles', 0, 10, (err, items) => {
-        if (err) throw err
-        items.forEach((item, i) => {
-         console.log(`Retrieved ${item} : ${styles.push(JSON.parse(item))}`);
-        })
-        return styles;
-       }));          
+    client.lrange("styles", 0, -1, async (error, items) => {
+        if (error) console.error(error);
+        if (items != null) {
+            console.log("Sending styles...");
+            return res.json(JSON.parse(items));
+        }
+    })
+
+    // res.json( await client.lrange('styles', 0, -1, (err, items) => {
+    //     if (err) throw err
+    //      console.log("retrieving styles...");
+    //      return res.json(JSON.parse(items));
+    //    }));          
 });
 
 // Anything that doesn't match the above, send back index.html
