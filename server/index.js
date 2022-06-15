@@ -70,13 +70,7 @@ app.get("/serve-styles", async (_, res) => {
             console.log("Sending styles...");
             return items;
         }
-    }));
-
-    // res.json( await client.lrange('styles', 0, -1, (err, items) => {
-    //     if (err) throw err
-    //      console.log("retrieving styles...");
-    //      return res.json(JSON.parse(items));
-    //    }));          
+    }));    
 });
 
 // Anything that doesn't match the above, send back index.html

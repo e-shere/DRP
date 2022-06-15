@@ -44,7 +44,7 @@ function App() {
           {Form()}
         </div>
         <div className="Style-table">
-          {BasicTable(styles.map(style => ({entry: 1, style})))}
+          {BasicTable(styles)}
         </div>
       </header>
     </div>
@@ -56,10 +56,18 @@ interface TableRow {
   style: Style
 }
 
-function BasicTable(rows: TableRow[]) {
+function BasicTable(styles: Style[]) {
+  const rows: TableRow[] = []
+  for (let i = 0; i < styles.length; i++) {
+    const tableRow = {entry: i, style: styles[i]}; 
+    // NOTE: The database stores duplicates at the moment, we should change to sorted set.
+    if (!rows.includes(tableRow)) { 
+      rows.push(tableRow);
+    }
+  }
   return (
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+      <Table sx={{ minWidth: 600 }} aria-label="simple table">
       <TableHead>
           <TableRow>
             <TableCell>Entry</TableCell>
@@ -88,20 +96,6 @@ function BasicTable(rows: TableRow[]) {
   );
 }
 
-function Styles(styles: Promise<Style[]>) {
-  // var rows: Style[] = []
-  // getAllStyles().then(styles => {rows = styles});
-  // rows.forEach()
-
-  // return (
-  //   <table>
-  //     {(style == null)
-  //       ? []
-  //       : [<tr><td>{style.font}</td><td>{style.fontSize}</td><td>{style.bgColor}</td></tr>]}
-  //   </table>
-  // );
-}
-
 function Form() {
   const [font, setFont] = useState("Open Sans");
   const [fontSize, setFontSize] = useState(12);
@@ -112,7 +106,6 @@ function Form() {
     const style = new Style(font, fontSize, bgColor);
 
     // Pusher submit event 
-    console.log("submitting event via axios...");
     axios.post(`/${SUBMIT_EVENT}`, style);
 
     // Update db
