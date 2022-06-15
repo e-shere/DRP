@@ -11,7 +11,6 @@ header {
   display: flex;
   border-bottom: 0.1em solid black;
   padding-bottom: 1em;
-  margin-bottom: 4em;
 }
 
 h1 {
@@ -20,18 +19,13 @@ h1 {
   color: rgb(50, 50, 50);
 }
 
-.nav-button {
+.header-button {
   flex-basis: 25%;
-}
-
-.form-field {
-  margin-bottom: 4em;
 }
 
 .bg-color-input {
   margin: auto;
   margin-left: 1em;
-  flex-grow: 1;
 }
 
 .App {
@@ -44,11 +38,16 @@ h1 {
 .labelled-item {
   display: flex;
   padding-inline: 0.75em;
-  padding-bottom: 4em;
 }
 
 .labelled-item label {
   padding-right: 1em;
   margin-right: auto;
   font-size: 1.5em;
+}
+
+.settings-form {
+  display: flex;
+  flex-direction: column;
+  align-content: space-around;
 }

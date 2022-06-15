@@ -1,4 +1,4 @@
-import { Button, Select, MenuItem, FormControl, InputLabel } from "@mui/material";
+import { Button, Select, TextField, MenuItem, FormControl, InputLabel } from "@mui/material";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 
 import { TITLE, UserSettings } from "./App";
@@ -14,10 +14,9 @@ function Settings(settings: UserSettings, setSettings: (_: UserSettings) => void
         />
         <h1>{TITLE}</h1>
       </header>
-      <FormControl fullWidth>
+      <FormControl className="settings-form" fullWidth>
         <InputLabel>Font</InputLabel>
         <Select
-          className="form-field"
           label="Font"
           value={settings.font}
           onChange={event => { setSettings({ ...settings, font: event.target.value }) }}
@@ -36,6 +35,13 @@ function Settings(settings: UserSettings, setSettings: (_: UserSettings) => void
             onChange={event => { setSettings({ ...settings, bgColor: event.target.value }) }}
           />
         </div>
+        <TextField
+          label="Font Size Increase"
+          variant="outlined"
+          type="number"
+          value={settings.fontSizeIncrease}
+          onChange={event => { setSettings({ ...settings, fontSizeIncrease: Number(event.target.value) }) }}
+        />
       </FormControl>
     </div>
   );

@@ -1,21 +1,17 @@
 import { ChangeEvent } from "react";
 import axios from "axios";
-import { Switch as MuiSwitch, Button } from "@mui/material";
+import { Switch, Button } from "@mui/material";
 import SettingsIcon from "@mui/icons-material/Settings";
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 import { TITLE, UserSettings } from "./App";
 const HEROKU_URL = `https://${TITLE}.herokuapp.com/`
 
-function AllSwitch(isOn:boolean, onChange: (_: ChangeEvent<HTMLInputElement>) => void) {
-
-}
-
-function Switch(label: string, isOn: boolean, disabled:boolean, onChange: (_: ChangeEvent<HTMLInputElement>) => void) {
+function LabelledSwitch(label: string, isOn: boolean, enabled: boolean, onChange: (_: ChangeEvent<HTMLInputElement>) => void) {
   return (
     <div className="labelled-item">
       <label>{label}</label>
-      <MuiSwitch onChange={onChange} checked={isOn} disabled={disabled}/>
+      <Switch onChange={onChange} checked={isOn} disabled={!enabled} />
     </div>
   );
 }
@@ -30,33 +26,32 @@ function Main(settings: UserSettings, setSettings: (_: UserSettings) => void, se
   return (
     <div className="Main">
       <header>
-        <div className="nav-button">{/* hacky empty div for scaling */}</div>
+        <div className="header-button">{/* hacky empty div for scaling */}</div>
         <h1>{TITLE}</h1>
-        {Switch(
-        "",
-        settings.styleChanged,
-        false,
-        event => { setSettings({ ...settings, styleChanged: event.target.checked }) }
-      )}
+        <div className="header-button">
+          <Switch
+            onChange={event => setSettings({ ...settings, styleChanged: event.target.checked })}
+            checked={settings.styleChanged}
+          />
+        </div>
       </header>
-      {Switch(
+      {LabelledSwitch(
         "Background",
         settings.bgChanged,
-        !settings.styleChanged,
+        settings.styleChanged,
         event => { setSettings({ ...settings, bgChanged: event.target.checked }) }
       )}
-      {Switch(
+      {LabelledSwitch(
         "Font",
         settings.fontChanged,
-        !settings.styleChanged,
+        settings.styleChanged,
         event => { setSettings({ ...settings, fontChanged: event.target.checked }) }
       )}
       <Button onClick={lookupStyle} startIcon={<AddCircleIcon />}></Button>
       < Button
-          className="nav-button"
-          onClick={() => { setPage("settings") }}
-          startIcon={<SettingsIcon />}
-        />
+        onClick={() => { setPage("settings") }}
+        startIcon={<SettingsIcon />}
+      />
     </div>
   );
 }

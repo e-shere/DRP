@@ -4,19 +4,19 @@ import { useChromeStorageSync } from 'use-chrome-storage';
 import Main from "./Main";
 import Settings from "./Settings";
 import "./App.css";
-import { setPageBgColor, setPageFont } from "./pageStyle";
+import { updatePage } from "./pageStyle";
 
 export const TITLE = "Claraify.";
 const DEFAULT_FONT = "Arial";
+const DEFAULT_FONT_INCREASE = 0;
 const DEFAULT_BG_COLOR = "#ffffff"; /* white */
-const INITIAL_FONT = document.body.style.fontFamily;
-const INITIAL_BG_COLOR = document.body.style.backgroundColor;
 
 export interface UserSettings {
   styleChanged: boolean,
   bgColor: string;
   bgChanged: boolean;
   font: string;
+  fontSizeIncrease: number;
   fontChanged: boolean;
 }
 
@@ -24,12 +24,13 @@ function App() {
   const [page, setPage] = useState("main");
   const [settings, setSettings] = useChromeStorageSync(
     "settings",
-    { 
+    {
       styleChanged: false,
-      bgColor: DEFAULT_BG_COLOR, 
-      bgChanged: false, 
-      font: DEFAULT_FONT, 
-      fontChanged: false 
+      bgChanged: false,
+      fontChanged: false,
+      bgColor: DEFAULT_BG_COLOR,
+      font: DEFAULT_FONT,
+      fontSizeIncrease: DEFAULT_FONT_INCREASE,
     }
   );
 
@@ -39,26 +40,8 @@ function App() {
   /* Update page on settings change if toggle is set */
 
   useEffect(() => {
-    if (settings.styleChanged && settings.bgChanged) {
-      setPageBgColor(settings.bgColor);
-    }
-  }, [settings.bgColor]);
-
-  useEffect(() => {
-    if (settings.styleChanged && settings.fontChanged) {
-      setPageFont(settings.font);
-    }
-  }, [settings.font]);
-
-  /* Reset page when toggle is unset */
-
-  useEffect(() => {
-    setPageFont(settings.styleChanged && settings.fontChanged ? settings.font : INITIAL_FONT);
-  }, [settings.fontChanged, settings.styleChanged]);
-  
-  useEffect(() => {
-    setPageBgColor(settings.styleChanged && settings.bgChanged ? settings.bgColor : INITIAL_BG_COLOR);
-  }, [settings.bgChanged, settings.styleChanged]);
+    updatePage(settings)
+  }, [settings]);
 
   /* Todo: better method for page navigation */
   function selectPage() {
