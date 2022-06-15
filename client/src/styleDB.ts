@@ -22,7 +22,7 @@ async function getAllStyles(): Promise<Style[]> {
   const res = await fetch("/serve-styles");
   const data = await res.json();
   console.log(JSON.stringify(data));
-  return JSON.parse(data);
+  return data.map(JSON.parse);
 }
 
 export { getDbStyle, setDbStyle, getAllStyles };
