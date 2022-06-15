@@ -11,16 +11,16 @@ function setDbStyle(style: Style) {
   fetch("/set", {
     method: "POST",
     headers: { "Content-Type": "application/json", },
-    body: JSON.stringify({ data: style, }),
+    body: JSON.stringify({ data: style }),
   })
     .then(res => res.json())
     .catch(() => console.log("Error when posting style"));
 }
 
 async function getAllStyles(): Promise<Style[]> {
+  console.log("Fetching styles...");
   const res = await fetch("/serve-style");
   const styles = await res.json();
-  console.log(styles);
   return styles;
 }
 

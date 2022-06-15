@@ -112,6 +112,7 @@ function Form() {
     const style = new Style(font, fontSize, bgColor);
 
     // Pusher submit event 
+    console.log("submitting event via axios...");
     axios.post(`/${SUBMIT_EVENT}`, style);
 
     // Update db
