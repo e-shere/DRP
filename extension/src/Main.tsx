@@ -7,11 +7,15 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { TITLE, UserSettings } from "./App";
 const HEROKU_URL = `https://${TITLE}.herokuapp.com/`
 
-function Switch(label: string, isOn: boolean, onChange: (_: ChangeEvent<HTMLInputElement>) => void) {
+function AllSwitch(isOn:boolean, onChange: (_: ChangeEvent<HTMLInputElement>) => void) {
+
+}
+
+function Switch(label: string, isOn: boolean, disabled:boolean, onChange: (_: ChangeEvent<HTMLInputElement>) => void) {
   return (
     <div className="labelled-item">
       <label>{label}</label>
-      <MuiSwitch onChange={onChange} checked={isOn} />
+      <MuiSwitch onChange={onChange} checked={isOn} disabled={disabled}/>
     </div>
   );
 }
@@ -28,23 +32,31 @@ function Main(settings: UserSettings, setSettings: (_: UserSettings) => void, se
       <header>
         <div className="nav-button">{/* hacky empty div for scaling */}</div>
         <h1>{TITLE}</h1>
-        < Button
-          className="nav-button"
-          onClick={() => { setPage("settings") }}
-          startIcon={<SettingsIcon />}
-        />
+        {Switch(
+        "",
+        settings.styleChanged,
+        false,
+        event => { setSettings({ ...settings, styleChanged: event.target.checked }) }
+      )}
       </header>
       {Switch(
         "Background",
         settings.bgChanged,
+        !settings.styleChanged,
         event => { setSettings({ ...settings, bgChanged: event.target.checked }) }
       )}
       {Switch(
         "Font",
         settings.fontChanged,
+        !settings.styleChanged,
         event => { setSettings({ ...settings, fontChanged: event.target.checked }) }
       )}
       <Button onClick={lookupStyle} startIcon={<AddCircleIcon />}></Button>
+      < Button
+          className="nav-button"
+          onClick={() => { setPage("settings") }}
+          startIcon={<SettingsIcon />}
+        />
     </div>
   );
 }
