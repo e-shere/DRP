@@ -102,7 +102,7 @@ app.post("/set", async (req, res) => {
     console.log("Connection to redis client established");
     const style = JSON.stringify(data);
     console.log(style);
-    client.lpush(STYLE_KEY, style);
+    client.lpush('styles', [style]);
 });
 
 app.listen(PORT, () => {
