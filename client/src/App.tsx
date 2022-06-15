@@ -57,17 +57,20 @@ interface TableRow {
 }
 
 function BasicTable(styles: Style[]) {
+  // some bad code... 
   const rows: TableRow[] = []
+  const styles_added: Style[] = []
   for (let i = 0; i < styles.length; i++) {
-    const tableRow = {entry: i, style: styles[i]}; 
+    const style = styles[i];
+    styles_added.push(style);
     // NOTE: The database stores duplicates at the moment, we should change to sorted set.
-    if (!rows.includes(tableRow)) { 
-      rows.push(tableRow);
+    if (!styles_added.includes(style)) { 
+      rows.push({entry: i, style: style});
     }
   }
   return (
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 600 }} aria-label="simple table">
+      <Table sx={{ minWidth: 500 }} aria-label="simple table">
       <TableHead>
           <TableRow>
             <TableCell>Entry</TableCell>
