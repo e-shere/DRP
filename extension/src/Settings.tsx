@@ -1,19 +1,15 @@
 import { Button, Select, MenuItem, FormControl, InputLabel } from "@mui/material";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 
-import { TITLE } from "./App";
-import { changeBgColor, changeFont } from "./storage";
+import { TITLE, UserSettings } from "./App";
 
-function Settings(state: any) {
-  chrome.storage.sync.get("bgColor", ({ bgColor }) => { state.setBgColor(bgColor) })
-  chrome.storage.sync.get("font", ({ font }) => { state.setFont(font) })
-
+function Settings(settings: UserSettings, setSettings: (_: UserSettings) => void, setPage: (_: string) => void) {
   return (
     <div className="Settings">
       <header>
         <Button
           className="nav-button"
-          onClick={() => state.setPage("main")}
+          onClick={() => setPage("main")}
           startIcon={<ArrowBackIosNewIcon />}
         />
         <h1>{TITLE}</h1>
@@ -23,33 +19,21 @@ function Settings(state: any) {
         <Select
           className="form-field"
           label="Font"
-          value={state.font}
-          onChange={event => {
-            const font = event.target.value;
-            state.setFont(event.target.value);
-            chrome.storage.sync.set({ font });
-            if (state.fontChanged) {
-              changeFont(event.target.value);
-            }
-          }}
+          value={settings.font}
+          onChange={event => { setSettings({ ...settings, font: event.target.value }) }}
         >
-          <MenuItem value="Comic Sans">Comic Sans</MenuItem>
           <MenuItem value="Arial">Arial</MenuItem>
+          <MenuItem value="Brush Script MT">Brush Script MT</MenuItem>
+          <MenuItem value="Courier New">Courier New</MenuItem>
+          <MenuItem value="Times New Roman">Times New Roman</MenuItem>
         </Select>
         <div className="labelled-item">
           <label>Background</label>
           <input
             className="bg-color-input"
             type="color"
-            value={state.bgColor}
-            onChange={event => {
-              const bgColor = event.target.value;
-              state.setBgColor(bgColor);
-              chrome.storage.sync.set({ bgColor });
-              if (state.bgChanged) {
-                changeBgColor(bgColor);
-              }
-            }}
+            value={settings.bgColor}
+            onChange={event => { setSettings({ ...settings, bgColor: event.target.value }) }}
           />
         </div>
       </FormControl>
