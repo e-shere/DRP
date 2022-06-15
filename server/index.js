@@ -64,7 +64,7 @@ app.get("/serve-styles", async (_, res) => {
     console.log("Connection to redis client established");
     console.log("Serving styles from database...");
 
-    client.lrange("styles", 0, -1, async (error, items) => {
+    client.lRange("styles", 0, -1, async (error, items) => {
         if (error) console.error(error);
         if (items != null) {
             console.log("Sending styles...");
@@ -101,7 +101,7 @@ app.post("/set", async (req, res) => {
     console.log("Connection to redis client established");
     const style = JSON.stringify(data);
     console.log(style);
-    // client.lpush('styles', [style]);
+    client.lPush('styles', [style]);
 });
 
 app.listen(PORT, () => {
