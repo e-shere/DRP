@@ -1,8 +1,11 @@
 import { ChangeEvent } from "react";
+import axios from "axios";
 import { Switch as MuiSwitch, Button } from "@mui/material";
 import SettingsIcon from "@mui/icons-material/Settings";
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 import { TITLE, UserSettings } from "./App";
+const HEROKU_URL = `https://${TITLE}.herokuapp.com/`
 
 function Switch(label: string, isOn: boolean, onChange: (_: ChangeEvent<HTMLInputElement>) => void) {
   return (
@@ -11,6 +14,12 @@ function Switch(label: string, isOn: boolean, onChange: (_: ChangeEvent<HTMLInpu
       <MuiSwitch onChange={onChange} checked={isOn} />
     </div>
   );
+}
+
+async function lookupStyle() {
+  const res = axios.get(`${HEROKU_URL}serve-style`);
+  res.then(res => res.data).then(res => { console.log(res) });
+  return (await res).data;
 }
 
 function Main(settings: UserSettings, setSettings: (_: UserSettings) => void, setPage: (_: string) => void) {
@@ -35,6 +44,7 @@ function Main(settings: UserSettings, setSettings: (_: UserSettings) => void, se
         settings.fontChanged,
         event => { setSettings({ ...settings, fontChanged: event.target.checked }) }
       )}
+      <Button onClick={lookupStyle} startIcon={<AddCircleIcon />}></Button>
     </div>
   );
 }
