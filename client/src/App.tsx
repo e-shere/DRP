@@ -49,9 +49,9 @@ function App() {
         <div>
           {Form()}
         </div>
-        <div className="Style-table">
+        {/* <div className="Style-table"> */}
           {DataTable(styles)}
-        </div>
+        {/* </div> */}
       </header>
     </div>
   );

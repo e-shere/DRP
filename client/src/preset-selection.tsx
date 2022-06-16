@@ -84,6 +84,9 @@ export default function DataTable(styles: Style[]) {
           },
         }}
       />
+      <div style={{ marginTop: "40px" }}>
+      You have selected style: {selectedRow[0].id}, {selectedRow[0].font} {selectedRow[0].fontSize} {selectedRow[0].bgColor}
+    </div>
     </div>
   );
 }
