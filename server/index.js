@@ -22,7 +22,9 @@ const pusher = new Pusher({
 const BUILD_DIR = "../client/build/";
 const PUSHER_CHANNEL = "claraify";
 const SUBMIT_EVENT = "submit";
+const ADD_TO_EXTENSION = "addex";
 const DB_KEY = "demo";
+const STYLE_KEY = "styles";
 const PRODUCTION = process.env.NODE_ENV == "production";
 const STAGING = process.env.NODE_ENV == "test";
 
@@ -56,9 +58,19 @@ app.get("/getall", async (_, res) => {
 
 // === Communication with chrome extension === //
 
-app.get("/serve-style", (_, res) => {
-  res.json({message: "Serving style from database"});
-  console.log("Serving style from database...");
+app.get("/serve-styles", async (_, res) => {
+    client = PRODUCTION || STAGING ? redis.createClient({ url: REDIS_URL }) : redis.createClient();
+    await client.connect();
+    console.log("Connection to redis client established");
+    console.log("Serving styles from database...");
+
+    res.json(await client.lRange(STYLE_KEY, 0, -1, async (error, items) => {
+        if (error) console.error(error);
+        if (items != null) {
+            console.log("Sending styles...");
+            return items;
+        }
+    }));    
 });
 
 // Anything that doesn't match the above, send back index.html
@@ -68,20 +80,33 @@ app.get('*', (_, res) => {
 
 app.post(`/${SUBMIT_EVENT}`, async (req, res) => {
     if (PRODUCTION || STAGING) {
-        // send to pusher only in production (to be isolated when runnig locally)
+        // send to pusher only in production (to be isolated when running locally)
         const payload = req.body;
         pusher.trigger(PUSHER_CHANNEL, SUBMIT_EVENT, payload);
+        console.log("Submitting");
         res.send(payload);
     }
 });
 
-app.post("/set", async (req, _) => {
+app.post(`/${ADD_TO_EXTENSION}`, async (req, res) => {
+    if (PRODUCTION || STAGING) {
+        // send to pusher only in production (to be isolated when running locally)
+        const payload = req.body;
+        // to send style to extension 
+        pusher.trigger(PUSHER_CHANNEL, ADD_TO_EXTENSION, payload);
+        console.log("Submitting to extension");
+        res.send(payload);
+    }
+});
+
+app.post("/set", async (req, res) => {
     const { data } = req.body;
     client = PRODUCTION || STAGING ? redis.createClient({ url: REDIS_URL }) : redis.createClient();
     await client.connect();
     console.log("Connection to redis client established");
-    console.log(data);
-    client.set(DB_KEY, JSON.stringify(data));
+    const style = JSON.stringify(data);
+    console.log(style);
+    client.lPush('styles', [style]);
 });
 
 app.listen(PORT, () => {
