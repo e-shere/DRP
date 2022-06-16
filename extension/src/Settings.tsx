@@ -42,7 +42,7 @@ function Settings(settings: UserSettings, setSettings: (_: UserSettings) => void
         />
         <label className="bg-color-input-label">Background</label>
         <SketchPicker
-          width="95%"
+          width="92.5%"
           presetColors={PRESET_BG_COLORS}
           color={settings.bgColor}
           onChange={color => { setSettings({ ...settings, bgColor: color.hex }) }}
