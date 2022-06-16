@@ -13,8 +13,13 @@
   font-size: calc(10px + 2vmin);
 }
 
-.Style-table {
-  margin-top: 1em;
+.style-table {
+}
+
+.style-submission{
+}
+
+.style-selection {
 }
 
 input[type=text],

@@ -67,16 +67,14 @@ export default function DataTable(styles: Style[]) {
   ];
 
   return (
-    <div style={{display: 'flex', height:300, width: '100%'}}>
-      <div style={{ marginTop: "40px" }}>
-      <Button onClick={() => {
+    <div className="style-selection">
+      <Button className="style-submission" onClick={() => {
         alert('Style submitted to extension!');
-        
         }} 
         variant="contained">Submit Style</Button>
       {/* You have selected style: {selectedRow[0].id}, {selectedRow[0].font} {selectedRow[0].fontSize} {selectedRow[0].bgColor} */}
-    </div>
-      <DataGrid
+      <DataGrid 
+        className="style-table" 
         rows={rows}
         columns={columns}
         autoHeight
