@@ -1,7 +1,14 @@
 import { Button, Select, TextField, MenuItem, FormControl, InputLabel } from "@mui/material";
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import { SketchPicker } from 'react-color';
 
 import { TITLE, UserSettings } from "./App";
+
+const PRESET_BG_COLORS = [
+  "#faf2d9",
+  "#fae1d9",
+  "#d9e8fa",
+];
 
 function Settings(settings: UserSettings, setSettings: (_: UserSettings) => void, setPage: (_: string) => void) {
   return (
@@ -26,21 +33,19 @@ function Settings(settings: UserSettings, setSettings: (_: UserSettings) => void
           <MenuItem value="Courier New">Courier New</MenuItem>
           <MenuItem value="Roboto">Roboto</MenuItem>
         </Select>
-        <div className="labelled-item">
-          <label>Background</label>
-          <input
-            className="bg-color-input"
-            type="color"
-            value={settings.bgColor}
-            onChange={event => { setSettings({ ...settings, bgColor: event.target.value }) }}
-          />
-        </div>
         <TextField
           label="Font Size Increase"
           variant="outlined"
           type="number"
           value={settings.fontSizeIncrease}
           onChange={event => { setSettings({ ...settings, fontSizeIncrease: Number(event.target.value) }) }}
+        />
+        <label className="bg-color-input-label">Background</label>
+        <SketchPicker
+          width="95%"
+          presetColors={PRESET_BG_COLORS}
+          color={settings.bgColor}
+          onChange={color => { setSettings({ ...settings, bgColor: color.hex }) }}
         />
       </FormControl>
     </div>

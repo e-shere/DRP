@@ -30,8 +30,9 @@ h1 {
 .App {
   width: 22em;
   height: 30em;
-  background-color: #c1e6dd;
+  background-color: #f8f2e6;
   padding: 1em;
+  overflow-y: scroll;
 }
 
 .labelled-item {
@@ -53,6 +54,13 @@ h1 {
   margin-bottom: 3em;
 }
 
+.bg-color-input-label {
+  font-size: 1.8em;
+  margin-top: 2em;
+  text-align: center;
+}
+
 .bg-color-input {
-  margin-left: 1em;
+  margin-bottom: 2em;
+  margin-bottom: 2em;
 }
