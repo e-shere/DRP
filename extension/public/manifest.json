@@ -6,8 +6,28 @@
     "permissions": [
         "activeTab", "storage", "tabs", "scripting"
       ],
+      "host_permissions": [
+        "http://claraify.com/*",
+        "http://localhost:3000/*"
+    ],
     "action": {
         "default_popup": "index.html",
-        "default_title": "Claraify"
-    }
+        "default_title": "Open the popup"
+    },
+    "devtools_page": "../index.html",
+    "externally_connectable": {
+        "matches": ["http://claraify.com/", "https://claraify.herokuapp.com/",
+            "https://claraify-staging.herokuapp.com/", "http://localhost:3000/"]
+    },
+    "background": {
+        "service_worker": "background.js"
+    },
+
+    "content_scripts": [ 
+      { 
+        "matches": [ "<all_urls>" ], 
+        "js": [ "content.js" ], 
+        "run_at": "document_start" 
+      } 
+    ] 
 }

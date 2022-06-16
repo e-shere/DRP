@@ -3,6 +3,7 @@ import { DataGrid, GridRowId, GridSelectionModel, GridColDef } from "@mui/x-data
 import Radio from "@mui/material/Radio";
 import Style from "./style";
 import Button from '@mui/material/Button';
+import { triggerMessageToExtension } from "./scripts";
 
 interface Row {
   id: GridRowId,
@@ -80,11 +81,10 @@ export default function DataTable(styles: Style[]) {
           setSelectionModel(newSelectionModel);
         }}
       />
-      {/* <Button className="style-submission" onClick={() => {
-        alert(`Copied preset ${Number(selectedRow[0].id)} to clipboard!`);
-          // copyToClipBoard(styles[(Number(selectedRow[0].id) - 1)]);
-        }} 
-        variant="contained">Copy preset to clipboard</Button> */}
+      <Button className="style-submission" onClick={(e) => {
+        triggerMessageToExtension(e, styles[(Number(selectedRow[0].id) - 1)])
+      }}
+        variant="contained">Copy preset to clipboard</Button>
     </div>
   );
 }

@@ -4,16 +4,8 @@ import axios from "axios";
 import { getDbStyle, setDbStyle, getAllStyles } from "./styleDB";
 import Style from "./style";
 import "./App.css";
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import { DataGrid, GridRowId, GridSelectionModel } from "@mui/x-data-grid";
-import Radio from "@mui/material/Radio";
 import DataTable from "./preset-selection";
+import { triggerMessageToExtension } from "./scripts";
 
 // this hack is required because env variables are not visible from the frontend
 const url = window.location.href;
@@ -48,6 +40,9 @@ function App() {
       <header className="App-header">
           {Form()}
           {DataTable(styles)}
+      <div>
+        <button onClick={(e) => triggerMessageToExtension(e, undefined)}>This button triggers a message</button>
+      </div>
       </header>
     </div>
   );
