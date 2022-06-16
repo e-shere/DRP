@@ -3,6 +3,7 @@ import { DataGrid, GridRowId, GridSelectionModel, GridColDef } from "@mui/x-data
 import Radio from "@mui/material/Radio";
 import {TableRow} from "./App";
 import Style from "./style";
+import Button from '@mui/material/Button';
 
 interface Row {
   id: GridRowId,
@@ -85,7 +86,12 @@ export default function DataTable(styles: Style[]) {
         }}
       />
       <div style={{ marginTop: "40px" }}>
-      You have selected style: {selectedRow[0].id}, {selectedRow[0].font} {selectedRow[0].fontSize} {selectedRow[0].bgColor}
+      <Button onClick={() => {
+        alert('Style submitted to extension!');
+        
+        }} 
+        variant="contained">Submit Style</Button>
+      {/* You have selected style: {selectedRow[0].id}, {selectedRow[0].font} {selectedRow[0].fontSize} {selectedRow[0].bgColor} */}
     </div>
     </div>
   );
