@@ -4,16 +4,10 @@ import axios from "axios";
 import { getDbStyle, setDbStyle, getAllStyles } from "./styleDB";
 import Style from "./style";
 import "./App.css";
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import { DataGrid, GridRowId, GridSelectionModel } from "@mui/x-data-grid";
-import Radio from "@mui/material/Radio";
+import Button from '@mui/material/Button';
 import DataTable from "./preset-selection";
+import { triggerMessageToExtension } from "./scripts";
+import { Dialog } from "@mui/material";
 
 // this hack is required because env variables are not visible from the frontend
 const url = window.location.href;
@@ -70,8 +64,9 @@ function Form() {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label>Font</label>
+    <div>
+    <form className="preset-form" onSubmit={handleSubmit}>
+      <label  >Font</label>
       <select value={font} onChange={event => setFont(event.target.value)}>
         <option value="Open Sans">Open Sans</option>
         <option value="Comic Sans">Comic Sans</option>
@@ -80,6 +75,7 @@ function Form() {
       <label>Font Size</label>
       <input
         type="number"
+        width={"50%"}
         value={fontSize}
         onChange={event => setFontSize(Number(event.target.value))} placeholder="font size"
       />
@@ -89,8 +85,15 @@ function Form() {
         value={bgColor}
         onChange={event => setBgColor(event.target.value)}
       />
-      <input type="submit" value="Submit" />   
-    </form>    
+      <input type="submit" value="SAVE STYLE TO YOUR PRESETS" style={{width:500, height: 50, fontSize: 20, font: "Courier New (monospace)"}}/>  
+      {/* <div> {[
+      <Button className="style-submission" variant="contained" onClick={handleSubmit}
+       style={{width:500, height: 50, fontSize: 20, font: "Courier New (monospace)"}}>
+        Save style to your presets</Button>]}
+        </div> */}
+    </form>   
+    
+    </div>      
   );
 }
 

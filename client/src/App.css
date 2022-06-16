@@ -13,15 +13,13 @@
   font-size: calc(10px + 2vmin);
 }
 
-.style-table {
-  margin-bottom: 1em;
+.preset-form {
+  margin-top: 2em;
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  padding: 20px;
   text-align: center;
   background-color: #f8f2e6;
-}
-
-.style-submission{
-  text-align: center;
-  background-color: rgb(169, 226, 226);
 }
 
 .style-selection {
@@ -29,6 +27,25 @@
   width: 58%;
   text-align: center;
 }
+
+.table-title {
+  text-align: center;
+}
+
+.style-table {
+  margin-bottom: 2em;
+  text-align: center;
+  background-color: #f8f2e6;
+  font-size:25px;
+}
+
+.style-submission{
+  text-align: center;
+  font-size:25px;
+  background-color: rgb(169, 226, 226);
+  margin-bottom: 2em;
+}
+
 
 input[type=text],
 input[type=color],
@@ -41,6 +58,7 @@ select {
   border: 1px solid #ccc;
   border-radius: 4px;
   box-sizing: border-box;
+  font-size:25px;
 }
 
 input[type=color] {

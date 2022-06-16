@@ -3,6 +3,8 @@ import { DataGrid, GridRowId, GridSelectionModel, GridColDef } from "@mui/x-data
 import Radio from "@mui/material/Radio";
 import Style from "./style";
 import Button from '@mui/material/Button';
+import { Tooltip } from "@mui/material";
+import { triggerMessageToExtension } from "./scripts";
 
 interface Row {
   id: GridRowId,
@@ -70,6 +72,7 @@ export default function DataTable(styles: Style[]) {
 
   return (
     <div className="style-selection">
+      <p className="table-title">Your saved presets:</p>
       <DataGrid 
         className="style-table" 
         rows={rows}
@@ -80,19 +83,10 @@ export default function DataTable(styles: Style[]) {
           setSelectionModel(newSelectionModel);
         }}
       />
-      {/* <Button className="style-submission" onClick={() => {
-        alert(`Copied preset ${Number(selectedRow[0].id)} to clipboard!`);
-          // copyToClipBoard(styles[(Number(selectedRow[0].id) - 1)]);
-        }} 
-        variant="contained">Copy preset to clipboard</Button> */}
+      <Button className="style-submission" onClick={(e) => {
+        triggerMessageToExtension(e, styles[(Number(selectedRow[0].id) - 1)])
+      }}
+      variant="contained" style={{width:500, height: 50, fontSize: 20, font: "Courier New (monospace)"}}>Submit preset to extension</Button>
     </div>
   );
-}
-
-function sendToExtension(selectedStyle: Style) {
-
-}
-
-function copyToClipBoard(selectedStyle: Style) {
-
 }
