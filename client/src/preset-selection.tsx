@@ -41,7 +41,9 @@ export default function DataTable(styles: Style[]) {
     {
       field: 'id',
       headerName: 'ID',
-      width: 40
+      description:
+        'The id of the preset you are submitting',
+      width: 150
     },
     {
       field: 'font',
@@ -78,16 +80,19 @@ export default function DataTable(styles: Style[]) {
           setSelectionModel(newSelectionModel);
         }}
       />
-      <Button className="style-submission" onClick={() => {
-        alert('Style submitted to extension!');
-        sendToExtension(styles[(Number(selectedRow[0].id) - 1)]);
+      {/* <Button className="style-submission" onClick={() => {
+        alert(`Copied preset ${Number(selectedRow[0].id)} to clipboard!`);
+          // copyToClipBoard(styles[(Number(selectedRow[0].id) - 1)]);
         }} 
-        variant="contained">Submit Style to extension</Button>
+        variant="contained">Copy preset to clipboard</Button> */}
     </div>
   );
 }
 
 function sendToExtension(selectedStyle: Style) {
 
+}
+
+function copyToClipBoard(selectedStyle: Style) {
 
 }
