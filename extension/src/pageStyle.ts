@@ -9,12 +9,12 @@ async function updatePage(settings: UserSettings) {
       : "";
     const bgAtrr = (s.bgChanged && s.styleChanged) ? `background-color:${s.bgColor} !important;` : "";
 
-    /* update page font */
+    /* Update page font */
     function setNodeBgColor(node: HTMLElement) {
       node.setAttribute("style", fontAtrr + bgAtrr);
     }
 
-    /* update page bg */
+    /* Update page bg */
     document.querySelectorAll("*").forEach(
       node => node.setAttribute("style", fontAtrr)
     );
