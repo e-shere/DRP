@@ -1,9 +1,23 @@
 /* Todo: improve method of updating background color (maybe adjust font color too) */
-async function setPageBgColor(bgColor: string) {
-  setPageStyle(bgColor, c => {
+
+import { UserSettings } from "./App";
+
+async function updatePage(settings: UserSettings) {
+  setPageStyle(settings, s => {
+    const fontAtrr = (s.fontChanged && s.styleChanged)
+      ? `font-family:${s.font} !important; font-size:calc(1em + ${s.fontSizeIncrease}px) !important;`
+      : "";
+    const bgAtrr = (s.bgChanged && s.styleChanged) ? `background-color:${s.bgColor} !important;` : "";
+
+    /* update page font */
     function setNodeBgColor(node: HTMLElement) {
-      node.style.setProperty("background-color", c, "important");
+      node.setAttribute("style", fontAtrr + bgAtrr);
     }
+
+    /* update page bg */
+    document.querySelectorAll("*").forEach(
+      node => node.setAttribute("style", fontAtrr)
+    );
     setNodeBgColor(document.body);
     document.querySelectorAll("p").forEach(setNodeBgColor);
     document.querySelectorAll("header").forEach(setNodeBgColor);
@@ -11,24 +25,13 @@ async function setPageBgColor(bgColor: string) {
   });
 }
 
-async function setPageFont(font: string) {
-  setPageStyle(font, f => {
-    document.querySelectorAll("*").forEach(
-      node => node.setAttribute("style", `font-family:${f} !important`)
-    );
+async function setPageStyle(settings: UserSettings, updateStyle: (_: UserSettings) => void) {
+  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+  chrome.scripting.executeScript({
+    target: { tabId: tab.id ? tab.id : -1 },
+    func: updateStyle,
+    args: [settings],
   });
 }
 
-async function setPageStyle(bgColor: string, updateStyle: (_: string) => void) {
-  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-  chrome.scripting.executeScript(
-    {
-      target: { tabId: tab.id ? tab.id : -1 },
-      func: updateStyle,
-      args: [bgColor],
-    }
-  );
-}
-
-
-export { setPageBgColor, setPageFont };
+export { updatePage };
