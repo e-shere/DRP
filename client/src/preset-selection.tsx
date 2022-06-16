@@ -11,9 +11,9 @@ interface Row {
   bgColor: string;
 }
 
-export default function DataTable(styles: Style[]) {
-  // const styles: Style[] = [{font:"Comic Sans",fontSize:23, bgColor:"#75507b"},
-  // {font:"Comic Sans",fontSize:23,bgColor:"#75507b"}]
+export default function DataTable(styl: Style[]) {
+  const styles: Style[] = [{font:"Comic Sans",fontSize:23, bgColor:"#75507b"},
+  {font:"Comic Sans",fontSize:23,bgColor:"#75507b"}]
 
   const rows: Row[] = [];
   for (let i = 1; i < styles.length + 1; i ++) {
@@ -44,6 +44,7 @@ export default function DataTable(styles: Style[]) {
     {
       field: 'id',
       headerName: 'ID',
+      width: 40
     },
     {
       field: 'font',
@@ -57,7 +58,7 @@ export default function DataTable(styles: Style[]) {
       headerName: 'Font Size',
       description:
         'The font size used by this preset',
-      width: 40
+      width: 150
     },
     {
       field: 'bgColor',
@@ -70,19 +71,26 @@ export default function DataTable(styles: Style[]) {
 
   return (
     <div className="style-selection">
-      <Button className="style-submission" onClick={() => {
-        alert('Style submitted to extension!');
-        }} 
-        variant="contained">Submit Style</Button>
       <DataGrid 
         className="style-table" 
         rows={rows}
         columns={columns}
+        autoHeight
         selectionModel={selectionModel}
         onSelectionModelChange={(newSelectionModel: GridSelectionModel) => {
           setSelectionModel(newSelectionModel);
         }}
       />
+      <Button className="style-submission" onClick={() => {
+        alert('Style submitted to extension!');
+        sendToExtension(styles[(Number(selectedRow[0].id) - 1)]);
+        }} 
+        variant="contained">Submit Style to extension</Button>
     </div>
   );
+}
+
+function sendToExtension(selectedStyle: Style) {
+
+
 }

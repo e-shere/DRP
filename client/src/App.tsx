@@ -118,7 +118,7 @@ function Form() {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form color={""} onSubmit={handleSubmit}>
       <label>Font</label>
       <select value={font} onChange={event => setFont(event.target.value)}>
         <option value="Open Sans">Open Sans</option>
@@ -137,16 +137,11 @@ function Form() {
         value={bgColor}
         onChange={event => setBgColor(event.target.value)}
       />
-      <input type="submit" value="Submit" />
-   
+      <input type="submit" value="Submit" />   
     </form>
 
     
   );
-}
-
-function submitToExtension(chosen_style: Style) {
-  axios.post(`/${ADD_TO_EXTENSION}`, chosen_style);
 }
 
 export default App;

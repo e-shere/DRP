@@ -4,7 +4,7 @@
 
 .App-header {
   padding: 0;
-  background-color: #282c34;
+  background-color: #d9e8fa;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -14,12 +14,20 @@
 }
 
 .style-table {
+  margin-bottom: 1em;
+  text-align: center;
+  background-color: #f8f2e6;
 }
 
 .style-submission{
+  text-align: center;
+  background-color: rgb(169, 226, 226);
 }
 
 .style-selection {
+  margin-top: 2em;
+  width: 58%;
+  text-align: center;
 }
 
 input[type=text],
@@ -41,8 +49,8 @@ input[type=color] {
 
 input[type=submit] {
   width: 100%;
-  background-color: #4CAF50;
-  color: white;
+  background-color: #1976d2;
+  color: rgb(255, 255, 255);
   padding: 14px 20px;
   margin: 8px 0;
   border: none;
@@ -51,16 +59,5 @@ input[type=submit] {
 }
 
 input[type=submit]:hover {
-  background-color: #45a049;
-}
-
-table {
-  table-layout: fixed;
-  width: 35vw;
-}
-
-div {
-  border-radius: 5px;
-  background-color: #f2f2f2;
-  padding: 20px;
+  background-color: #42a5f5;
 }
