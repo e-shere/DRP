@@ -46,9 +46,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <div>
           {Form()}
-        </div>
           {DataTable(styles)}
       </header>
     </div>
