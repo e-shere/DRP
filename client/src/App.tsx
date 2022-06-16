@@ -7,6 +7,7 @@ import "./App.css";
 import Button from '@mui/material/Button';
 import DataTable from "./preset-selection";
 import { triggerMessageToExtension } from "./scripts";
+import { Dialog } from "@mui/material";
 
 // this hack is required because env variables are not visible from the frontend
 const url = window.location.href;
@@ -84,11 +85,14 @@ function Form() {
         value={bgColor}
         onChange={event => setBgColor(event.target.value)}
       />
+      <input type="submit" value="SAVE STYLE TO YOUR PRESETS" style={{width:500, height: 50, fontSize: 20, font: "Courier New (monospace)"}}/>  
+      {/* <div> {[
+      <Button className="style-submission" variant="contained" onClick={handleSubmit}
+       style={{width:500, height: 50, fontSize: 20, font: "Courier New (monospace)"}}>
+        Save style to your presets</Button>]}
+        </div> */}
     </form>   
-    <Button className="style-submission" onClick={(e) => {
-      handleSubmit(e);
-    }} variant="contained" style={{width:500, height: 50, fontSize: 20, font: "Courier New (monospace)"}}>
-      Save style to your presets</Button> 
+    
     </div>      
   );
 }
