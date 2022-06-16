@@ -67,7 +67,15 @@ export default function DataTable(styles: Style[]) {
   ];
 
   return (
-    <div style={{height:300, width: '100%'}}>
+    <div style={{display: 'flex', height:300, width: '100%'}}>
+      <div style={{ marginTop: "40px" }}>
+      <Button onClick={() => {
+        alert('Style submitted to extension!');
+        
+        }} 
+        variant="contained">Submit Style</Button>
+      {/* You have selected style: {selectedRow[0].id}, {selectedRow[0].font} {selectedRow[0].fontSize} {selectedRow[0].bgColor} */}
+    </div>
       <DataGrid
         rows={rows}
         columns={columns}
@@ -85,14 +93,6 @@ export default function DataTable(styles: Style[]) {
           },
         }}
       />
-      <div style={{ marginTop: "40px" }}>
-      <Button onClick={() => {
-        alert('Style submitted to extension!');
-        
-        }} 
-        variant="contained">Submit Style</Button>
-      {/* You have selected style: {selectedRow[0].id}, {selectedRow[0].font} {selectedRow[0].fontSize} {selectedRow[0].bgColor} */}
-    </div>
     </div>
   );
 }
