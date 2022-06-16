@@ -35,11 +35,8 @@ function App() {
   /* Load settings from chrome sync */
   useChromeStorageSync("settings", setSettings);
 
-  /* Update page on settings change if toggle is set */
-
-  useEffect(() => {
-    updatePage(settings)
-  }, [settings]);
+  /* refresh page on any settings change */
+  useEffect(() => { updatePage(settings) }, [settings]);
 
   /* Todo: better method for page navigation */
   function selectPage() {
