@@ -7,6 +7,7 @@ import "./App.css";
 import { updatePage } from "./pageStyle";
 
 export const TITLE = "Clarify.";
+export const WEBAPP_URL = "https://claraify.herokuapp.com/";
 
 export interface UserSettings {
   styleChanged: boolean,

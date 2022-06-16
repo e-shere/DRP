@@ -2,7 +2,7 @@ import { Button, Select, TextField, MenuItem, FormControl, InputLabel } from "@m
 import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import { SketchPicker } from 'react-color';
 
-import { TITLE, UserSettings } from "./App";
+import { TITLE, UserSettings, WEBAPP_URL } from "./App";
 
 const PRESET_BG_COLORS = [
   "#faf2d9",
@@ -25,6 +25,7 @@ function Settings(settings: UserSettings, setSettings: (_: UserSettings) => void
         <div className="setting">
           <InputLabel>Font</InputLabel>
           <Select
+            fullWidth
             label="Font"
             value={settings.font}
             onChange={event => { setSettings({ ...settings, font: event.target.value }) }}
@@ -36,6 +37,9 @@ function Settings(settings: UserSettings, setSettings: (_: UserSettings) => void
         </div>
         <div className="setting">
           <TextField
+            fullWidth
+            InputProps={{ inputProps: { min: -20, max: 50 } }}
+            onWheel={event => event.target instanceof HTMLElement && event.target.blur()}
             label="Font Size Increase"
             variant="outlined"
             type="number"
@@ -45,6 +49,9 @@ function Settings(settings: UserSettings, setSettings: (_: UserSettings) => void
         </div>
         <div className="setting">
           <TextField
+            fullWidth
+            InputProps={{ inputProps: { min: 0, max: 10 } }}
+            onWheel={event => event.target instanceof HTMLElement && event.target.blur()}
             label="Letter Spacing"
             variant="outlined"
             type="number"
@@ -61,6 +68,11 @@ function Settings(settings: UserSettings, setSettings: (_: UserSettings) => void
             onChange={color => { setSettings({ ...settings, bgColor: color.hex }) }}
           />
         </div>
+        <Button
+          href={WEBAPP_URL}
+          target="_blank"
+          variant="outlined"
+        >Presets</Button>
       </FormControl>
     </div>
   );
