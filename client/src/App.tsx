@@ -4,6 +4,7 @@ import axios from "axios";
 import { getDbStyle, setDbStyle, getAllStyles } from "./styleDB";
 import Style from "./style";
 import "./App.css";
+import Button from '@mui/material/Button';
 import DataTable from "./preset-selection";
 import { triggerMessageToExtension } from "./scripts";
 
@@ -40,9 +41,6 @@ function App() {
       <header className="App-header">
           {Form()}
           {DataTable(styles)}
-      <div>
-        <button onClick={(e) => triggerMessageToExtension(e, undefined)}>This button triggers a message</button>
-      </div>
       </header>
     </div>
   );
@@ -65,7 +63,8 @@ function Form() {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <div>
+    <form className="preset-form" onSubmit={handleSubmit}>
       <label>Font</label>
       <select value={font} onChange={event => setFont(event.target.value)}>
         <option value="Open Sans">Open Sans</option>
@@ -75,6 +74,7 @@ function Form() {
       <label>Font Size</label>
       <input
         type="number"
+        width={"50%"}
         value={fontSize}
         onChange={event => setFontSize(Number(event.target.value))} placeholder="font size"
       />
@@ -84,8 +84,12 @@ function Form() {
         value={bgColor}
         onChange={event => setBgColor(event.target.value)}
       />
-      <input type="submit" value="Submit" />   
-    </form>    
+    </form>   
+    <Button className="style-submission" onClick={(e) => {
+      // triggerMessageToExtension(e, styles[(Number(selectedRow[0].id) - 1)])
+    }} variant="contained" style={{width:500, height: 50, fontSize: 20, font: "Courier New (monospace)"}}>
+      Save style to your presets</Button> 
+    </div>      
   );
 }
 

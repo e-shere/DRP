@@ -13,8 +13,21 @@
   font-size: calc(10px + 2vmin);
 }
 
-.style-table {
+.preset-form {
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  padding: 20px;
   margin-bottom: 1em;
+  text-align: center;
+  background-color: #f8f2e6;
+}
+
+.table-title {
+  text-align: center;
+}
+
+.style-table {
+  margin-bottom: 2em;
   text-align: center;
   background-color: #f8f2e6;
 }
