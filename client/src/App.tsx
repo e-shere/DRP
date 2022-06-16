@@ -86,6 +86,7 @@ function Form() {
       />
     </form>   
     <Button className="style-submission" onClick={(e) => {
+      handleSubmit(e);
       // triggerMessageToExtension(e, styles[(Number(selectedRow[0].id) - 1)])
     }} variant="contained" style={{width:500, height: 50, fontSize: 20, font: "Courier New (monospace)"}}>
       Save style to your presets</Button> 
