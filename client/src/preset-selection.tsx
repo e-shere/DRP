@@ -45,17 +45,17 @@ export default function DataTable(styles: Style[]) {
     {
       field: "font",
       headerName: "Font",
-      width: 50
+      width: 150
     },
     {
-      field: "font size",
+      field: "fontSize",
       headerName: "Font Size",
-      width: 50
+      width: 40
     },
     {
-      field: "bg colour",
+      field: "bgColor",
       headerName: "Background Colour",
-      width: 50
+      width: 60
     },
   ];
 
