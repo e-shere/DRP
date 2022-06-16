@@ -11,6 +11,9 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+// import { DataGrid } from "@mui/x-data-grid";
+import Radio from "@mui/material/Radio";
+import DataTable from "./preset-selection";
 
 // this hack is required because env variables are not visible from the frontend
 const url = window.location.href;
@@ -45,15 +48,15 @@ function App() {
           {Form()}
         </div>
         <div className="Style-table">
-          {BasicTable(styles)}
+          {DataTable(styles)}
         </div>
       </header>
     </div>
   );
 }
 
-interface TableRow {
-  entry: number,
+export interface TableRow {
+  id: number,
   style: Style
 }
 const styles_added: Style[] = []
@@ -65,7 +68,7 @@ function BasicTable(styles: Style[]) {
     const style = styles[i];
     // NOTE: The database stores duplicates at the moment, we should change to sorted set.
     if (!styles_added.includes(style)) { 
-      rows.push({entry: i, style: style});
+      rows.push({id: i, style: style});
       styles_added.push(style);
     } 
   }
@@ -83,11 +86,11 @@ function BasicTable(styles: Style[]) {
         <TableBody>
           {rows.map((row) => (
             <TableRow
-              key={row.entry}
+              key={row.id}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               <TableCell component="th" scope="row">
-                {row.entry}
+                {row.id}
               </TableCell>
               <TableCell align="right">{row.style.font}</TableCell>
               <TableCell align="right">{row.style.bgColor}</TableCell>
