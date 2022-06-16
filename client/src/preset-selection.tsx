@@ -4,16 +4,22 @@ import Radio from "@mui/material/Radio";
 import {TableRow} from "./App";
 import Style from "./style";
 
-
+interface Row {
+  id: GridRowId,
+  font: string;
+  fontSize: number;
+  bgColor: string;
+}
 
 export default function DataTable(styles: Style[]) {
-  const rows: TableRow[] = [];
-  for (let i = 0; i < styles.length; i ++) {
+  const rows: Row[] = [];
+  for (let i = 1; i < styles.length + 1; i ++) {
     console.log(`${styles[i]}  style number ${i}`);
-    rows.push({id: i, style: styles[i]})
+    var style: Style = styles[i];
+    rows.push({id: i, font: style.font, fontSize: style.fontSize, bgColor: style.bgColor});
   }
 
-  var radioChecked: GridRowId[] = [0];
+  var radioChecked: GridRowId[] = [1];
   const [selectionModel, setSelectionModel] = React.useState<GridRowId[]>([]);
   radioChecked = selectionModel;
 
