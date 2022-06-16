@@ -1,5 +1,5 @@
 import React from "react";
-import { DataGrid, GridRowId, GridSelectionModel } from "@mui/x-data-grid";
+import { DataGrid, GridRowId, GridSelectionModel, GridColDef } from "@mui/x-data-grid";
 import Radio from "@mui/material/Radio";
 import {TableRow} from "./App";
 import Style from "./style";
@@ -28,7 +28,7 @@ export default function DataTable(styles: Style[]) {
   });
 
 
-  const columns = [
+  const columns: GridColDef[] = [
     {
       field: "radiobutton",
       headerName: "",
@@ -39,27 +39,34 @@ export default function DataTable(styles: Style[]) {
       )
     },
     {
-      field: "id",
-      headerName: "ID"
+      field: 'id',
+      headerName: 'ID',
     },
     {
-      field: "font",
-      headerName: "Font",
+      field: 'font',
+      headerName: 'Font',
+      description:
+        'The type of font used by this present',
       width: 150
     },
     {
-      field: "fontSize",
-      headerName: "Font Size",
+      field: 'fontSize',
+      headerName: 'Font Size',
+      description:
+        'The font size used by this preset',
       width: 40
     },
     {
-      field: "bgColor",
-      headerName: "Background Colour",
+      field: 'bgColor',
+      headerName: 'Background Colour',
+      description:
+        'The background colour set by the extension',
       width: 150
     },
   ];
 
   return (
+    <div style={{height:300, width: '100%'}}>
       <DataGrid
         rows={rows}
         columns={columns}
@@ -77,5 +84,6 @@ export default function DataTable(styles: Style[]) {
           },
         }}
       />
+    </div>
   );
 }
