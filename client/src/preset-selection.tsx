@@ -1,5 +1,4 @@
 import React from "react";
-import "./styles.css";
 import { DataGrid, GridRowId, GridSelectionModel } from "@mui/x-data-grid";
 import Radio from "@mui/material/Radio";
 import {TableRow} from "./App";
