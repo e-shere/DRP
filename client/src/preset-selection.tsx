@@ -43,9 +43,19 @@ export default function DataTable(styles: Style[]) {
       headerName: "ID"
     },
     {
-      field: "style",
-      headerName: "Style",
-      width: 150
+      field: "font",
+      headerName: "Font",
+      width: 50
+    },
+    {
+      field: "font size",
+      headerName: "Font Size",
+      width: 50
+    },
+    {
+      field: "bg colour",
+      headerName: "Background Colour",
+      width: 50
     },
   ];
 

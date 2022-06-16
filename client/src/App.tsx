@@ -41,6 +41,8 @@ function App() {
     }
   }, []);
 
+  useEffect(() => {getAllStyles().then(setStyles)}, []);
+
   return (
     <div className="App">
       <header className="App-header">
