@@ -7,35 +7,34 @@ import "./App.css";
 import { updatePage } from "./pageStyle";
 
 export const TITLE = "Clarify.";
-const DEFAULT_FONT = "Arial";
-const DEFAULT_FONT_INCREASE = 0;
-const DEFAULT_BG_COLOR = "#ffffff"; /* white */
 
 export interface UserSettings {
   styleChanged: boolean,
-  bgColor: string;
   bgChanged: boolean;
+  fontChanged: boolean;
+  bgColor: string;
   font: string;
   fontSizeIncrease: number;
-  fontChanged: boolean;
+  fontSpacingIncrease: number;
 }
 
 function App() {
   const [page, setPage] = useState("main");
   const [settings, setSettings] = useChromeStorageSync(
     "settings", {
-    styleChanged: false,
+    styleChanged: true,
     bgChanged: false,
     fontChanged: false,
-    bgColor: DEFAULT_BG_COLOR,
-    font: DEFAULT_FONT,
-    fontSizeIncrease: DEFAULT_FONT_INCREASE,
+    bgColor: "#ffffff", /* white */
+    font: "Arial",
+    fontSizeIncrease: 0,
+    fontSpacingIncrease: 0,
   });
 
   /* Load settings from chrome sync */
   useChromeStorageSync("settings", setSettings);
 
-  /* refresh page on any settings change */
+  /* Refresh page on any settings change */
   useEffect(() => { updatePage(settings) }, [settings]);
 
   /* Todo: better method for page navigation */

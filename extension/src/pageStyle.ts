@@ -5,7 +5,9 @@ import { UserSettings } from "./App";
 async function updatePage(settings: UserSettings) {
   setPageStyle(settings, s => {
     const fontAtrr = (s.fontChanged && s.styleChanged)
-      ? `font-family:${s.font} !important; font-size:calc(1em + ${s.fontSizeIncrease}px) !important;`
+      ? `font-family:${s.font} !important; 
+         font-size:calc(1em + ${s.fontSizeIncrease / 10}px) !important;
+         letter-spacing: ${s.fontSpacingIncrease}px !important;`
       : "";
     const bgAtrr = (s.bgChanged && s.styleChanged) ? `background-color:${s.bgColor} !important;` : "";
 

@@ -45,22 +45,16 @@ h1 {
   padding-right: 1em;
   margin-right: auto;
   font-size: 1.5em;
-  padding-bottom: 3em;
+  margin-bottom: 3em;
 }
 
 /* Settings */
 
-.font-input {
+.setting {
   margin-bottom: 3em;
 }
 
 .bg-color-input-label {
   font-size: 1.8em;
-  margin-top: 2em;
   text-align: center;
-}
-
-.bg-color-input {
-  margin-bottom: 2em;
-  margin-bottom: 2em;
 }
