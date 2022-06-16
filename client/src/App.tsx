@@ -66,7 +66,7 @@ function Form() {
   return (
     <div>
     <form className="preset-form" onSubmit={handleSubmit}>
-      <label>Font</label>
+      <label  >Font</label>
       <select value={font} onChange={event => setFont(event.target.value)}>
         <option value="Open Sans">Open Sans</option>
         <option value="Comic Sans">Comic Sans</option>
