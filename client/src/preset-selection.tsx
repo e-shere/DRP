@@ -8,6 +8,9 @@ import Style from "./style";
 
 export default function DataTable(styles: Style[]) {
   const rows: TableRow[] = [];
+  for (let i = 0; i < styles.length; i ++) {
+    rows.push({id: i, style: styles[i]})
+  }
   let radioChecked: GridRowId[] = [rows[0].id];
   const [selectionModel, setSelectionModel] = React.useState<GridRowId[]>([]);
   radioChecked = selectionModel;
@@ -17,10 +20,7 @@ export default function DataTable(styles: Style[]) {
   });
 
 
-  for (let i = 0; i < styles.length; i ++) {
-    rows.push({id: i, style: styles[i]})
-
-  }
+  
 
 
 const columns = [
