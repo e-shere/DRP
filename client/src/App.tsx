@@ -53,54 +53,6 @@ function App() {
   );
 }
 
-export interface TableRow {
-  id: GridRowId,
-  style: Style
-}
-const styles_added: Style[] = []
-
-function BasicTable(styles: Style[]) {
-  // some bad code... 
-  const rows: TableRow[] = []
-  for (let i = 0; i < styles.length; i++) {
-    const style = styles[i];
-    // NOTE: The database stores duplicates at the moment, we should change to sorted set.
-    if (!styles_added.includes(style)) { 
-      rows.push({id: i, style: style});
-      styles_added.push(style);
-    } 
-  }
-  return (
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 500 }} aria-label="simple table">
-      <TableHead>
-          <TableRow>
-            <TableCell>Entry</TableCell>
-            <TableCell align="right">Font</TableCell>
-            <TableCell align="right">Background Colour</TableCell>
-            <TableCell align="right">Font Size</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <TableRow
-              key={row.id}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                {row.id}
-              </TableCell>
-              <TableCell align="right">{row.style.font}</TableCell>
-              <TableCell align="right">{row.style.bgColor}</TableCell>
-              <TableCell align="right">{row.style.fontSize}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-  );
-}
-
 function Form() {
   const [font, setFont] = useState("Open Sans");
   const [fontSize, setFontSize] = useState(12);
@@ -118,7 +70,7 @@ function Form() {
   }
 
   return (
-    <form color={""} onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit}>
       <label>Font</label>
       <select value={font} onChange={event => setFont(event.target.value)}>
         <option value="Open Sans">Open Sans</option>
@@ -138,9 +90,7 @@ function Form() {
         onChange={event => setBgColor(event.target.value)}
       />
       <input type="submit" value="Submit" />   
-    </form>
-
-    
+    </form>    
   );
 }
 

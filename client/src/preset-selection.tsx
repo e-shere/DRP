@@ -11,10 +11,7 @@ interface Row {
   bgColor: string;
 }
 
-export default function DataTable(styl: Style[]) {
-  const styles: Style[] = [{font:"Comic Sans",fontSize:23, bgColor:"#75507b"},
-  {font:"Comic Sans",fontSize:23,bgColor:"#75507b"}]
-
+export default function DataTable(styles: Style[]) {
   const rows: Row[] = [];
   for (let i = 1; i < styles.length + 1; i ++) {
     console.log(`${styles[i - 1]}  style number ${i}`);
