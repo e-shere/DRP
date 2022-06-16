@@ -20,9 +20,6 @@ export default function DataTable(styles: Style[]) {
   });
 
 
-  
-
-
 const columns = [
   {
     field: "radiobutton",

@@ -11,7 +11,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-// import { DataGrid } from "@mui/x-data-grid";
+import { DataGrid, GridRowId, GridSelectionModel } from "@mui/x-data-grid";
 import Radio from "@mui/material/Radio";
 import DataTable from "./preset-selection";
 
@@ -56,7 +56,7 @@ function App() {
 }
 
 export interface TableRow {
-  id: number,
+  id: GridRowId,
   style: Style
 }
 const styles_added: Style[] = []
