@@ -1,7 +1,6 @@
 import React from "react";
 import { DataGrid, GridRowId, GridSelectionModel, GridColDef } from "@mui/x-data-grid";
 import Radio from "@mui/material/Radio";
-import {TableRow} from "./App";
 import Style from "./style";
 import Button from '@mui/material/Button';
 
@@ -13,6 +12,9 @@ interface Row {
 }
 
 export default function DataTable(styles: Style[]) {
+  // const styles: Style[] = [{font:"Comic Sans",fontSize:23, bgColor:"#75507b"},
+  // {font:"Comic Sans",fontSize:23,bgColor:"#75507b"}]
+
   const rows: Row[] = [];
   for (let i = 1; i < styles.length + 1; i ++) {
     console.log(`${styles[i - 1]}  style number ${i}`);
@@ -72,23 +74,13 @@ export default function DataTable(styles: Style[]) {
         alert('Style submitted to extension!');
         }} 
         variant="contained">Submit Style</Button>
-      {/* You have selected style: {selectedRow[0].id}, {selectedRow[0].font} {selectedRow[0].fontSize} {selectedRow[0].bgColor} */}
       <DataGrid 
         className="style-table" 
         rows={rows}
         columns={columns}
-        autoHeight
         selectionModel={selectionModel}
         onSelectionModelChange={(newSelectionModel: GridSelectionModel) => {
           setSelectionModel(newSelectionModel);
-        }}
-        sx={{
-          boxShadow: 2,
-          border: 2,
-          borderColor: 'primary.light',
-          '& .MuiDataGrid-cell:hover': {
-            color: 'primary.main',
-          },
         }}
       />
     </div>
