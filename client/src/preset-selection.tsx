@@ -55,7 +55,7 @@ export default function DataTable(styles: Style[]) {
     {
       field: "bgColor",
       headerName: "Background Colour",
-      width: 60
+      width: 150
     },
   ];
 
@@ -67,6 +67,14 @@ export default function DataTable(styles: Style[]) {
         selectionModel={selectionModel}
         onSelectionModelChange={(newSelectionModel: GridSelectionModel) => {
           setSelectionModel(newSelectionModel);
+        }}
+        sx={{
+          boxShadow: 2,
+          border: 2,
+          borderColor: 'primary.light',
+          '& .MuiDataGrid-cell:hover': {
+            color: 'primary.main',
+          },
         }}
       />
   );
