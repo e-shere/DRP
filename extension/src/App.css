@@ -11,6 +11,7 @@ header {
   display: flex;
   border-bottom: 0.1em solid black;
   padding-bottom: 1em;
+  margin-bottom: 3em;
 }
 
 h1 {
@@ -23,8 +24,11 @@ h1 {
   flex-basis: 25%;
 }
 
+.font-input {
+  margin-bottom: 3em;
+}
+
 .bg-color-input {
-  margin: auto;
   margin-left: 1em;
 }
 
@@ -44,10 +48,5 @@ h1 {
   padding-right: 1em;
   margin-right: auto;
   font-size: 1.5em;
-}
-
-.settings-form {
-  display: flex;
-  flex-direction: column;
-  align-content: space-around;
+  padding-bottom: 3em;
 }

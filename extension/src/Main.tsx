@@ -47,7 +47,7 @@ function Main(settings: UserSettings, setSettings: (_: UserSettings) => void, se
         settings.styleChanged,
         event => { setSettings({ ...settings, fontChanged: event.target.checked }) }
       )}
-      <Button onClick={lookupStyle} startIcon={<AddCircleIcon />}></Button>
+      {/* <Button onClick={lookupStyle} startIcon={<AddCircleIcon />}></Button> */}
       < Button
         onClick={() => { setPage("settings") }}
         startIcon={<SettingsIcon />}

@@ -14,17 +14,17 @@ function Settings(settings: UserSettings, setSettings: (_: UserSettings) => void
         />
         <h1>{TITLE}</h1>
       </header>
-      <FormControl className="settings-form" fullWidth>
+      <FormControl fullWidth>
         <InputLabel>Font</InputLabel>
         <Select
+          className="font-input"
           label="Font"
           value={settings.font}
           onChange={event => { setSettings({ ...settings, font: event.target.value }) }}
         >
           <MenuItem value="Arial">Arial</MenuItem>
-          <MenuItem value="Brush Script MT">Brush Script MT</MenuItem>
           <MenuItem value="Courier New">Courier New</MenuItem>
-          <MenuItem value="Times New Roman">Times New Roman</MenuItem>
+          <MenuItem value="Roboto">Roboto</MenuItem>
         </Select>
         <div className="labelled-item">
           <label>Background</label>

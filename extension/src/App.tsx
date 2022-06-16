@@ -6,7 +6,7 @@ import Settings from "./Settings";
 import "./App.css";
 import { updatePage } from "./pageStyle";
 
-export const TITLE = "Claraify.";
+export const TITLE = "Clarify.";
 const DEFAULT_FONT = "Arial";
 const DEFAULT_FONT_INCREASE = 0;
 const DEFAULT_BG_COLOR = "#ffffff"; /* white */
@@ -23,16 +23,14 @@ export interface UserSettings {
 function App() {
   const [page, setPage] = useState("main");
   const [settings, setSettings] = useChromeStorageSync(
-    "settings",
-    {
-      styleChanged: false,
-      bgChanged: false,
-      fontChanged: false,
-      bgColor: DEFAULT_BG_COLOR,
-      font: DEFAULT_FONT,
-      fontSizeIncrease: DEFAULT_FONT_INCREASE,
-    }
-  );
+    "settings", {
+    styleChanged: false,
+    bgChanged: false,
+    fontChanged: false,
+    bgColor: DEFAULT_BG_COLOR,
+    font: DEFAULT_FONT,
+    fontSizeIncrease: DEFAULT_FONT_INCREASE,
+  });
 
   /* Load settings from chrome sync */
   useChromeStorageSync("settings", setSettings);
