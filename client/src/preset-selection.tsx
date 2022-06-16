@@ -13,7 +13,7 @@ export default function DataTable(styles: Style[]) {
     rows.push({id: i, style: styles[i]})
   }
 
-  var radioChecked: GridRowId[] = [rows[0].id];
+  var radioChecked: GridRowId[] = [0];
   const [selectionModel, setSelectionModel] = React.useState<GridRowId[]>([]);
   radioChecked = selectionModel;
 
