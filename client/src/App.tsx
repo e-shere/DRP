@@ -1,9 +1,13 @@
 import { FormEvent, useState, useEffect } from "react";
 import Pusher from "pusher-js";
 import axios from "axios";
-import { getDbStyle, setDbStyle } from "./styleDB";
+import { getDbStyle, setDbStyle, getAllStyles } from "./styleDB";
 import Style from "./style";
 import "./App.css";
+import Button from '@mui/material/Button';
+import DataTable from "./preset-selection";
+import { triggerMessageToExtension } from "./scripts";
+import { Dialog } from "@mui/material";
 
 // this hack is required because env variables are not visible from the frontend
 const url = window.location.href;
@@ -16,44 +20,30 @@ const PUSHER_CLUSTER = "eu";
 
 const PUSHER_CHANNEL = "claraify";
 const SUBMIT_EVENT = "submit";
+const ADD_TO_EXTENSION = "addex";
 
 function App() {
-  const [style, setStyle] = useState(new Style("Open Sans", 12, "white"));
+  const [styles, setStyles] = useState<Style[]>([]);
 
   // Binding to update styles in real time
   useEffect(() => {
     if (PRODUCTION || STAGING) {
       // subscribe to pusher only in production (to be isolated when runnig locally)
       const pusher = new Pusher(PUSHER_KEY, { cluster: PUSHER_CLUSTER })
-      pusher.subscribe(PUSHER_CHANNEL).bind(SUBMIT_EVENT, (style: Style) => setStyle(style))
+      pusher.subscribe(PUSHER_CHANNEL).bind(SUBMIT_EVENT, () => getAllStyles().then(setStyles))
       return (() => pusher.unsubscribe(PUSHER_CHANNEL))
     }
   }, []);
 
-  // Set style from DB on initial load
-  useEffect(() => { getDbStyle().then(style => setStyle(style)) }, []);
+  useEffect(() => {getAllStyles().then(setStyles)}, []);
 
   return (
     <div className="App">
       <header className="App-header">
-        <div>
           {Form()}
-        </div>
-        <div className="Style-table">
-          {Styles(style)}
-        </div>
+          {DataTable(styles)}
       </header>
     </div>
-  );
-}
-
-function Styles(style: Style) {
-  return (
-    <table>
-      {(style == null)
-        ? []
-        : [<tr><td>{style.font}</td><td>{style.fontSize}</td><td>{style.bgColor}</td></tr>]}
-    </table>
   );
 }
 
@@ -74,8 +64,9 @@ function Form() {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label>Font</label>
+    <div>
+    <form className="preset-form" onSubmit={handleSubmit}>
+      <label  >Font</label>
       <select value={font} onChange={event => setFont(event.target.value)}>
         <option value="Open Sans">Open Sans</option>
         <option value="Comic Sans">Comic Sans</option>
@@ -84,6 +75,7 @@ function Form() {
       <label>Font Size</label>
       <input
         type="number"
+        width={"50%"}
         value={fontSize}
         onChange={event => setFontSize(Number(event.target.value))} placeholder="font size"
       />
@@ -93,8 +85,15 @@ function Form() {
         value={bgColor}
         onChange={event => setBgColor(event.target.value)}
       />
-      <input type="submit" value="Submit" />
-    </form>
+      <input type="submit" value="SAVE STYLE TO YOUR PRESETS" style={{width:500, height: 50, fontSize: 20, font: "Courier New (monospace)"}}/>  
+      {/* <div> {[
+      <Button className="style-submission" variant="contained" onClick={handleSubmit}
+       style={{width:500, height: 50, fontSize: 20, font: "Courier New (monospace)"}}>
+        Save style to your presets</Button>]}
+        </div> */}
+    </form>   
+    
+    </div>      
   );
 }
 

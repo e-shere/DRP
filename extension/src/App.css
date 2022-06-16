@@ -1,4 +1,7 @@
 /* Very hard-coded although I do not think a browser extension needs to be responsive */
+
+/* General */
+
 body {
   margin: 0;
 }
@@ -11,7 +14,7 @@ header {
   display: flex;
   border-bottom: 0.1em solid black;
   padding-bottom: 1em;
-  margin-bottom: 4em;
+  margin-bottom: 3em;
 }
 
 h1 {
@@ -20,35 +23,38 @@ h1 {
   color: rgb(50, 50, 50);
 }
 
-.nav-button {
+.header-button {
   flex-basis: 25%;
-}
-
-.form-field {
-  margin-bottom: 4em;
-}
-
-.bg-color-input {
-  margin: auto;
-  margin-left: 1em;
-  flex-grow: 1;
 }
 
 .App {
   width: 22em;
   height: 30em;
-  background-color: #c1e6dd;
+  background-color: #f8f2e6;
   padding: 1em;
+  overflow-y: scroll;
 }
 
 .labelled-item {
   display: flex;
   padding-inline: 0.75em;
-  padding-bottom: 4em;
 }
 
 .labelled-item label {
+  line-height: 38px;
   padding-right: 1em;
   margin-right: auto;
   font-size: 1.5em;
+  margin-bottom: 3em;
+}
+
+/* Settings */
+
+.setting {
+  margin-bottom: 3em;
+}
+
+.bg-color-input-label {
+  font-size: 1.8em;
+  text-align: center;
 }
