@@ -2,7 +2,6 @@ import { ChangeEvent } from "react";
 import axios from "axios";
 import { Switch, Button } from "@mui/material";
 import SettingsIcon from "@mui/icons-material/Settings";
-import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 import { TITLE, UserSettings } from "./App";
 const HEROKU_URL = `https://${TITLE}.herokuapp.com/`
@@ -47,11 +46,9 @@ function Main(settings: UserSettings, setSettings: (_: UserSettings) => void, se
         settings.styleChanged,
         event => { setSettings({ ...settings, fontChanged: event.target.checked }) }
       )}
-      {/* <Button onClick={lookupStyle} startIcon={<AddCircleIcon />}></Button> */}
-      < Button
-        onClick={() => { setPage("settings") }}
-        startIcon={<SettingsIcon />}
-      />
+      <Button onClick={() => { setPage("settings") }} startIcon={<SettingsIcon />}>
+        Settings
+      </Button>
     </div>
   );
 }
