@@ -14,8 +14,8 @@ interface Row {
 export default function DataTable(styles: Style[]) {
   const rows: Row[] = [];
   for (let i = 1; i < styles.length + 1; i ++) {
-    console.log(`${styles[i]}  style number ${i}`);
-    var style: Style = styles[i];
+    console.log(`${styles[i - 1]}  style number ${i}`);
+    var style: Style = styles[i - 1];
     rows.push({id: i, font: style.font, fontSize: style.fontSize, bgColor: style.bgColor});
   }
 
