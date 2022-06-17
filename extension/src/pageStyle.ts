@@ -18,7 +18,7 @@ async function updatePage(settings: UserSettings) {
       /* Get the value of the style attribute, or an empty string if it is null */
       var currentAttrs = element.getAttribute("style") ?? "";
       /* Return everything before the CLARIFY_SEPARATOR */
-      return currentAttrs.split(CLARIFY_SEPARATOR)[0]
+      return currentAttrs.split(CLARIFY_SEPARATOR)[0].trim();
     }
 
     /* Add data-initial-font-size (custom attribute) to each element */
@@ -40,40 +40,35 @@ async function updatePage(settings: UserSettings) {
 
   
     function setNodeBgColor(node: HTMLElement) {
-      var originalAttrs: string = getOriginalStyleProperties(node).trim();
+      var originalStyleProperties: string = getOriginalStyleProperties(node);
       // set style to be original attributes + our attributes
-      node.setAttribute("style", originalAttrs.concat(CLARIFY_SEPARATOR, fontAtrr, bgAtrr));
+      node.setAttribute("style", originalStyleProperties.concat(CLARIFY_SEPARATOR, fontAtrr, bgAtrr));
     }
 
     /* Update page bg */
     document.querySelectorAll("*").forEach(
       node => {
-        const fontAtrr = (s.fontChanged && s.styleChanged)
-          ? `font-family:${s.font} !important; 
-             font-size:calc(${(node as HTMLElement).dataset.initialFontSize} + ${s.fontSizeIncrease / 10}px) !important;
-             letter-spacing: ${s.fontSpacingIncrease}px !important;`
-          : "";
-        const bgAtrr = (s.bgChanged && s.styleChanged) ? `background-color:${s.bgColor} !important;` : "";
+        const originalStyleProperties: string = getOriginalStyleProperties(node as HTMLElement);
 
-
-        // get the value of the style attribute, or an empty string if it is null
-        var originalAttrs: string = node.getAttribute("style") ?? "";
-        function flushClarifyAttrs(attrs: string) {
-          return attrs.split(CLARIFY_SEPARATOR)[0];
+        if (!s.styleChanged) {
+          /* Come back to original style */
+          node.setAttribute("style", originalStyleProperties);
+        } else {
+          /* Set style to be original properties + our properties (bgAttr added only if the node 
+          is of a particular type (HTML tag)) */
+          const fontAtrr = s.fontChanged
+            ? `font-family:${s.font} !important; 
+              font-size:calc(${(node as HTMLElement).dataset.initialFontSize} + ${s.fontSizeIncrease / 10}px) !important;
+              letter-spacing: ${s.fontSpacingIncrease}px !important;`
+            : "";
+          const bgAtrr = s.bgChanged ? `background-color:${s.bgColor} !important;` : "";
+          node.setAttribute("style", 
+            originalStyleProperties.concat(CLARIFY_SEPARATOR, fontAtrr, canSetBgColor(node) ? bgAtrr : "")
+          );
         }
-        originalAttrs = flushClarifyAttrs(originalAttrs).trim();
-        // set style to be original attributes + our attributes (bgAttr added only if the node 
-        // is of a particular type (HTML tag))
-        node.setAttribute("style", 
-          originalAttrs.concat(CLARIFY_SEPARATOR, fontAtrr, canSetBgColor(node) ? bgAtrr : "")
-        );
-        // }
       }
     );
     setNodeBgColor(document.body);
-    // document.querySelectorAll("p").forEach(setNodeBgColor);
-    // document.querySelectorAll("header").forEach(setNodeBgColor);
-    // document.querySelectorAll("li").forEach(setNodeBgColor);
   });
 }
 
