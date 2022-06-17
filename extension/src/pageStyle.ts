@@ -5,13 +5,6 @@ import { UserSettings } from "./App";
 async function updatePage(settings: UserSettings) {
   setPageStyle(settings, s => {
 
-    const fontAtrr = (s.fontChanged && s.styleChanged)
-      ? `font-family:${s.font} !important; 
-         font-size:calc(1em + ${s.fontSizeIncrease / 10}px) !important;
-         letter-spacing: ${s.fontSpacingIncrease}px !important;`
-      : "";
-    const bgAtrr = (s.bgChanged && s.styleChanged) ? `background-color:${s.bgColor} !important;` : "";
-
     /* Add data-initial-font-size (custom attribute) to each element */
     document.querySelectorAll("*").forEach(
       element => {
@@ -22,6 +15,14 @@ async function updatePage(settings: UserSettings) {
       }
     );
 
+    const fontAtrr = (s.fontChanged && s.styleChanged)
+      ? `font-family:${s.font} !important; 
+         font-size:calc(1em + ${s.fontSizeIncrease / 10}px) !important;
+         letter-spacing: ${s.fontSpacingIncrease}px !important;`
+      : "";
+    const bgAtrr = (s.bgChanged && s.styleChanged) ? `background-color:${s.bgColor} !important;` : "";
+
+  
     function setNodeBgColor(node: HTMLElement) {
       // get the value of the style attribute, or an empty string if it is null
       var originalAttrs: string = node.getAttribute("style") ?? "";
@@ -32,11 +33,6 @@ async function updatePage(settings: UserSettings) {
       // set style to be original attributes + our attributes
       node.setAttribute("style", originalAttrs.concat(" ClarifySeparator:here; ", fontAtrr, bgAtrr));
     }
-
-    const tagForBgColorChange = ["p", "header", "li"];
-    function setBgColor(node: Element): boolean {
-      return tagForBgColorChange.includes(node.tagName);
-    } 
 
     /* Update page bg */
     document.querySelectorAll("*").forEach(
@@ -58,7 +54,7 @@ async function updatePage(settings: UserSettings) {
         // set style to be original attributes + our attributes (bgAttr added only if the node 
         // is of a particular type (HTML tag))
         node.setAttribute("style", 
-          originalAttrs.concat(" ClarifySeparator:here; ", fontAtrr, setBgColor(node) ? bgAtrr : "")
+          originalAttrs.concat(" ClarifySeparator:here; ", fontAtrr, canSetBgColor(node) ? bgAtrr : "")
         );
         // }
       }
@@ -77,6 +73,12 @@ async function setPageStyle(settings: UserSettings, updateStyle: (_: UserSetting
     func: updateStyle,
     args: [settings],
   });
+}
+
+/* The html tags for which we should change the background color */
+const tagForBgColorChange = ["p", "header", "li"];
+function canSetBgColor(node: Element): boolean {
+  return tagForBgColorChange.includes(node.tagName);
 }
 
 export { updatePage };
