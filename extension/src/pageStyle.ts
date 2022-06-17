@@ -5,6 +5,22 @@ import { UserSettings } from "./App";
 async function updatePage(settings: UserSettings) {
   setPageStyle(settings, s => {
 
+    const CLARIFY_SEPARATOR = "ClarifySeparator:here;";
+    /* The html tags for which we should change the background color */
+    const tagForBgColorChange = ["p", "header", "li"];
+    function canSetBgColor(node: Element): boolean {
+      return tagForBgColorChange.includes(node.tagName);
+    }
+
+    /* Return the original value of the style attribute (i.e. remove all style properties added by the extension, 
+      therefore everything after the ClarifySeparator)*/
+    function getOriginalStyleProperties(element: HTMLElement): string {
+      /* Get the value of the style attribute, or an empty string if it is null */
+      var currentAttrs = element.getAttribute("style") ?? "";
+      /* Return everything before the CLARIFY_SEPARATOR */
+      return currentAttrs.split(CLARIFY_SEPARATOR)[0]
+    }
+
     /* Add data-initial-font-size (custom attribute) to each element */
     document.querySelectorAll("*").forEach(
       element => {
@@ -24,14 +40,9 @@ async function updatePage(settings: UserSettings) {
 
   
     function setNodeBgColor(node: HTMLElement) {
-      // get the value of the style attribute, or an empty string if it is null
-      var originalAttrs: string = node.getAttribute("style") ?? "";
-      function flushClarifyAttrs(attrs: string) {
-        return attrs.split("ClarifySeparator:here;")[0];
-      }
-      originalAttrs = flushClarifyAttrs(originalAttrs).trim();
+      var originalAttrs: string = getOriginalStyleProperties(node).trim();
       // set style to be original attributes + our attributes
-      node.setAttribute("style", originalAttrs.concat(" ClarifySeparator:here; ", fontAtrr, bgAtrr));
+      node.setAttribute("style", originalAttrs.concat(CLARIFY_SEPARATOR, fontAtrr, bgAtrr));
     }
 
     /* Update page bg */
@@ -48,13 +59,13 @@ async function updatePage(settings: UserSettings) {
         // get the value of the style attribute, or an empty string if it is null
         var originalAttrs: string = node.getAttribute("style") ?? "";
         function flushClarifyAttrs(attrs: string) {
-          return attrs.split("ClarifySeparator:here;")[0];
+          return attrs.split(CLARIFY_SEPARATOR)[0];
         }
         originalAttrs = flushClarifyAttrs(originalAttrs).trim();
         // set style to be original attributes + our attributes (bgAttr added only if the node 
         // is of a particular type (HTML tag))
         node.setAttribute("style", 
-          originalAttrs.concat(" ClarifySeparator:here; ", fontAtrr, canSetBgColor(node) ? bgAtrr : "")
+          originalAttrs.concat(CLARIFY_SEPARATOR, fontAtrr, canSetBgColor(node) ? bgAtrr : "")
         );
         // }
       }
@@ -73,12 +84,6 @@ async function setPageStyle(settings: UserSettings, updateStyle: (_: UserSetting
     func: updateStyle,
     args: [settings],
   });
-}
-
-/* The html tags for which we should change the background color */
-const tagForBgColorChange = ["p", "header", "li"];
-function canSetBgColor(node: Element): boolean {
-  return tagForBgColorChange.includes(node.tagName);
 }
 
 export { updatePage };
