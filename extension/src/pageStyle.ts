@@ -6,8 +6,9 @@ async function updatePage(settings: UserSettings) {
   setPageStyle(settings, s => {
 
     const CLARIFY_SEPARATOR = "ClarifySeparator:here;";
-    /* The html tags for which we should change the background color */
-    const tagForBgColorChange = ["p", "header", "li"];
+    /* The html tags for which we should change the background color. document.body can have tags
+    'body' and 'frameset' */
+    const tagForBgColorChange = ["p", "header", "li", "body", "frameset"].map(s => s.toUpperCase());
     function canSetBgColor(node: Element): boolean {
       return tagForBgColorChange.includes(node.tagName);
     }
@@ -30,20 +31,6 @@ async function updatePage(settings: UserSettings) {
         }
       }
     );
-
-    const fontAtrr = (s.fontChanged && s.styleChanged)
-      ? `font-family:${s.font} !important; 
-         font-size:calc(1em + ${s.fontSizeIncrease / 10}px) !important;
-         letter-spacing: ${s.fontSpacingIncrease}px !important;`
-      : "";
-    const bgAtrr = (s.bgChanged && s.styleChanged) ? `background-color:${s.bgColor} !important;` : "";
-
-  
-    function setNodeBgColor(node: HTMLElement) {
-      var originalStyleProperties: string = getOriginalStyleProperties(node);
-      // set style to be original attributes + our attributes
-      node.setAttribute("style", originalStyleProperties.concat(CLARIFY_SEPARATOR, fontAtrr, bgAtrr));
-    }
 
     /* Update page bg */
     document.querySelectorAll("*").forEach(
@@ -68,7 +55,6 @@ async function updatePage(settings: UserSettings) {
         }
       }
     );
-    setNodeBgColor(document.body);
   });
 }
 
