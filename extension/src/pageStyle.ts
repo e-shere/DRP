@@ -50,11 +50,12 @@ async function updatePage(settings: UserSettings) {
         } else {
           /* Set style to be original properties + our properties (bgAttr added only if the node 
           is of a particular type (HTML tag)) */
-          const fontAtrr = s.fontChanged
-          ? `font-family:${s.font} !important; 
-            font-size:calc(${(node as HTMLElement).dataset.initialFontSize} + ${s.fontSizeIncrease / 10}px) !important;
-            letter-spacing: ${s.fontSpacingIncrease}px !important;`
-          : "";
+          // if tagName is span, then do not add the font family (e.g. in Google Calendar it makes the icons be just squares)  
+          var fontAtrr = s.fontChanged && element.tagName != "SPAN" ? `font-family:${s.font} !important; ` : "";
+          fontAtrr = fontAtrr.concat(s.fontChanged
+            ? `font-size:calc(${element.dataset.initialFontSize} + ${s.fontSizeIncrease / 10}px) !important;
+              letter-spacing: ${s.fontSpacingIncrease}px !important;`
+            : "");
           const bgAtrr = s.bgChanged ? `background-color:${s.bgColor} !important;` : "";
           element.setAttribute("style", originalStyleProperties.concat(";", element.tagName == "IMG" ? "" : fontAtrr, canSetBgColor(node) ? bgAtrr : ""));
         }
