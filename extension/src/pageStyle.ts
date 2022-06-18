@@ -22,13 +22,19 @@ async function updatePage(settings: UserSettings) {
       return currentAttrs.split(CLARIFY_SEPARATOR)[0].trim();
     }
 
-    /* Add data-initial-font-size (custom attribute) to each element */
+    /* Add custom attributes to each element. 
+    data-initial-font-size: computed font size of the original page
+    data-initial-style: copy of the original value of the style attribute */
     document.querySelectorAll("*").forEach(
       element => {
         if (!element.hasAttribute('data-initial-font-size')) {
-          /* Add it only if not present already */
+          /* Add it only if not already present */
           element.setAttribute('data-initial-font-size', window.getComputedStyle(element).getPropertyValue('font-size'));
         }
+        if (!element.hasAttribute('data-initial-style')) {
+          /* Keep a copy of the initial value of the style attribute if not already present */
+          element.setAttribute('data-initial-style', element.getAttribute("style") ?? "");
+        } 
       }
     );
 
