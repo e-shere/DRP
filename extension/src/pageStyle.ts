@@ -13,15 +13,6 @@ async function updatePage(settings: UserSettings) {
       return tagForBgColorChange.includes(node.tagName);
     }
 
-    /* Return the original value of the style attribute (i.e. remove all style properties added by the extension, 
-      therefore everything after the ClarifySeparator)*/
-    function getOriginalStyleProperties(element: HTMLElement): string {
-      /* Get the value of the style attribute, or an empty string if it is null */
-      var currentAttrs = element.getAttribute("style") ?? "";
-      /* Return everything before the CLARIFY_SEPARATOR */
-      return currentAttrs.split(CLARIFY_SEPARATOR)[0].trim();
-    }
-
     /* Add custom attributes to each element. 
     data-initial-font-size: computed font size of the original page
     data-initial-style: copy of the original value of the style attribute */
