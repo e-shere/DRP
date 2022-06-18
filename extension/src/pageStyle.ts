@@ -41,23 +41,22 @@ async function updatePage(settings: UserSettings) {
     /* Update page bg */
     document.querySelectorAll("*").forEach(
       node => {
-        const originalStyleProperties: string = getOriginalStyleProperties(node as HTMLElement);
-
+        const element = node as HTMLElement;
+        const originalStyleProperties: string = element.dataset.initialStyle ?? "";
+        
         if (!s.styleChanged) {
           /* Come back to original style */
-          node.setAttribute("style", originalStyleProperties);
+          element.setAttribute("style", originalStyleProperties);
         } else {
           /* Set style to be original properties + our properties (bgAttr added only if the node 
           is of a particular type (HTML tag)) */
           const fontAtrr = s.fontChanged
-            ? `font-family:${s.font} !important; 
-              font-size:calc(${(node as HTMLElement).dataset.initialFontSize} + ${s.fontSizeIncrease / 10}px) !important;
-              letter-spacing: ${s.fontSpacingIncrease}px !important;`
-            : "";
+          ? `font-family:${s.font} !important; 
+            font-size:calc(${(node as HTMLElement).dataset.initialFontSize} + ${s.fontSizeIncrease / 10}px) !important;
+            letter-spacing: ${s.fontSpacingIncrease}px !important;`
+          : "";
           const bgAtrr = s.bgChanged ? `background-color:${s.bgColor} !important;` : "";
-          node.setAttribute("style", 
-            originalStyleProperties.concat(CLARIFY_SEPARATOR, fontAtrr, canSetBgColor(node) ? bgAtrr : "")
-          );
+          element.setAttribute("style", originalStyleProperties.concat(";", element.tagName == "IMG" ? "" : fontAtrr, canSetBgColor(node) ? bgAtrr : ""));
         }
       }
     );
