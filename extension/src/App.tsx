@@ -13,7 +13,7 @@ export interface UserSettings {
   styleChanged: boolean,
   bgChanged: boolean,
   fontChanged: boolean,
-  punctuationSpacing: boolean,
+  punctuationSpacingChanged: boolean,
   bgColor: string,
   font: string,
   fontSizeIncrease: number,

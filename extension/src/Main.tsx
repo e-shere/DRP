@@ -49,6 +49,12 @@ function Main(settings: UserSettings, setSettings: (_: UserSettings) => void, se
         settings.styleChanged,
         event => { setSettings({ ...settings, fontChanged: event.target.checked }) }
       )}
+      {LabelledSwitch(
+        "Spaces after punctuation",
+        settings.punctuationSpacingChanged,
+        settings.styleChanged,
+        event => { setSettings({ ...settings, punctuationSpacingChanged: event.target.checked }) }
+      )}
       <Button onClick={() => { setPage("settings") }} startIcon={<SettingsIcon />}>
         Settings
       </Button>
