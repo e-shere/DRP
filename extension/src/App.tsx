@@ -11,12 +11,13 @@ export const WEBAPP_URL = "https://claraify.herokuapp.com/";
 
 export interface UserSettings {
   styleChanged: boolean,
-  bgChanged: boolean;
-  fontChanged: boolean;
-  bgColor: string;
-  font: string;
-  fontSizeIncrease: number;
-  fontSpacingIncrease: number;
+  bgChanged: boolean,
+  fontChanged: boolean,
+  punctuationSpacing: boolean,
+  bgColor: string,
+  font: string,
+  fontSizeIncrease: number,
+  fontSpacingIncrease: number
 }
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
     styleChanged: true,
     bgChanged: false,
     fontChanged: false,
+    punctuationSpacing: false,
     bgColor: "#ffffff", /* white */
     font: "Arial",
     fontSizeIncrease: 0,
