@@ -18,7 +18,7 @@ function unpackStyle(keyval: {freq: number, preset: string}) {
 
 function componentToHex(c: number) {
   var hex = c.toString(16);
-  return hex.length == 1 ? "0" + hex : hex;
+  return hex.length === 1 ? "0" + hex : hex;
 }
 
 function rgbToHex(r: number, g: number, b: number) {
