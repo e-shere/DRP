@@ -1,9 +1,8 @@
+import { TextField, MenuItem, FormControl } from "@mui/material";
 import { ChangeEvent } from "react";
-import { Button, Select, TextField, MenuItem, FormControl, InputLabel } from "@mui/material";
-import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
 import { SketchPicker } from 'react-color';
 
-import { TITLE, UserSettings, WEBAPP_URL } from "./App";
+import { UserSettings } from "./App";
 
 const PRESET_BG_COLORS = [
   "#faf2d9",
@@ -28,22 +27,27 @@ function NumberField(label: string, min: number, max: number, value: number, onC
   );
 }
 
-function Settings(settings: UserSettings, setSettings: (_: UserSettings) => void, setPage: (_: string) => void) {
+function BackgroundSettings(settings: UserSettings, setSettings: (_: UserSettings) => void) {
   return (
-    <div className="Settings">
-      <header>
-        <Button
-          className="nav-button"
-          onClick={() => setPage("main")}
-          startIcon={<ArrowBackIosNewIcon />}
-        />
-        <h1>{TITLE}</h1>
-      </header>
-      <FormControl fullWidth>
+    <FormControl fullWidth>
+      <div className="setting">
+          <SketchPicker
+            width="92.5%"
+            presetColors={PRESET_BG_COLORS}
+            color={settings.bgColor}
+            onChange={color => { setSettings({ ...settings, bgColor: color.hex }) }}
+          />
+        </div>
+    </FormControl>
+  );
+}
+
+function FontSettings(settings: UserSettings, setSettings: (_: UserSettings) => void) {
+  return (
+    <FormControl fullWidth>
         <div className="setting">
-          <InputLabel>Font</InputLabel>
-          <Select
-            fullWidth
+          <TextField
+            select
             label="Font"
             value={settings.font}
             onChange={event => { setSettings({ ...settings, font: event.target.value }) }}
@@ -51,7 +55,7 @@ function Settings(settings: UserSettings, setSettings: (_: UserSettings) => void
             <MenuItem value="Arial">Arial</MenuItem>
             <MenuItem value="Courier New">Courier New</MenuItem>
             <MenuItem value="Roboto">Roboto</MenuItem>
-          </Select>
+          </TextField>
         </div>
         {NumberField(
           "Font Size",
@@ -75,15 +79,6 @@ function Settings(settings: UserSettings, setSettings: (_: UserSettings) => void
           event => { setSettings({ ...settings, lineSpacing: Number(event.target.value) }) }
         )}
         <div className="setting">
-          <label className="color-input-label">Background</label>
-          <SketchPicker
-            width="92.5%"
-            presetColors={PRESET_BG_COLORS}
-            color={settings.bgColor}
-            onChange={color => { setSettings({ ...settings, bgColor: color.hex }) }}
-          />
-        </div>
-        <div className="setting">
           <label className="color-input-label">Font Colour</label>
           <SketchPicker
             width="92.5%"
@@ -92,14 +87,9 @@ function Settings(settings: UserSettings, setSettings: (_: UserSettings) => void
             onChange={color => { setSettings({ ...settings, fontColor: color.hex }) }}
           />
         </div>
-        <Button
-          href={WEBAPP_URL}
-          target="_blank"
-          variant="outlined"
-        >Presets</Button>
       </FormControl>
-    </div>
   );
 }
 
-export default Settings;
+
+export {BackgroundSettings, FontSettings};

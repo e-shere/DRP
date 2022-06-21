@@ -15,10 +15,10 @@ const STAGING = url.includes("staging");
 const PRODUCTION = !url.includes("staging") && !url.includes("localhost");
 
 // TODO: Fetch env vars from the server (they are public so should not be security problem for now)
-var PUSHER_KEY = PRODUCTION ? "92e02b3a0a7919063500" : "d99fd8c0f4faeacc4709";
+var PUSHER_KEY = PRODUCTION ? "6dbf0a6609c4bb0901fb" : "f3244147a7aa2248499d";
 const PUSHER_CLUSTER = "eu";
 
-const PUSHER_CHANNEL = "claraify";
+const PUSHER_CHANNEL = "clarify";
 const SUBMIT_EVENT = "submit";
 const ADD_TO_EXTENSION = "addex";
 
