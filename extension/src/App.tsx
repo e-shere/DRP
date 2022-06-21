@@ -12,6 +12,7 @@ export interface UserSettings {
   styleChanged: boolean,
   bgChanged: boolean;
   fontChanged: boolean;
+  punctuationSpacingChanged: boolean;
   bgColor: string;
   font: string;
   fontSize: number;
@@ -26,6 +27,7 @@ function App() {
     styleChanged: true,
     bgChanged: false,
     fontChanged: false,
+    punctuationSpacing: false,
     bgColor: "#ffffff", /* white */
     font: "Arial",
     fontSize: 0,
@@ -33,9 +35,6 @@ function App() {
     lineSpacing: 0,
     fontColor: "black",
   });
-
-  /* Load settings from chrome sync */
-  useChromeStorageSync("settings", setSettings);
 
   /* Refresh page on any settings change */
   useEffect(() => { updatePage(settings) }, [settings]);

@@ -83,6 +83,24 @@ function Main(settings: UserSettings, setSettings: (_: UserSettings) => void) {
           )}
       </div>   
       </div> 
+      <div className="accordion-element">  
+      <Accordion 
+        expanded={expanded === 'panel3'} 
+        onChange={toggleAccordion('panel3')}
+        disabled={!settings.styleChanged}
+        >
+        <AccordionSummary aria-controls="panel3d-content" id="panel3d-header">
+          <Typography>Punctuation spacing</Typography>
+        </AccordionSummary>
+      </Accordion>
+      <div className="accordion-overlay">
+      {SettingSwitch(
+          settings.punctuationSpacingChanged,
+          settings.styleChanged,
+          event => { setSettings({ ...settings, punctuationSpacingChanged: event.target.checked }) }
+          )}
+      </div>
+      </div>
     </div>
   );
 }

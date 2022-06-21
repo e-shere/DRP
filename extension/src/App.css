@@ -15,7 +15,7 @@ header {
   display: flex;
   border-bottom: 0.1em solid black;
   padding-bottom: 1em;
-  margin-bottom: 3em;
+  margin-bottom: 2em;
 }
 
 h1 {
@@ -52,7 +52,7 @@ h1 {
 }
 
 .setting {
-  margin-bottom: 3em;
+  margin-bottom: 2em;
 }
 
 .color-input-label {
