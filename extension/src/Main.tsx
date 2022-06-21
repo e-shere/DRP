@@ -1,8 +1,8 @@
-import { ChangeEvent } from "react";
+import { ChangeEvent, useState } from "react";
 import axios from "axios";
-import { Switch, Button } from "@mui/material";
-import SettingsIcon from "@mui/icons-material/Settings";
-
+import { Switch } from "@mui/material";
+import {Accordion, AccordionSummary, AccordionDetails} from "./Accordion"
+import Typography from '@mui/material/Typography';
 import { TITLE, UserSettings } from "./App";
 
 const TITLE_URL = "claraify";
@@ -25,6 +25,13 @@ async function lookupStyle() {
 }
 
 function Main(settings: UserSettings, setSettings: (_: UserSettings) => void, setPage: (_: string) => void) {
+  const [expanded, setExpanded] = useState<string | false>('panel1');
+
+  const handleChange =
+    (panel: string) => (event: React.SyntheticEvent, newExpanded: boolean) => {
+      setExpanded(newExpanded ? panel : false);
+    };
+
   return (
     <div className="Main">
       <header>
@@ -37,21 +44,32 @@ function Main(settings: UserSettings, setSettings: (_: UserSettings) => void, se
           />
         </div>
       </header>
-      {LabelledSwitch(
-        "Background",
-        settings.bgChanged,
-        settings.styleChanged,
-        event => { setSettings({ ...settings, bgChanged: event.target.checked }) }
-      )}
-      {LabelledSwitch(
-        "Font",
-        settings.fontChanged,
-        settings.styleChanged,
-        event => { setSettings({ ...settings, fontChanged: event.target.checked }) }
-      )}
-      <Button onClick={() => { setPage("settings") }} startIcon={<SettingsIcon />}>
-        Settings
-      </Button>
+      <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
+        <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
+          <Typography>Font</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Typography>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
+            malesuada lacus ex, sit amet blandit leo lobortis eget. Lorem ipsum dolor
+            sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
+            sit amet blandit leo lobortis eget.
+          </Typography>
+        </AccordionDetails>
+      </Accordion>
+      <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
+        <AccordionSummary aria-controls="panel2d-content" id="panel2d-header">
+          <Typography>Font</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Typography>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
+            malesuada lacus ex, sit amet blandit leo lobortis eget. Lorem ipsum dolor
+            sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
+            sit amet blandit leo lobortis eget.
+          </Typography>
+        </AccordionDetails>
+      </Accordion>
     </div>
   );
 }
