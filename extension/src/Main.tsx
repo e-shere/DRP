@@ -3,7 +3,9 @@ import axios from "axios";
 import { Switch } from "@mui/material";
 import {Accordion, AccordionSummary, AccordionDetails} from "./Accordion"
 import Typography from '@mui/material/Typography';
+
 import { TITLE, UserSettings } from "./App";
+import { BackgroundSettings, FontSettings } from "./Settings"
 
 const TITLE_URL = "claraify";
 const HEROKU_URL = `https://${TITLE_URL}.herokuapp.com/`;
@@ -24,7 +26,7 @@ async function lookupStyle() {
   res.then(res => res.data).then(res => { return res.json().map(JSON.parse) });
 }
 
-function Main(settings: UserSettings, setSettings: (_: UserSettings) => void, setPage: (_: string) => void) {
+function Main(settings: UserSettings, setSettings: (_: UserSettings) => void) {
   const [expanded, setExpanded] = useState<string | false>('panel1');
 
   const handleChange =
@@ -46,15 +48,10 @@ function Main(settings: UserSettings, setSettings: (_: UserSettings) => void, se
       </header>
       <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
         <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
-          <Typography>Font</Typography>
+          <Typography>Background</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Typography>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-            malesuada lacus ex, sit amet blandit leo lobortis eget. Lorem ipsum dolor
-            sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
-            sit amet blandit leo lobortis eget.
-          </Typography>
+            { BackgroundSettings(settings, setSettings) }
         </AccordionDetails>
       </Accordion>
       <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
@@ -62,12 +59,7 @@ function Main(settings: UserSettings, setSettings: (_: UserSettings) => void, se
           <Typography>Font</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Typography>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-            malesuada lacus ex, sit amet blandit leo lobortis eget. Lorem ipsum dolor
-            sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
-            sit amet blandit leo lobortis eget.
-          </Typography>
+            { FontSettings(settings, setSettings) }
         </AccordionDetails>
       </Accordion>
     </div>

@@ -1,8 +1,7 @@
-import { Button, Select, TextField, MenuItem, FormControl, InputLabel } from "@mui/material";
-import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import { Select, TextField, MenuItem, FormControl, InputLabel } from "@mui/material";
 import { SketchPicker } from 'react-color';
 
-import { TITLE, UserSettings, WEBAPP_URL } from "./App";
+import { UserSettings } from "./App";
 
 const PRESET_BG_COLORS = [
   "#faf2d9",
@@ -10,18 +9,25 @@ const PRESET_BG_COLORS = [
   "#d9e8fa",
 ];
 
-function Settings(settings: UserSettings, setSettings: (_: UserSettings) => void, setPage: (_: string) => void) {
+function BackgroundSettings(settings: UserSettings, setSettings: (_: UserSettings) => void) {
   return (
-    <div className="Settings">
-      <header>
-        <Button
-          className="nav-button"
-          onClick={() => setPage("main")}
-          startIcon={<ArrowBackIosNewIcon />}
-        />
-        <h1>{TITLE}</h1>
-      </header>
-      <FormControl fullWidth>
+    <FormControl fullWidth>
+      <div className="setting">
+          <label className="bg-color-input-label">Background</label>
+          <SketchPicker
+            width="92.5%"
+            presetColors={PRESET_BG_COLORS}
+            color={settings.bgColor}
+            onChange={color => { setSettings({ ...settings, bgColor: color.hex }) }}
+          />
+        </div>
+    </FormControl>
+  );
+}
+
+function FontSettings(settings: UserSettings, setSettings: (_: UserSettings) => void) {
+  return (
+    <FormControl fullWidth>
         <div className="setting">
           <InputLabel>Font</InputLabel>
           <Select
@@ -59,23 +65,9 @@ function Settings(settings: UserSettings, setSettings: (_: UserSettings) => void
             onChange={event => { setSettings({ ...settings, fontSpacingIncrease: Number(event.target.value) }) }}
           />
         </div>
-        <div className="setting">
-          <label className="bg-color-input-label">Background</label>
-          <SketchPicker
-            width="92.5%"
-            presetColors={PRESET_BG_COLORS}
-            color={settings.bgColor}
-            onChange={color => { setSettings({ ...settings, bgColor: color.hex }) }}
-          />
-        </div>
-        <Button
-          href={WEBAPP_URL}
-          target="_blank"
-          variant="outlined"
-        >Presets</Button>
       </FormControl>
-    </div>
   );
 }
 
-export default Settings;
+
+export {BackgroundSettings, FontSettings};
