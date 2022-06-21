@@ -47,7 +47,6 @@ function FontSettings(settings: UserSettings, setSettings: (_: UserSettings) => 
   return (
     <FormControl fullWidth>
         <div className="setting">
-          <InputLabel>Font</InputLabel>
           <Select
             fullWidth
             label="Font"

@@ -25,6 +25,7 @@ h1 {
 
 .header-button {
   flex-basis: 25%;
+  margin-top: 1em;
 }
 
 .App {
