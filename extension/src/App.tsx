@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useChromeStorageSync } from 'use-chrome-storage';
 
 import Main from "./Main";

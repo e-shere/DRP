@@ -4,6 +4,7 @@
 
 body {
   margin: 0;
+  position: relative;
 }
 
 button {
@@ -25,6 +26,7 @@ h1 {
 
 .header-button {
   flex-basis: 25%;
+  margin-top: 1em;
 }
 
 .App {
@@ -35,20 +37,19 @@ h1 {
   overflow-y: scroll;
 }
 
-.labelled-item {
-  display: flex;
-  padding-inline: 0.75em;
-}
-
-.labelled-item label {
-  line-height: 38px;
-  padding-right: 1em;
-  margin-right: auto;
-  font-size: 1.5em;
-  margin-bottom: 3em;
-}
-
 /* Settings */
+
+.accordion-element {
+  position: relative;
+}
+
+.accordion-overlay {
+  top: 0;
+  right: 0;
+  margin-top: 5px; /*Sorry! Hard coded*/
+  z-index: 9;
+  position: absolute;
+}
 
 .setting {
   margin-bottom: 3em;
