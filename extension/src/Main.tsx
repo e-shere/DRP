@@ -33,7 +33,10 @@ function Main(settings: UserSettings, setSettings: (_: UserSettings) => void) {
         <h1>{TITLE}</h1>
         <div className="header-button">
           <Switch
-            onChange={event => setSettings({ ...settings, styleChanged: event.target.checked })}
+            onChange={event => {
+              setSettings({ ...settings, styleChanged: event.target.checked });
+              setExpanded(false)
+            }}
             checked={settings.styleChanged}
           />
         </div>
