@@ -73,6 +73,30 @@ app.get("/serve-styles", async (_, res) => {
     }));    
 });
 
+
+app.get("/serve-presets", async (_, res) => {
+    client = PRODUCTION || STAGING ? redis.createClient({ url: REDIS_URL }) : redis.createClient();
+    await client.connect();
+    console.log("Connection to redis client established");
+    console.log("Serving styles from database...");
+
+    client.keys('*', function (err, keys) {
+        if (err) return console.log(err);
+         
+        for(var i = 0, len = keys.length; i < len; i++) {
+          console.log(keys[i]);
+        }
+    });
+
+    // res.json(await client.lRange(STYLE_KEY, 0, -1, async (error, items) => {
+    //     if (error) console.error(error);
+    //     if (items != null) {
+    //         console.log("Sending styles...");
+    //         return items;
+    //     }
+    // }));    
+});
+
 // Anything that doesn't match the above, send back index.html
 app.get('*', (_, res) => {
     res.sendFile(path.join(__dirname + BUILD_DIR + "index.html"))

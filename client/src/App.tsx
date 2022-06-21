@@ -1,7 +1,7 @@
 import { FormEvent, useState, useEffect } from "react";
 import Pusher from "pusher-js";
 import axios from "axios";
-import { getDbStyle, setDbStyle, getAllStyles } from "./styleDB";
+import { getDbStyle, setDbStyle, getAllStyles, addPreset} from "./styleDB";
 import Style from "./style";
 import "./App.css";
 import Button from '@mui/material/Button';
@@ -35,7 +35,7 @@ function App() {
     }
   }, []);
 
-  useEffect(() => {getAllStyles().then(setStyles)}, []);
+  // useEffect(() => {getAllStyles().then(setStyles)}, []);
 
   return (
     <div className="App">
@@ -60,7 +60,7 @@ function Form() {
     axios.post(`/${SUBMIT_EVENT}`, style);
 
     // Update db
-    setDbStyle(style);
+    addPreset(style);
   }
 
   return (

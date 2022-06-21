@@ -1,4 +1,5 @@
 import Style from "./style";
+import { GridRowId } from "@mui/x-data-grid";
 
 async function getDbStyle(): Promise<Style> {
   const res = await fetch("/getall");
@@ -25,16 +26,18 @@ async function getAllStyles(): Promise<Style[]> {
   return data.map(JSON.parse);
 }
 
-async function addPreset(style: Style) {
+function addPreset(style: Style){
   var font = style.font;
   var gId = String(assignGroupID(hexToRgb(style.bgColor)));
+  var key =  gId + ":" + font;
 
   fetch("/add-preset", {
     method: "POST",
     headers: { "Content-Type": "application/json", },
-    body: JSON.stringify({ data: gId + ":" + font }), // can add font colour as well here
+    body: JSON.stringify({ data: key}), // can add font colour as well here
   }).then(res => res.json()).catch(() => console.log("Error when submitting preset"));
-
+  
+  // return gId;
 }
 
 interface RGB {
@@ -58,4 +61,4 @@ function assignGroupID(rgb: RGB) {
   return String(rgb.b) + String(rgb.g) + String(rgb.r);
 }
 
-export { getDbStyle, setDbStyle, getAllStyles };
+export { getDbStyle, setDbStyle, getAllStyles, addPreset };
