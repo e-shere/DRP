@@ -46,7 +46,7 @@ h1 {
 .accordion-overlay {
   top: 0;
   right: 0;
-  margin-top: 5px; /*Sorry! Hard coded*/
+  margin-top: 0.5em;
   z-index: 9;
   position: absolute;
 }

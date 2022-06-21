@@ -54,10 +54,10 @@ async function updatePage(settings: UserSettings) {
         }
 
         element.innerHTML = element.dataset.initialInnerHtml ?? element.innerHTML;
-  
+
         /* Apply change only if switch is toggled */
         if (changed) {
-          element.innerHTML = element.innerHTML.split(/(?<=[.?!,;])/).join("<br>"); 
+          element.innerHTML = element.innerHTML.split(/(?<=[.?!,;])/).join("<br>");
         }
       }
     }
