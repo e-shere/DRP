@@ -24,6 +24,10 @@ async function lookupStyle() {
   res.then(res => res.data).then(res => { return res.json().map(JSON.parse) });
 }
 
+// we will have some state to keep the list of own presets.
+//      - initial value will be the result returned by a get from the storage
+//      - on change of the preset states (i.e. when you want to submit the current UserSettings), 
+//        send a set request to the database to add the new preset
 function Main(settings: UserSettings, setSettings: (_: UserSettings) => void, setPage: (_: string) => void) {
   return (
     <div className="Main">
@@ -54,6 +58,23 @@ function Main(settings: UserSettings, setSettings: (_: UserSettings) => void, se
       </Button>
     </div>
   );
+}
+
+interface Preset {
+  bgColor: string;
+  font: string;
+  fontSizeIncrease: number;
+  fontSpacingIncrease: number;
+  // isFavourite: boolean; // when this changes, send a request to the database to update the counters
+}
+
+
+// https://stackoverflow.com/questions/63127803/react-js-chrome-extension-how-to-store-data-from-background-js-in-a-variable-i
+// THIS : https://yashgarudkar.medium.com/building-chrome-extensions-in-react-6c117e54c7eb
+function sendPresetToStorage(presets: [Preset]) {
+  // simply sends the presets to the chrome storage
+  // remember to put '/* global chrome */' on top of the file where chrome.storage is used
+  chrome.storage.sync.set({ presets: presets });
 }
 
 export default Main;
