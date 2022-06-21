@@ -25,6 +25,10 @@ async function updatePage(settings: UserSettings) {
           /* Keep a copy of the initial value of the style attribute if not already present */
           element.setAttribute('data-initial-style', element.getAttribute("style") ?? "");
         } 
+        if (!element.hasAttribute('data-initial-inner-html')) {
+          /* Keep a copy of the initial value of the style attribute if not already present */
+          element.setAttribute('data-initial-inner-html', element.innerHTML);
+        } 
       }
     );
 
@@ -64,7 +68,8 @@ async function updatePage(settings: UserSettings) {
             // the content -> MUST NOT DO IT
             // Therefore we need to use innerHTML being careful not to add spaces after punctuation within HTML tags. In 
             // this way we will keep the children nodes untouched -> DESIRED BEHAVIOUR
-            element.innerHTML = element.innerHTML.split(/(?<=[.?!,;])/).join("<br>"); 
+            // element.innerHTML = element.innerHTML.split(/(?<=[.?!,;])/).join("<br>"); 
+            element.innerHTML = element.innerHTML.split(/(?<=[.?!,;])/).join("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"); 
             // this splits also on punctuation within the html tags
             
             
@@ -72,6 +77,9 @@ async function updatePage(settings: UserSettings) {
             // .replaceAll(";", ";&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
             //   .replaceAll(/,/g, "$1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
             //   .replaceAll(".", ".&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+          }
+          if (!s.punctuationSpacingChanged) {
+            element.innerHTML = element.dataset.initialInnerHtml ?? element.innerHTML;
           }
         }
       }
