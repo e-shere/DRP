@@ -11,16 +11,18 @@ async function updatePage(settings: UserSettings) {
         /* Tags for elements to exclude should be uppercase */
         setElementProperty(element, "background-color", s.bgColor, s.bgChanged, bgChangeTags);
         setElementProperty(element, "font-family", s.font, s.fontChanged, ["IMG", "SPAN"]);
-        increaseElementProperty(element, "font-size", s.fontSize, s.fontChanged, ["IMG"], 0.1);
-        increaseElementProperty(element, "letter-spacing", s.letterSpacing, s.fontChanged, ["IMG"], 0.5);
+        increaseElementProperty(element, "font-size", s.fontSize, s.fontChanged, ["IMG"], "16px");
+        increaseElementProperty(element, "letter-spacing", s.letterSpacing, s.fontChanged, ["IMG"], "2px");
       } else {
         ["background-color", "font-size", "letter-spacing", "font-family"]
           .forEach(t => resetElementProperty(element, t));
       }
     });
 
-    function increaseElementProperty(element: HTMLElement, property: string, value: number, changed: boolean, tags: string[], scale: number) {
-      const increasedValue = `calc(${toPixels(getDataProperty(element, property))} + ${value * scale}px)`;
+    function increaseElementProperty(element: HTMLElement, property: string, value: number, changed: boolean, tags: string[], defaultValue: string) {
+      const dataProperty = getDataProperty(element, property);
+      const initialValue = dataProperty.includes("px") ? dataProperty : defaultValue;
+      const increasedValue = `calc(${initialValue} + ${value}px)`;
       setElementProperty(element, property, increasedValue, changed, tags);
     }
 
@@ -40,17 +42,6 @@ async function updatePage(settings: UserSettings) {
 
     function resetElementProperty(element: HTMLElement, property: string) {
       element.style.setProperty(property, getDataProperty(element, property));
-    }
-
-    function toPixels(str: string) {
-      switch(str) {
-        case "medium":
-          return "16px";
-        case "normal":
-          return "0px";
-        default:
-          return str;
-      }
     }
 
     function getDataProperty(element: HTMLElement, property: string) {

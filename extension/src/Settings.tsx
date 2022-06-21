@@ -55,7 +55,7 @@ function Settings(settings: UserSettings, setSettings: (_: UserSettings) => void
         </div>
         {NumberField(
           "Font Size",
-          -20,
+          -5,
           50,
           settings.fontSize,
           event => { setSettings({ ...settings, fontSize: Number(event.target.value) }) }
