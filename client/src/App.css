@@ -79,3 +79,15 @@ input[type=submit] {
 input[type=submit]:hover {
   background-color: #42a5f5;
 }
+
+.MuiDataGrid-cellContent {
+  font-size: 2em;
+}
+
+.MuiDataGrid-columnHeaderTitle {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  font-weight: 500;
+  font-size: 2em;
+}

@@ -43,34 +43,25 @@ app.get("/api", (_, res) => {
     res.json({ message: "Hello from server!" });
 });
 
-app.get("/getall", async (_, res) => {
+app.get("/serve-presets", async (_, res) => {
     client = PRODUCTION || STAGING ? redis.createClient({ url: REDIS_URL }) : redis.createClient();
     await client.connect();
     console.log("Connection to redis client established");
+    console.log("Serving presets from database...");
+    var tableData = []
 
-    res.json(await client.get(DB_KEY, (error, styles) => {
-        if (error) console.error(error);
-        if (styles != null) {
-            return styles;
-        }
-    }));
-});
+    var keys = await client.keys('*', async (err, keys) => {
+        if (err) return console.log(err);
+    });
+    
+    // WARNING: horrid code, I humbly aplogise...
+    for(var i = 0, len = keys.length; i < len; i++) {
+        var key = keys[i];
+        tableData.push({freq: await client.get(key), preset: key});
+      }
 
-// === Communication with chrome extension === //
-
-app.get("/serve-styles", async (_, res) => {
-    client = PRODUCTION || STAGING ? redis.createClient({ url: REDIS_URL }) : redis.createClient();
-    await client.connect();
-    console.log("Connection to redis client established");
-    console.log("Serving styles from database...");
-
-    res.json(await client.lRange(STYLE_KEY, 0, -1, async (error, items) => {
-        if (error) console.error(error);
-        if (items != null) {
-            console.log("Sending styles...");
-            return items;
-        }
-    }));    
+    console.log(tableData);
+    res.json(tableData);  
 });
 
 // Anything that doesn't match the above, send back index.html
@@ -88,27 +79,21 @@ app.post(`/${SUBMIT_EVENT}`, async (req, res) => {
     }
 });
 
-app.post(`/${ADD_TO_EXTENSION}`, async (req, res) => {
-    if (PRODUCTION || STAGING) {
-        // send to pusher only in production (to be isolated when running locally)
-        const payload = req.body;
-        // to send style to extension 
-        pusher.trigger(PUSHER_CHANNEL, ADD_TO_EXTENSION, payload);
-        console.log("Submitting to extension");
-        res.send(payload);
-    }
-});
-
-app.post("/set", async (req, res) => {
-    const { data } = req.body;
+app.post("/add-preset", async (req, res) => {
+    const { preset } = req.body;
     client = PRODUCTION || STAGING ? redis.createClient({ url: REDIS_URL }) : redis.createClient();
     await client.connect();
     console.log("Connection to redis client established");
-    const style = JSON.stringify(data);
-    console.log(style);
-    client.lPush('styles', [style]);
+    var gId = preset.gId;
+    console.log(`Adding key "${gId}" to database`);
+    client.incr(gId, "0", (err, res) => { 
+        if (err) console.log(err);
+        console.log("adding " + res);
+    });
 });
 
 app.listen(PORT, () => {
     console.log(`Server listening on ${PORT}`);
 });
+
+
