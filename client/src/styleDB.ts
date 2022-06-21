@@ -29,10 +29,26 @@ async function getAllStyles(): Promise<Style[]> {
 async function getAllPresets(): Promise<Style[]> {
   console.log("Fetching presets...");
   const res = await fetch("/serve-presets");
-  // const data = await res.json();
-  // console.log(`presetPopularity: ${data}`);
-  // console.log();
-  return res.json();
+  // console.log(res.data);
+  const data = await res.json()
+  return data.map(unpackStyle)
+}
+
+function unpackStyle(keyval: {freq: number, preset: string}) {
+  const settings: string[] = keyval.preset.split(":");
+  const bgColour: string = rgbToHex(Number(settings[0]),Number(settings[1]),Number(settings[2]));
+
+  var style = new Style(settings[3], 0, bgColour);
+  return style; 
+}
+
+function componentToHex(c: number) {
+  var hex = c.toString(16);
+  return hex.length == 1 ? "0" + hex : hex;
+}
+
+function rgbToHex(r: number, g: number, b: number) {
+  return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
 }
 
 function addPreset(style: Style){
@@ -46,7 +62,6 @@ function addPreset(style: Style){
     body: JSON.stringify({ data: style }), // can add font colour as well here
   }).then(res => res.json()).catch(() => console.log("Error when submitting preset"));
   
-  // return gId;
 }
 
 interface RGB {
@@ -67,7 +82,7 @@ function hexToRgb(hex: string): RGB {
 }
 
 function assignGroupID(rgb: RGB) {
-  return String(rgb.b) + String(rgb.g) + String(rgb.r);
+  return String(rgb.b) + ":" + String(rgb.g) + ":" + String(rgb.r);
 }
 
-export { getDbStyle, setDbStyle, getAllStyles, addPreset, getAllPresets};
+export { getDbStyle, setDbStyle, getAllStyles, addPreset, getAllPresets };

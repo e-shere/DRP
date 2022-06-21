@@ -83,25 +83,16 @@ app.get("/serve-presets", async (_, res) => {
 
     var keys = await client.keys('*', async (err, keys) => {
         if (err) return console.log(err);
-         
-        // WARNING: horrid code, I humbly aplogise...
     });
-
+    
+    // WARNING: horrid code, I humbly aplogise...
     for(var i = 0, len = keys.length; i < len; i++) {
         var key = keys[i];
         tableData.push({freq: await client.get(key), preset: key});
       }
+
     console.log(tableData);
-
-    res.json(tableData);
-
-    // res.json(await client.lRange(STYLE_KEY, 0, -1, async (error, items) => {
-    //     if (error) console.error(error);
-    //     if (items != null) {
-    //         console.log("Sending styles...");
-    //         return items;
-    //     }
-    // }));    
+    res.json(tableData);  
 });
 
 // Anything that doesn't match the above, send back index.html
