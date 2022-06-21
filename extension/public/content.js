@@ -13,7 +13,7 @@ var message = "test"
   
 // 	if (typeof message !== "object" ||
 // 		 message === null ||
-// 		  !!message.source && message.source !== "claraify-webapp") { 
+// 		  !!message.source && message.source !== "clarify-this-webapp") { 
 // 	  return; 
 // 	} 
 // 	chrome.runtime.sendMessage(message); 
@@ -21,7 +21,7 @@ var message = "test"
 
 
 //   chrome.runtime.onMessage.addListener((request) => {
-//     request.source = 'claraify-webapp';
+//     request.source = 'clarify-this-webapp';
 //     window.postMessage(request, '*');
 // });
 
@@ -30,7 +30,7 @@ var message = "test"
 // 		function(request, sender, sendResponse) {
 // 			console.log("RECIEVED");
 // 			console.log(request);
-// 			if (sender.url === "http://claraify.com/") {
+// 			if (sender.url === "http://clarify-this.com/") {
 				
 // 				console.log("Response!");
 // 				message = "SUCCESS";
