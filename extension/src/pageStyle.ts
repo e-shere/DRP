@@ -5,7 +5,6 @@ import { UserSettings } from "./App";
 async function updatePage(settings: UserSettings) {
   setPageStyle(settings, s => {
 
-    const CLARIFY_SEPARATOR = "ClarifySeparator:here;";
     /* The html tags for which we should change the background color. document.body can have tags
     'body' and 'frameset' */
     const tagForBgColorChange = ["p", "header", "li", "body", "frameset"].map(s => s.toUpperCase());
@@ -29,6 +28,11 @@ async function updatePage(settings: UserSettings) {
       }
     );
 
+    function RemoveHTMLTags(innerHTML: string) {
+      var regX = /(<([^>]+)>)/ig;                
+      alert(innerHTML.replace(regX, ""));
+    }
+
     /* Update page bg */
     document.querySelectorAll("*").forEach(
       node => {
@@ -49,6 +53,26 @@ async function updatePage(settings: UserSettings) {
             : "");
           const bgAtrr = s.bgChanged ? `background-color:${s.bgColor} !important;` : "";
           element.setAttribute("style", originalStyleProperties.concat(";", element.tagName == "IMG" ? "" : fontAtrr, canSetBgColor(node) ? bgAtrr : ""));
+          const tagsAddSpaces = ["P", "LI"]
+          if (tagsAddSpaces.includes(node.tagName) && s.punctuationSpacingChanged) {
+            // element.textContent = element.textContent?.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "$1      ") ?? null;
+            // element.innerHTML = element.innerHTML.split(/(?<=[.?!,;])/).join("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+
+
+            // see https://www.microfocus.com/documentation/silk-test/200/en/silktestworkbench-help-en/SILKTEST-21EEFF3F-DIFFERENCEBETWEENTEXTCONTENTSINNERTEXTINNERHTML-REF.html
+            // Ideally we would use textContents, but setting it removes all the node's children so we would lose part of
+            // the content -> MUST NOT DO IT
+            // Therefore we need to use innerHTML being careful not to add spaces after punctuation within HTML tags. In 
+            // this way we will keep the children nodes untouched -> DESIRED BEHAVIOUR
+            element.innerHTML = element.innerHTML.split(/(?<=[.?!,;])/).join("<br>"); 
+            // this splits also on punctuation within the html tags
+            
+            
+            
+            // .replaceAll(";", ";&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
+            //   .replaceAll(/,/g, "$1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
+            //   .replaceAll(".", ".&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+          }
         }
       }
     );
