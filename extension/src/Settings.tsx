@@ -67,6 +67,13 @@ function Settings(settings: UserSettings, setSettings: (_: UserSettings) => void
           settings.letterSpacing,
           event => { setSettings({ ...settings, letterSpacing: Number(event.target.value) }) }
         )}
+        {NumberField(
+          "Line Spacing",
+          0,
+          30,
+          settings.lineSpacing,
+          event => { setSettings({ ...settings, lineSpacing: Number(event.target.value) }) }
+        )}
         <div className="setting">
           <label className="bg-color-input-label">Background</label>
           <SketchPicker

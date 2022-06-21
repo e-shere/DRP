@@ -17,6 +17,7 @@ export interface UserSettings {
   font: string;
   fontSize: number;
   letterSpacing: number;
+  lineSpacing: number;
 }
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
     font: "Arial",
     fontSize: 0,
     letterSpacing: 0,
+    lineSpacing: 0,
   });
 
   /* Load settings from chrome sync */

@@ -13,6 +13,7 @@ async function updatePage(settings: UserSettings) {
         setElementProperty(element, "font-family", s.font, s.fontChanged, ["IMG", "SPAN"]);
         increaseElementProperty(element, "font-size", s.fontSize, s.fontChanged, ["IMG"], "16px");
         increaseElementProperty(element, "letter-spacing", s.letterSpacing, s.fontChanged, ["IMG"], "2px");
+        increaseElementProperty(element, "line-height", s.lineSpacing, s.fontChanged, ["IMG"], "1em");
       } else {
         ["background-color", "font-size", "letter-spacing", "font-family"]
           .forEach(t => resetElementProperty(element, t));
