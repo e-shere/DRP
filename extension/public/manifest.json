@@ -1,5 +1,5 @@
 {
-    "name": "Claraify",
+    "name": "clarify-this",
     "description": "Making the Web accessible for everyone",
     "version": "1.0",
     "manifest_version": 3,
@@ -7,7 +7,7 @@
         "activeTab", "storage", "tabs", "scripting"
       ],
       "host_permissions": [
-        "http://claraify.com/*",
+        "http://clarify-this.com/*",
         "http://localhost:3000/*"
     ],
     "action": {
@@ -16,8 +16,8 @@
     },
     "devtools_page": "../index.html",
     "externally_connectable": {
-        "matches": ["http://claraify.com/", "https://claraify.herokuapp.com/",
-            "https://claraify-staging.herokuapp.com/", "http://localhost:3000/"]
+        "matches": ["http://clarify-this.com/", "https://clarify-this.herokuapp.com/",
+            "https://clarify-this-staging.herokuapp.com/", "http://localhost:3000/"]
     },
     "background": {
         "service_worker": "background.js"

@@ -7,7 +7,7 @@ import { TITLE, UserSettings } from "./App";
 import { BackgroundSettings, FontSettings } from "./Settings"
 import "./App.css";
 
-const TITLE_URL = "claraify";
+const TITLE_URL = "clarify-this";
 const HEROKU_URL = `https://${TITLE_URL}.herokuapp.com/`;
 const LOCAL_HOST = `http://localhost:3000/`
 const HEROKU_STAGING = `https://${TITLE_URL}-staging.herokuapp.com/`
