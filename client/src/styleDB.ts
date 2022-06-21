@@ -29,12 +29,12 @@ async function getAllStyles(): Promise<Style[]> {
 function addPreset(style: Style){
   var font = style.font;
   var gId = String(assignGroupID(hexToRgb(style.bgColor)));
-  var key =  gId + ":" + font;
+  style.gId = gId + ":" + font;
 
   fetch("/add-preset", {
     method: "POST",
     headers: { "Content-Type": "application/json", },
-    body: JSON.stringify({ data: key}), // can add font colour as well here
+    body: JSON.stringify({ data: style }), // can add font colour as well here
   }).then(res => res.json()).catch(() => console.log("Error when submitting preset"));
   
   // return gId;

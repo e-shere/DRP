@@ -138,11 +138,14 @@ app.listen(PORT, () => {
 });
 
 app.post("/add-preset", async (req, res) => {
-    const { key } = req.body;
+    const { data } = req.body;
     client = PRODUCTION || STAGING ? redis.createClient({ url: REDIS_URL }) : redis.createClient();
     await client.connect();
     console.log("Connection to redis client established");
-    // const style = JSON.stringify(key); //already a string I think
-    console.log(`Adding key:${key} to database`);
-    client.incr(key, (err, res) => { console.log("adding " + res);});
+    var gId = data.gId;
+    console.log(`Adding key "${gId}" to database`);
+    client.incr(gId, (err, res) => { 
+        if (err) console.log(err);
+        console.log("adding " + res);
+    });
 });
