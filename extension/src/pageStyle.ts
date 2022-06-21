@@ -1,89 +1,78 @@
-/* Todo: improve method of updating background color (maybe adjust font color too) */
-
 import { UserSettings } from "./App";
 
 async function updatePage(settings: UserSettings) {
   setPageStyle(settings, s => {
+    /* hacky - all tags exclusing those that we want to change the bg for */
+    const bgChangeTags = Array.from(document.querySelectorAll<HTMLElement>("*"))
+      .map(e => e.tagName).filter(t => !["H1", "H2", "A", "P", "HEADER", "LI", "BODY", "FRAMESET"].includes(t));
 
-    /* The html tags for which we should change the background color. document.body can have tags
-    'body' and 'frameset' */
-    const tagForBgColorChange = ["p", "header", "li", "body", "frameset"].map(s => s.toUpperCase());
-    function canSetBgColor(node: Element): boolean {
-      return tagForBgColorChange.includes(node.tagName);
+    const punctuationTags = Array.from(document.querySelectorAll<HTMLElement>("*"))
+      .map(e => e.tagName).filter(t => !["P", "LI"].includes(t));
+
+    document.querySelectorAll<HTMLElement>("*").forEach(element => {
+      if (s.styleChanged) {
+        /* Tags for elements to exclude should be uppercase */
+        hackyhackhack(element, "inner-html", s.punctuationSpacingChanged, punctuationTags);
+        setElementProperty(element, "background-color", s.bgColor, s.bgChanged, bgChangeTags);
+        setElementProperty(element, "font-family", s.font, s.fontChanged, ["IMG", "SPAN"]);
+        setElementProperty(element, "color", s.fontColor, s.fontChanged, ["IMG"]);
+        increaseElementProperty(element, "font-size", s.fontSize, s.fontChanged, ["IMG"], "16px");
+        increaseElementProperty(element, "letter-spacing", s.letterSpacing, s.fontChanged, ["IMG"], "2px");
+        increaseElementProperty(element, "line-height", s.lineSpacing, s.fontChanged, ["IMG"], "1em");
+      } else {
+        ["background-color", "font-size", "color", "letter-spacing", "font-family"]
+          .forEach(t => resetElementProperty(element, t));
+      }
+    });
+
+    function increaseElementProperty(element: HTMLElement, property: string, value: number, changed: boolean, tags: string[], defaultValue: string) {
+      const dataProperty = getDataProperty(element, property);
+      const initialValue = dataProperty.includes("px") ? dataProperty : defaultValue;
+      const increasedValue = `calc(${initialValue} + ${value}px)`;
+      setElementProperty(element, property, increasedValue, changed, tags);
     }
 
-    /* Add custom attributes to each element. 
-    data-initial-font-size: computed font size of the original page
-    data-initial-style: copy of the original value of the style attribute */
-    document.querySelectorAll("*").forEach(
-      element => {
-        if (!element.hasAttribute('data-initial-font-size')) {
-          /* Add it only if not already present */
-          element.setAttribute('data-initial-font-size', window.getComputedStyle(element).getPropertyValue('font-size'));
-        }
-        if (!element.hasAttribute('data-initial-style')) {
-          /* Keep a copy of the initial value of the style attribute if not already present */
-          element.setAttribute('data-initial-style', element.getAttribute("style") ?? "");
-        } 
-        if (!element.hasAttribute('data-initial-inner-html')) {
-          /* Keep a copy of the initial value of the style attribute if not already present */
-          element.setAttribute('data-initial-inner-html', element.innerHTML);
-        } 
+    function setElementProperty(element: HTMLElement, property: string, value: string, changed: boolean, excluded: string[]) {
+      const dataProperty = `data-initial-${property}`;
+      if (!element.hasAttribute(dataProperty)) {
+        element.setAttribute(dataProperty, window.getComputedStyle(element).getPropertyValue(property));
       }
-    );
 
-    function RemoveHTMLTags(innerHTML: string) {
-      var regX = /(<([^>]+)>)/ig;                
-      alert(innerHTML.replace(regX, ""));
+      /* Apply change only if switch is toggled */
+      if (!excluded.includes(element.tagName) && changed) {
+        element.style.setProperty(property, value);
+      } else {
+        resetElementProperty(element, property);
+      }
     }
 
-    /* Update page bg */
-    document.querySelectorAll("*").forEach(
-      node => {
-        const element = node as HTMLElement;
-        const originalStyleProperties: string = element.dataset.initialStyle ?? "";
-        
-        if (!s.styleChanged) {
-          /* Come back to original style */
-          element.setAttribute("style", originalStyleProperties);
-        } else {
-          /* Set style to be original properties + our properties (bgAttr added only if the node 
-          is of a particular type (HTML tag)) */
-          // if tagName is span, then do not add the font family (e.g. in Google Calendar it makes the icons be just squares)  
-          var fontAtrr = s.fontChanged && element.tagName != "SPAN" ? `font-family:${s.font} !important; ` : "";
-          fontAtrr = fontAtrr.concat(s.fontChanged
-            ? `font-size:calc(${element.dataset.initialFontSize} + ${s.fontSizeIncrease / 10}px) !important;
-              letter-spacing: ${s.fontSpacingIncrease}px !important;`
-            : "");
-          const bgAtrr = s.bgChanged ? `background-color:${s.bgColor} !important;` : "";
-          element.setAttribute("style", originalStyleProperties.concat(";", element.tagName == "IMG" ? "" : fontAtrr, canSetBgColor(node) ? bgAtrr : ""));
-          const tagsAddSpaces = ["P", "LI"]
-          if (tagsAddSpaces.includes(node.tagName) && s.punctuationSpacingChanged) {
-            // element.textContent = element.textContent?.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, "$1      ") ?? null;
-            // element.innerHTML = element.innerHTML.split(/(?<=[.?!,;])/).join("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
+    function hackyhackhack(element: HTMLElement, property: string, changed: boolean, excluded: string[]) {
+      if (!excluded.includes(element.tagName)) {
+        const dataProperty = `data-initial-${property}`;
+        if (!element.hasAttribute(dataProperty)) {
+          element.setAttribute(dataProperty, element.innerHTML);
+        }
 
-
-            // see https://www.microfocus.com/documentation/silk-test/200/en/silktestworkbench-help-en/SILKTEST-21EEFF3F-DIFFERENCEBETWEENTEXTCONTENTSINNERTEXTINNERHTML-REF.html
-            // Ideally we would use textContents, but setting it removes all the node's children so we would lose part of
-            // the content -> MUST NOT DO IT
-            // Therefore we need to use innerHTML being careful not to add spaces after punctuation within HTML tags. In 
-            // this way we will keep the children nodes untouched -> DESIRED BEHAVIOUR
-            // element.innerHTML = element.innerHTML.split(/(?<=[.?!,;])/).join("<br>"); 
-            element.innerHTML = element.innerHTML.split(/(?<=[.?!,;])/).join("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"); 
-            // this splits also on punctuation within the html tags
-            
-            
-            
-            // .replaceAll(";", ";&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
-            //   .replaceAll(/,/g, "$1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
-            //   .replaceAll(".", ".&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
-          }
-          if (!s.punctuationSpacingChanged) {
-            element.innerHTML = element.dataset.initialInnerHtml ?? element.innerHTML;
-          }
+        element.innerHTML = element.dataset.initialInnerHtml ?? element.innerHTML;
+  
+        /* Apply change only if switch is toggled */
+        if (changed) {
+          element.innerHTML = element.innerHTML.split(/(?<=[.?!,;])/).join("<br>"); 
         }
       }
-    );
+    }
+
+    function resetElementProperty(element: HTMLElement, property: string) {
+      element.style.setProperty(property, getDataProperty(element, property));
+    }
+
+    function getDataProperty(element: HTMLElement, property: string) {
+      return element.dataset[camelCase(`initial-${property}`)] ?? "";
+    }
+
+    function camelCase(str: string) {
+      return str.toLowerCase().replace(/[^a-zA-Z0-9]+(.)/g, (_, chr) => chr.toUpperCase());
+    }
   });
 }
 

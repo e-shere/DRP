@@ -7,7 +7,7 @@ import { TITLE, UserSettings } from "./App";
 
 const TITLE_URL = "claraify";
 const HEROKU_URL = `https://${TITLE_URL}.herokuapp.com/`;
-const LOCAL_HOSE = `http://localhost:3000/`
+const LOCAL_HOST = `http://localhost:3000/`
 const HEROKU_STAGING = `https://${TITLE_URL}-staging.herokuapp.com/`
 
 function LabelledSwitch(label: string, isOn: boolean, enabled: boolean, onChange: (_: ChangeEvent<HTMLInputElement>) => void) {
@@ -50,7 +50,7 @@ function Main(settings: UserSettings, setSettings: (_: UserSettings) => void, se
         event => { setSettings({ ...settings, fontChanged: event.target.checked }) }
       )}
       {LabelledSwitch(
-        "Spaces after punctuation",
+        "Punctuation Spacing",
         settings.punctuationSpacingChanged,
         settings.styleChanged,
         event => { setSettings({ ...settings, punctuationSpacingChanged: event.target.checked }) }
