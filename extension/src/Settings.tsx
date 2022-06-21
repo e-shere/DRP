@@ -43,20 +43,20 @@ function Settings(settings: UserSettings, setSettings: (_: UserSettings) => void
             label="Font Size Increase"
             variant="outlined"
             type="number"
-            value={settings.fontSizeIncrease}
-            onChange={event => { setSettings({ ...settings, fontSizeIncrease: Number(event.target.value) }) }}
+            value={settings.fontSize}
+            onChange={event => { setSettings({ ...settings, fontSize: Number(event.target.value) }) }}
           />
         </div>
         <div className="setting">
           <TextField
             fullWidth
-            InputProps={{ inputProps: { min: 0, max: 10 } }}
+            InputProps={{ inputProps: { min: 0, max: 20 } }}
             onWheel={event => event.target instanceof HTMLElement && event.target.blur()}
             label="Letter Spacing"
             variant="outlined"
             type="number"
-            value={settings.fontSpacingIncrease}
-            onChange={event => { setSettings({ ...settings, fontSpacingIncrease: Number(event.target.value) }) }}
+            value={settings.letterSpacing}
+            onChange={event => { setSettings({ ...settings, letterSpacing: Number(event.target.value) }) }}
           />
         </div>
         <div className="setting">

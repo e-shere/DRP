@@ -15,8 +15,8 @@ export interface UserSettings {
   fontChanged: boolean;
   bgColor: string;
   font: string;
-  fontSizeIncrease: number;
-  fontSpacingIncrease: number;
+  fontSize: number;
+  letterSpacing: number;
 }
 
 function App() {
@@ -28,8 +28,8 @@ function App() {
     fontChanged: false,
     bgColor: "#ffffff", /* white */
     font: "Arial",
-    fontSizeIncrease: 0,
-    fontSpacingIncrease: 0,
+    fontSize: 0,
+    letterSpacing: 0,
   });
 
   /* Load settings from chrome sync */
