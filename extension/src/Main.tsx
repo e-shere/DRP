@@ -12,18 +12,10 @@ const HEROKU_URL = `https://${TITLE_URL}.herokuapp.com/`;
 const LOCAL_HOST = `http://localhost:3000/`
 const HEROKU_STAGING = `https://${TITLE_URL}-staging.herokuapp.com/`
 
-function LabelledSwitch(label: string, isOn: boolean, enabled: boolean, onChange: (_: ChangeEvent<HTMLInputElement>) => void) {
+function SettingSwitch(isOn: boolean, enabled: boolean, onChange: (_: ChangeEvent<HTMLInputElement>) => void) {
   return (
-    <div className="labelled-item">
-      <label>{label}</label>
       <Switch onChange={onChange} checked={isOn} disabled={!enabled} />
-    </div>
   );
-}
-
-async function lookupStyle() {
-  const res = axios.get(`${HEROKU_STAGING}serve-styles`);
-  res.then(res => res.data).then(res => { return res.json().map(JSON.parse) });
 }
 
 function Main(settings: UserSettings, setSettings: (_: UserSettings) => void) {
@@ -49,6 +41,11 @@ function Main(settings: UserSettings, setSettings: (_: UserSettings) => void) {
       <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
         <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
           <Typography>Background</Typography>
+          {SettingSwitch(
+          settings.bgChanged,
+          settings.styleChanged,
+          event => { setSettings({ ...settings, bgChanged: event.target.checked }) }
+          )}
         </AccordionSummary>
         <AccordionDetails>
             { BackgroundSettings(settings, setSettings) }
@@ -57,6 +54,11 @@ function Main(settings: UserSettings, setSettings: (_: UserSettings) => void) {
       <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
         <AccordionSummary aria-controls="panel2d-content" id="panel2d-header">
           <Typography>Font</Typography>
+          {SettingSwitch(
+          settings.fontChanged,
+          settings.styleChanged,
+          event => { setSettings({ ...settings, fontChanged: event.target.checked }) }
+          )}
         </AccordionSummary>
         <AccordionDetails>
             { FontSettings(settings, setSettings) }

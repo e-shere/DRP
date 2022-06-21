@@ -31,7 +31,6 @@ function BackgroundSettings(settings: UserSettings, setSettings: (_: UserSetting
   return (
     <FormControl fullWidth>
       <div className="setting">
-          <label className="color-input-label">Background</label>
           <SketchPicker
             width="92.5%"
             presetColors={PRESET_BG_COLORS}
@@ -47,8 +46,8 @@ function FontSettings(settings: UserSettings, setSettings: (_: UserSettings) => 
   return (
     <FormControl fullWidth>
         <div className="setting">
-          <Select
-            fullWidth
+          <TextField
+            select
             label="Font"
             value={settings.font}
             onChange={event => { setSettings({ ...settings, font: event.target.value }) }}
@@ -56,7 +55,7 @@ function FontSettings(settings: UserSettings, setSettings: (_: UserSettings) => 
             <MenuItem value="Arial">Arial</MenuItem>
             <MenuItem value="Courier New">Courier New</MenuItem>
             <MenuItem value="Roboto">Roboto</MenuItem>
-          </Select>
+          </TextField>
         </div>
         {NumberField(
           "Font Size",
