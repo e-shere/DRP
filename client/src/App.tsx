@@ -1,7 +1,7 @@
 import { FormEvent, useState, useEffect } from "react";
 import Pusher from "pusher-js";
 import axios from "axios";
-import { getDbStyle, setDbStyle, getAllStyles, addPreset, getAllPresets} from "./styleDB";
+import { addPreset, getAllPresets} from "./styleDB";
 import Style from "./style";
 import "./App.css";
 import Button from '@mui/material/Button';

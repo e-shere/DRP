@@ -43,37 +43,6 @@ app.get("/api", (_, res) => {
     res.json({ message: "Hello from server!" });
 });
 
-app.get("/getall", async (_, res) => {
-    client = PRODUCTION || STAGING ? redis.createClient({ url: REDIS_URL }) : redis.createClient();
-    await client.connect();
-    console.log("Connection to redis client established");
-
-    res.json(await client.get(DB_KEY, (error, styles) => {
-        if (error) console.error(error);
-        if (styles != null) {
-            return styles;
-        }
-    }));
-});
-
-// === Communication with chrome extension === //
-
-app.get("/serve-styles", async (_, res) => {
-    client = PRODUCTION || STAGING ? redis.createClient({ url: REDIS_URL }) : redis.createClient();
-    await client.connect();
-    console.log("Connection to redis client established");
-    console.log("Serving styles from database...");
-
-    res.json(await client.lRange(STYLE_KEY, 0, -1, async (error, items) => {
-        if (error) console.error(error);
-        if (items != null) {
-            console.log("Sending styles...");
-            return items;
-        }
-    }));    
-});
-
-
 app.get("/serve-presets", async (_, res) => {
     client = PRODUCTION || STAGING ? redis.createClient({ url: REDIS_URL }) : redis.createClient();
     await client.connect();
@@ -110,31 +79,6 @@ app.post(`/${SUBMIT_EVENT}`, async (req, res) => {
     }
 });
 
-app.post(`/${ADD_TO_EXTENSION}`, async (req, res) => {
-    if (PRODUCTION || STAGING) {
-        // send to pusher only in production (to be isolated when running locally)
-        const payload = req.body;
-        // to send style to extension 
-        pusher.trigger(PUSHER_CHANNEL, ADD_TO_EXTENSION, payload);
-        console.log("Submitting to extension");
-        res.send(payload);
-    }
-});
-
-app.post("/set", async (req, res) => {
-    const { data } = req.body;
-    client = PRODUCTION || STAGING ? redis.createClient({ url: REDIS_URL }) : redis.createClient();
-    await client.connect();
-    console.log("Connection to redis client established");
-    const style = JSON.stringify(data);
-    console.log(style);
-    client.lPush('styles', [style]);
-});
-
-app.listen(PORT, () => {
-    console.log(`Server listening on ${PORT}`);
-});
-
 app.post("/add-preset", async (req, res) => {
     const { data } = req.body;
     client = PRODUCTION || STAGING ? redis.createClient({ url: REDIS_URL }) : redis.createClient();
@@ -147,3 +91,9 @@ app.post("/add-preset", async (req, res) => {
         console.log("adding " + res);
     });
 });
+
+app.listen(PORT, () => {
+    console.log(`Server listening on ${PORT}`);
+});
+
+

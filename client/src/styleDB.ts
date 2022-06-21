@@ -1,37 +1,10 @@
 import Style from "./style";
-import { GridRowId } from "@mui/x-data-grid";
-
-async function getDbStyle(): Promise<Style> {
-  const res = await fetch("/getall");
-  const data = await res.json();
-  console.log(JSON.stringify(data));
-  return JSON.parse(data);
-}
-
-function setDbStyle(style: Style) {
-  fetch("/set", {
-    method: "POST",
-    headers: { "Content-Type": "application/json", },
-    body: JSON.stringify({ data: style }),
-  })
-    .then(res => res.json())
-    .catch(() => console.log("Error when posting style"));
-}
-
-async function getAllStyles(): Promise<Style[]> {
-  console.log("Fetching styles...");
-  const res = await fetch("/serve-styles");
-  const data = await res.json();
-  console.log(JSON.stringify(data));
-  return data.map(JSON.parse);
-}
 
 async function getAllPresets(): Promise<Style[]> {
   console.log("Fetching presets...");
   const res = await fetch("/serve-presets");
-  // console.log(res.data);
-  const data = await res.json()
-  return data.map(unpackStyle)
+  const presets = await res.json()
+  return presets.map(unpackStyle)
 }
 
 function unpackStyle(keyval: {freq: number, preset: string}) {
@@ -61,7 +34,6 @@ function addPreset(style: Style){
     headers: { "Content-Type": "application/json", },
     body: JSON.stringify({ data: style }), // can add font colour as well here
   }).then(res => res.json()).catch(() => console.log("Error when submitting preset"));
-  
 }
 
 interface RGB {
@@ -85,4 +57,4 @@ function assignGroupID(rgb: RGB) {
   return String(rgb.b) + ":" + String(rgb.g) + ":" + String(rgb.r);
 }
 
-export { getDbStyle, setDbStyle, getAllStyles, addPreset, getAllPresets };
+export { addPreset, getAllPresets };
