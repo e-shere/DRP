@@ -1,4 +1,4 @@
-import { Select, TextField, MenuItem, FormControl, InputLabel } from "@mui/material";
+import { TextField, MenuItem, FormControl } from "@mui/material";
 import { ChangeEvent } from "react";
 import { SketchPicker } from 'react-color';
 
