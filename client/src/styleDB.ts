@@ -12,6 +12,7 @@ function unpackStyle(keyval: {freq: number, preset: string}) {
   const bgColour: string = rgbToHex(Number(settings[0]),Number(settings[1]),Number(settings[2]));
 
   var style = new Style(settings[3], 0, bgColour);
+  style.gId = keyval.freq;
   return style; 
 }
 

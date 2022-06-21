@@ -15,10 +15,11 @@ interface Row {
 
 export default function DataTable(styles: Style[]) {
   const rows: Row[] = [];
+  console.log(styles);
   for (let i = 1; i < styles.length + 1; i ++) {
-    console.log(`${styles[i - 1]}  style number ${i}`);
+    // console.log(`${styles[i - 1]}  style number ${i}`);
     var style: Style = styles[i - 1];
-    rows.push({id: i, font: style.font, fontSize: style.fontSize, bgColor: style.bgColor});
+    rows.push({id: style.gId, font: style.font, fontSize: style.fontSize, bgColor: style.bgColor});
   }
 
   var radioChecked: GridRowId[] = [1];
@@ -28,7 +29,6 @@ export default function DataTable(styles: Style[]) {
   const selectedRow = rows.filter((item) => {
     return item.id === selectionModel[0];
   });
-
 
   const columns: GridColDef[] = [
     {
