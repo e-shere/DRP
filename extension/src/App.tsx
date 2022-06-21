@@ -28,7 +28,7 @@ function App() {
     bgChanged: false,
     fontChanged: false,
     punctuationSpacing: false,
-    bgColor: "#ffffff", /* white */
+    bgColor: "white",
     font: "Arial",
     fontSize: 0,
     letterSpacing: 0,

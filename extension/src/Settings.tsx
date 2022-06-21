@@ -48,6 +48,7 @@ function FontSettings(settings: UserSettings, setSettings: (_: UserSettings) => 
         <div className="setting">
           <TextField
             select
+            fullWidth
             label="Font"
             value={settings.font}
             onChange={event => { setSettings({ ...settings, font: event.target.value }) }}
