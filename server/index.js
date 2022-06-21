@@ -80,11 +80,11 @@ app.post(`/${SUBMIT_EVENT}`, async (req, res) => {
 });
 
 app.post("/add-preset", async (req, res) => {
-    const { data } = req.body;
+    const { preset } = req.body;
     client = PRODUCTION || STAGING ? redis.createClient({ url: REDIS_URL }) : redis.createClient();
     await client.connect();
     console.log("Connection to redis client established");
-    var gId = data.gId;
+    var gId = preset.gId;
     console.log(`Adding key "${gId}" to database`);
     client.incr(gId, "0", (err, res) => { 
         if (err) console.log(err);
