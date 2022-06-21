@@ -1,13 +1,12 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useChromeStorageSync } from 'use-chrome-storage';
 
 import Main from "./Main";
-import Settings from "./Settings";
 import "./App.css";
 import { updatePage } from "./pageStyle";
 
 export const TITLE = "Clarify.";
-export const WEBAPP_URL = "https://claraify.herokuapp.com/";
+export const WEBAPP_URL = "https://clarify-this.herokuapp.com/";
 
 export interface UserSettings {
   styleChanged: boolean,
@@ -15,12 +14,13 @@ export interface UserSettings {
   fontChanged: boolean;
   bgColor: string;
   font: string;
-  fontSizeIncrease: number;
-  fontSpacingIncrease: number;
+  fontSize: number;
+  letterSpacing: number;
+  lineSpacing: number;
+  fontColor: string;
 }
 
 function App() {
-  const [page, setPage] = useState("main");
   const [settings, setSettings] = useChromeStorageSync(
     "settings", {
     styleChanged: true,
@@ -28,8 +28,10 @@ function App() {
     fontChanged: false,
     bgColor: "#ffffff", /* white */
     font: "Arial",
-    fontSizeIncrease: 0,
-    fontSpacingIncrease: 0,
+    fontSize: 0,
+    letterSpacing: 0,
+    lineSpacing: 0,
+    fontColor: "black",
   });
 
   /* Load settings from chrome sync */
@@ -38,19 +40,9 @@ function App() {
   /* Refresh page on any settings change */
   useEffect(() => { updatePage(settings) }, [settings]);
 
-  /* Todo: better method for page navigation */
-  function selectPage() {
-    switch (page) {
-      case "settings":
-        return Settings(settings, setSettings, setPage);
-      default:
-        return Main(settings, setSettings, setPage);
-    }
-  }
-
   return (
     <div className="App">
-      {selectPage()}
+      {Main(settings, setSettings)}
     </div>
   )
 }

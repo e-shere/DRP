@@ -1,30 +1,31 @@
-import { ChangeEvent } from "react";
-import axios from "axios";
-import { Switch, Button } from "@mui/material";
-import SettingsIcon from "@mui/icons-material/Settings";
+import { ChangeEvent, useState } from "react";
+import { Switch } from "@mui/material";
+import {Accordion, AccordionSummary, AccordionDetails} from "./Accordion"
+import Typography from '@mui/material/Typography';
 
 import { TITLE, UserSettings } from "./App";
+import { BackgroundSettings, FontSettings } from "./Settings"
+import "./App.css";
 
-const TITLE_URL = "claraify";
+const TITLE_URL = "clarify-this";
 const HEROKU_URL = `https://${TITLE_URL}.herokuapp.com/`;
-const LOCAL_HOSE = `http://localhost:3000/`
+const LOCAL_HOST = `http://localhost:3000/`
 const HEROKU_STAGING = `https://${TITLE_URL}-staging.herokuapp.com/`
 
-function LabelledSwitch(label: string, isOn: boolean, enabled: boolean, onChange: (_: ChangeEvent<HTMLInputElement>) => void) {
+function SettingSwitch(isOn: boolean, enabled: boolean, onChange: (_: ChangeEvent<HTMLInputElement>) => void) {
   return (
-    <div className="labelled-item">
-      <label>{label}</label>
-      <Switch onChange={onChange} checked={isOn} disabled={!enabled} />
-    </div>
+        <Switch onChange={onChange} checked={isOn} disabled={!enabled} />
   );
 }
 
-async function lookupStyle() {
-  const res = axios.get(`${HEROKU_STAGING}serve-styles`);
-  res.then(res => res.data).then(res => { return res.json().map(JSON.parse) });
-}
+function Main(settings: UserSettings, setSettings: (_: UserSettings) => void) {
+  const [expanded, setExpanded] = useState<string | false>('panel1');
 
-function Main(settings: UserSettings, setSettings: (_: UserSettings) => void, setPage: (_: string) => void) {
+  const toggleAccordion =
+    (panel: string) => (event: React.SyntheticEvent, newExpanded: boolean) => {
+      setExpanded(newExpanded ? panel : false);
+    };
+
   return (
     <div className="Main">
       <header>
@@ -32,26 +33,56 @@ function Main(settings: UserSettings, setSettings: (_: UserSettings) => void, se
         <h1>{TITLE}</h1>
         <div className="header-button">
           <Switch
-            onChange={event => setSettings({ ...settings, styleChanged: event.target.checked })}
+            onChange={event => {
+              setSettings({ ...settings, styleChanged: event.target.checked });
+              setExpanded(false)
+            }}
             checked={settings.styleChanged}
           />
         </div>
       </header>
-      {LabelledSwitch(
-        "Background",
-        settings.bgChanged,
-        settings.styleChanged,
-        event => { setSettings({ ...settings, bgChanged: event.target.checked }) }
-      )}
-      {LabelledSwitch(
-        "Font",
-        settings.fontChanged,
-        settings.styleChanged,
-        event => { setSettings({ ...settings, fontChanged: event.target.checked }) }
-      )}
-      <Button onClick={() => { setPage("settings") }} startIcon={<SettingsIcon />}>
-        Settings
-      </Button>
+      <div className="accordion-element">  
+      <Accordion 
+        expanded={expanded === 'panel1'} 
+        onChange={toggleAccordion('panel1')}
+        disabled={!settings.styleChanged}
+        >
+        <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
+          <Typography>Background</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+            { BackgroundSettings(settings, setSettings) }
+        </AccordionDetails>
+      </Accordion>
+      <div className="accordion-overlay">
+      {SettingSwitch(
+          settings.bgChanged,
+          settings.styleChanged,
+          event => { setSettings({ ...settings, bgChanged: event.target.checked }) }
+          )}
+      </div>
+      </div>
+      <div className="accordion-element">    
+      <Accordion 
+        expanded={expanded === 'panel2'} 
+        onChange={toggleAccordion('panel2')}
+        disabled={!settings.styleChanged}
+        >
+        <AccordionSummary aria-controls="panel2d-content" id="panel2d-header">
+          <Typography>Font</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+            { FontSettings(settings, setSettings) }
+        </AccordionDetails>
+      </Accordion>
+      <div className="accordion-overlay">
+      {SettingSwitch(
+          settings.fontChanged,
+          settings.styleChanged,
+          event => { setSettings({ ...settings, fontChanged: event.target.checked }) }
+          )}
+      </div>   
+      </div> 
     </div>
   );
 }
