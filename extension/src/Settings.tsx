@@ -75,12 +75,21 @@ function Settings(settings: UserSettings, setSettings: (_: UserSettings) => void
           event => { setSettings({ ...settings, lineSpacing: Number(event.target.value) }) }
         )}
         <div className="setting">
-          <label className="bg-color-input-label">Background</label>
+          <label className="color-input-label">Background</label>
           <SketchPicker
             width="92.5%"
             presetColors={PRESET_BG_COLORS}
             color={settings.bgColor}
             onChange={color => { setSettings({ ...settings, bgColor: color.hex }) }}
+          />
+        </div>
+        <div className="setting">
+          <label className="color-input-label">Font Colour</label>
+          <SketchPicker
+            width="92.5%"
+            presetColors={["#ffffff", "#000000"]}
+            color={settings.fontColor}
+            onChange={color => { setSettings({ ...settings, fontColor: color.hex }) }}
           />
         </div>
         <Button

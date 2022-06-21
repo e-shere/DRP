@@ -18,6 +18,7 @@ export interface UserSettings {
   fontSize: number;
   letterSpacing: number;
   lineSpacing: number;
+  fontColor: string;
 }
 
 function App() {
@@ -32,6 +33,7 @@ function App() {
     fontSize: 0,
     letterSpacing: 0,
     lineSpacing: 0,
+    fontColor: "black",
   });
 
   /* Load settings from chrome sync */

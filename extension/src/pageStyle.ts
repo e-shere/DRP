@@ -4,13 +4,14 @@ async function updatePage(settings: UserSettings) {
   setPageStyle(settings, s => {
     /* hacky - all tags exclusing those that we want to change the bg for */
     const bgChangeTags = Array.from(document.querySelectorAll<HTMLElement>("*"))
-      .map(e => e.tagName).filter(t => !["P", "HEADER", "LI", "BODY", "FRAMESET"].includes(t));
+      .map(e => e.tagName).filter(t => !["H1", "H2", "A", "P", "HEADER", "LI", "BODY", "FRAMESET"].includes(t));
 
     document.querySelectorAll<HTMLElement>("*").forEach(element => {
       if (s.styleChanged) {
         /* Tags for elements to exclude should be uppercase */
         setElementProperty(element, "background-color", s.bgColor, s.bgChanged, bgChangeTags);
         setElementProperty(element, "font-family", s.font, s.fontChanged, ["IMG", "SPAN"]);
+        setElementProperty(element, "color", s.fontColor, s.fontChanged, ["IMG"]);
         increaseElementProperty(element, "font-size", s.fontSize, s.fontChanged, ["IMG"], "16px");
         increaseElementProperty(element, "letter-spacing", s.letterSpacing, s.fontChanged, ["IMG"], "2px");
         increaseElementProperty(element, "line-height", s.lineSpacing, s.fontChanged, ["IMG"], "1em");
