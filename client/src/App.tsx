@@ -1,7 +1,7 @@
 import { FormEvent, useState, useEffect } from "react";
 import Pusher from "pusher-js";
 import axios from "axios";
-import { getDbStyle, setDbStyle, getAllStyles, addPreset} from "./styleDB";
+import { getDbStyle, setDbStyle, getAllStyles, addPreset, getAllPresets} from "./styleDB";
 import Style from "./style";
 import "./App.css";
 import Button from '@mui/material/Button';
@@ -30,12 +30,12 @@ function App() {
     if (PRODUCTION || STAGING) {
       // subscribe to pusher only in production (to be isolated when runnig locally)
       const pusher = new Pusher(PUSHER_KEY, { cluster: PUSHER_CLUSTER })
-      pusher.subscribe(PUSHER_CHANNEL).bind(SUBMIT_EVENT, () => getAllStyles().then(setStyles))
+      pusher.subscribe(PUSHER_CHANNEL).bind(SUBMIT_EVENT, () => getAllPresets().then(setStyles))
       return (() => pusher.unsubscribe(PUSHER_CHANNEL))
     }
   }, []);
 
-  // useEffect(() => {getAllStyles().then(setStyles)}, []);
+  useEffect(() => {getAllPresets().then(setStyles)}, []);
 
   return (
     <div className="App">

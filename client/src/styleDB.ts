@@ -26,6 +26,15 @@ async function getAllStyles(): Promise<Style[]> {
   return data.map(JSON.parse);
 }
 
+async function getAllPresets(): Promise<Style[]> {
+  console.log("Fetching presets...");
+  const res = await fetch("/serve-presets");
+  // const data = await res.json();
+  // console.log(`presetPopularity: ${data}`);
+  // console.log();
+  return res.json();
+}
+
 function addPreset(style: Style){
   var font = style.font;
   var gId = String(assignGroupID(hexToRgb(style.bgColor)));
@@ -61,4 +70,4 @@ function assignGroupID(rgb: RGB) {
   return String(rgb.b) + String(rgb.g) + String(rgb.r);
 }
 
-export { getDbStyle, setDbStyle, getAllStyles, addPreset };
+export { getDbStyle, setDbStyle, getAllStyles, addPreset, getAllPresets};

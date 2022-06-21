@@ -78,15 +78,22 @@ app.get("/serve-presets", async (_, res) => {
     client = PRODUCTION || STAGING ? redis.createClient({ url: REDIS_URL }) : redis.createClient();
     await client.connect();
     console.log("Connection to redis client established");
-    console.log("Serving styles from database...");
+    console.log("Serving presets from database...");
+    var tableData = []
 
-    client.keys('*', function (err, keys) {
+    var keys = await client.keys('*', async (err, keys) => {
         if (err) return console.log(err);
          
-        for(var i = 0, len = keys.length; i < len; i++) {
-          console.log(keys[i]);
-        }
+        // WARNING: horrid code, I humbly aplogise...
     });
+
+    for(var i = 0, len = keys.length; i < len; i++) {
+        var key = keys[i];
+        tableData.push({freq: await client.get(key), preset: key});
+      }
+    console.log(tableData);
+
+    res.json(tableData);
 
     // res.json(await client.lRange(STYLE_KEY, 0, -1, async (error, items) => {
     //     if (error) console.error(error);
@@ -144,7 +151,7 @@ app.post("/add-preset", async (req, res) => {
     console.log("Connection to redis client established");
     var gId = data.gId;
     console.log(`Adding key "${gId}" to database`);
-    client.incr(gId, (err, res) => { 
+    client.incr(gId, "0", (err, res) => { 
         if (err) console.log(err);
         console.log("adding " + res);
     });
