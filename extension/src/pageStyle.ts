@@ -6,13 +6,11 @@ async function updatePage(settings: UserSettings) {
     const bgChangeTags = Array.from(document.querySelectorAll<HTMLElement>("*"))
       .map(e => e.tagName).filter(t => !["H1", "H2", "A", "P", "HEADER", "LI", "BODY", "FRAMESET"].includes(t));
 
-    const punctuationTags = Array.from(document.querySelectorAll<HTMLElement>("*"))
-      .map(e => e.tagName).filter(t => !["P", "LI"].includes(t));
-
     document.querySelectorAll<HTMLElement>("*").forEach(element => {
       if (s.styleChanged) {
+        setPunctuationSpacing(element, "inner-text", s.punctuationSpacingChanged, ["P", "LI"]);
+
         /* Tags for elements to exclude should be uppercase */
-        hackyhackhack(element, "inner-html", s.punctuationSpacingChanged, punctuationTags);
         setElementProperty(element, "background-color", s.bgColor, s.bgChanged, bgChangeTags);
         setElementProperty(element, "font-family", s.font, s.fontChanged, ["IMG", "SPAN"]);
         setElementProperty(element, "color", s.fontColor, s.fontChanged, ["IMG"]);
@@ -33,32 +31,33 @@ async function updatePage(settings: UserSettings) {
     }
 
     function setElementProperty(element: HTMLElement, property: string, value: string, changed: boolean, excluded: string[]) {
-      const dataProperty = `data-initial-${property}`;
-      if (!element.hasAttribute(dataProperty)) {
-        element.setAttribute(dataProperty, window.getComputedStyle(element).getPropertyValue(property));
-      }
+      if (!excluded.includes(element.tagName)) {
+        const initialValue = window.getComputedStyle(element).getPropertyValue(property);
+        storeElementProperty(element, property, initialValue)
 
-      /* Apply change only if switch is toggled */
-      if (!excluded.includes(element.tagName) && changed) {
-        element.style.setProperty(property, value);
-      } else {
-        resetElementProperty(element, property);
+        if (changed) {
+          element.style.setProperty(property, value);
+        } else {
+          resetElementProperty(element, property);
+        }
       }
     }
 
-    function hackyhackhack(element: HTMLElement, property: string, changed: boolean, excluded: string[]) {
-      if (!excluded.includes(element.tagName)) {
-        const dataProperty = `data-initial-${property}`;
-        if (!element.hasAttribute(dataProperty)) {
-          element.setAttribute(dataProperty, element.innerHTML);
-        }
+    function setPunctuationSpacing(element: HTMLElement, property: string, changed: boolean, included: string[]) {
+      if (included.includes(element.tagName)) {
+        storeElementProperty(element, property, element.innerText);
 
-        element.innerHTML = element.dataset.initialInnerHtml ?? element.innerHTML;
+        element.innerText = changed
+          ? element.innerText.split(/(?<=[.?!,;])/).join("\n")
+          : element.dataset.initialInnerText
+          ?? element.innerText;
+      }
+    }
 
-        /* Apply change only if switch is toggled */
-        if (changed) {
-          element.innerHTML = element.innerHTML.split(/(?<=[.?!,;])/).join("<br>");
-        }
+    function storeElementProperty(element: HTMLElement, property: string, value: string) {
+      const dataProperty = `data-initial-${property}`;
+      if (!element.hasAttribute(dataProperty)) {
+        element.setAttribute(dataProperty, value);
       }
     }
 
