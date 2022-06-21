@@ -112,3 +112,13 @@ app.post("/set", async (req, res) => {
 app.listen(PORT, () => {
     console.log(`Server listening on ${PORT}`);
 });
+
+app.post("/add-preset", async (req, res) => {
+    const { key } = req.body;
+    client = PRODUCTION || STAGING ? redis.createClient({ url: REDIS_URL }) : redis.createClient();
+    await client.connect();
+    console.log("Connection to redis client established");
+    // const style = JSON.stringify(key); //already a string I think
+    console.log(`Adding key:${key} to database`);
+    client.incr(key, (err, res) => { console.log("adding " + res);});
+});
