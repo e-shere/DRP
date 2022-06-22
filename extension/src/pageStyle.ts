@@ -1,22 +1,22 @@
-import { UserSettings } from "./App";
+import { UserSettings, Preset } from "./App";
 
-async function updatePage(settings: UserSettings) {
-  setPageStyle(settings, s => {
+async function updatePage(settings: UserSettings, preset: Preset) {
+  setPageStyle(settings, preset, (s, p) => {
     /* hacky - all tags exclusing those that we want to change the bg for */
     const bgChangeTags = Array.from(document.querySelectorAll<HTMLElement>("*"))
       .map(e => e.tagName).filter(t => !["H1", "H2", "A", "P", "HEADER", "LI", "BODY", "FRAMESET"].includes(t));
 
     document.querySelectorAll<HTMLElement>("*").forEach(element => {
       if (s.styleChanged) {
-        setPunctuationSpacing(element, "inner-text", s.punctuationSpacingChanged, ["P", "LI"]);
+        setPunctuationSpacing(element, "inner-text", p.punctuationSpacingChanged, ["P", "LI"]);
 
         /* Tags for elements to exclude should be uppercase */
-        setElementProperty(element, "background-color", s.bgColor, s.bgChanged, bgChangeTags);
-        setElementProperty(element, "font-family", s.font, s.fontChanged, ["IMG", "SPAN"]);
-        setElementProperty(element, "color", s.fontColor, s.fontChanged, ["IMG"]);
-        increaseElementProperty(element, "font-size", s.fontSize, s.fontChanged, ["IMG"], "16px");
-        increaseElementProperty(element, "letter-spacing", s.letterSpacing, s.fontChanged, ["IMG"], "2px");
-        increaseElementProperty(element, "line-height", s.lineSpacing, s.fontChanged, ["IMG"], "1em");
+        setElementProperty(element, "background-color", p.bgColor, p.bgChanged, bgChangeTags);
+        setElementProperty(element, "font-family", p.font, p.fontChanged, ["IMG", "SPAN"]);
+        setElementProperty(element, "color", p.fontColor, p.fontChanged, ["IMG"]);
+        increaseElementProperty(element, "font-size", p.fontSize, p.fontChanged, ["IMG"], "16px");
+        increaseElementProperty(element, "letter-spacing", p.letterSpacing, p.fontChanged, ["IMG"], "2px");
+        increaseElementProperty(element, "line-height", p.lineSpacing, p.fontChanged, ["IMG"], "1em");
       } else {
         ["background-color", "font-size", "color", "letter-spacing", "font-family"]
           .forEach(t => resetElementProperty(element, t));
@@ -47,10 +47,10 @@ async function updatePage(settings: UserSettings) {
       if (included.includes(element.tagName)) {
         storeElementProperty(element, property, element.innerText);
 
-        element.innerText = changed
-          ? element.innerText.split(/(?<=[.?!,;])/).join("\n")
-          : element.dataset.initialInnerText
-          ?? element.innerText;
+        element.innerText = element.dataset.initialInnerText ?? element.innerText;
+        if (changed) {
+          element.innerText = element.innerText.split(/(?<=[.?!,;])/).join("\n");
+        }
       }
     }
 
@@ -75,12 +75,12 @@ async function updatePage(settings: UserSettings) {
   });
 }
 
-async function setPageStyle(settings: UserSettings, updateStyle: (_: UserSettings) => void) {
+async function setPageStyle(settings: UserSettings, preset: Preset, updateStyle: (s: UserSettings, p: Preset) => void) {
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
   chrome.scripting.executeScript({
     target: { tabId: tab.id ? tab.id : -1 },
     func: updateStyle,
-    args: [settings],
+    args: [settings, preset],
   });
 }
 

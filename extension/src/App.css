@@ -2,20 +2,20 @@
 
 /* General */
 
-body {
-  margin: 0;
-  position: relative;
+.Main {
+  height: 87%;
+  overflow-y: scroll;
 }
 
-button {
-  padding: 0;
+body {
+  margin: 0;
 }
 
 header {
   display: flex;
   border-bottom: 0.1em solid black;
   padding-bottom: 1em;
-  margin-bottom: 2em;
+  margin-bottom: 0.5em;
 }
 
 h1 {
@@ -39,7 +39,7 @@ h1 {
 
 /* Settings */
 
-.accordion-element {
+.accordion {
   position: relative;
 }
 
@@ -47,7 +47,6 @@ h1 {
   top: 0;
   right: 0;
   margin-top: 0.5em;
-  z-index: 9;
   position: absolute;
 }
 
@@ -58,4 +57,23 @@ h1 {
 .color-input-label {
   font-size: 1.8em;
   text-align: center;
+}
+
+/* Presets */
+
+.preset-button {
+  width: 6.35em;
+  white-space: nowrap;
+}
+
+.save-preset-button {
+  left: 10em;
+}
+
+.Presets {
+  margin: 0;
+  margin-top: 1em;
+  height: 10%;
+  width: 92%;
+  position: fixed;
 }
