@@ -7,16 +7,18 @@ import { Tooltip } from "@mui/material";
 import { triggerMessageToExtension } from "./scripts";
 
 interface Row {
-  id: GridRowId,
+  freq: GridRowId,
+  id: number,
   font: string;
   bgColor: string;
 }
 
 export default function DataTable(styles: Style[]) {
+  console.log(styles);
   const rows: Row[] = [];
   for (let i = 1; i < styles.length + 1; i ++) {
     var style: Style = styles[i - 1];
-    rows.push({id: style.gId, font: style.font, bgColor: style.bgColor});
+    rows.push({id: i, freq: style.gId, font: style.font, bgColor: style.bgColor});
   }
 
   var radioChecked: GridRowId[] = [1];
@@ -38,11 +40,11 @@ export default function DataTable(styles: Style[]) {
       )
     },
     {
-      field: 'id',
-      headerName: 'ID',
+      field: 'freq',
+      headerName: 'Popularity',
       description:
         'The id of the preset you are submitting',
-      width: 100
+      width: 300
     },
     {
       field: 'font',
