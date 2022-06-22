@@ -1,6 +1,6 @@
 import { ChangeEvent, useState } from "react";
 import { Switch } from "@mui/material";
-import { Accordion, AccordionSummary, AccordionDetails } from "./accordion"
+import { Accordion, AccordionSummary, AccordionDetails } from "./Accordion"
 import Typography from '@mui/material/Typography';
 
 import { TITLE, UserSettings } from "./App";
