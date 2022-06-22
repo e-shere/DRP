@@ -34,7 +34,7 @@ function BackgroundSettings(preset: Preset, setPreset: (_: Preset) => void) {
           width="91.5%"
           presetColors={PRESET_BG_COLORS}
           color={preset.bgColor}
-          onChange={color => setPreset({ ...preset, bgColor: color.hex })}
+          onChange={color => setPreset({ ...preset, bgColor: color.hex }) }
         />
       </div>
     </FormControl>

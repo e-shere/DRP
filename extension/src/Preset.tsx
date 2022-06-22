@@ -1,9 +1,11 @@
 import { useState } from "react";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from '@mui/icons-material/Delete';
+import { Dialog, DialogActions, DialogContent, Grid, TextField } from "@mui/material";
 
 import { Preset, UserSettings } from "./App";
-import { Dialog, DialogActions, DialogContent, TextField } from "@mui/material";
 
 function SavePresetButton(settings: UserSettings, preset: Preset, setSettings: (_: UserSettings) => void) {
   const [labelOpen, setLabelOpen] = useState(false);
@@ -37,27 +39,59 @@ function SavePresetButton(settings: UserSettings, preset: Preset, setSettings: (
               const newPreset = { ...preset, label };
               setSettings({ ...settings, presets: settings.presets.concat(newPreset) })
             }
-          }}>Save</Button>
+          }}>
+            Save
+          </Button>
         </DialogActions>
       </Dialog>
     </div>
   );
 }
 
-function Presets(presets: Preset[], setPreset: (_: Preset) => void) {
-  function PresetButton(preset: Preset) {
+function Presets(settings: UserSettings, setSettings: (_: UserSettings) => void, setPreset: (_: Preset) => void) {
+  const [deleteOpen, setDeleteOpen] = useState(false);
+
+  function PresetButton(preset: Preset, i: number) {
     return (
-      <Button onClick={() => setPreset(preset)} className="preset-button">
+      <Button
+        style={{ fontSize: "0.9em" }}
+        onClick={() => setPreset(preset)}
+        className="preset-button"
+      >
         {preset.label}
+        <IconButton size="small" onClick={() => { setDeleteOpen(true) }}>
+          <DeleteIcon />
+        </IconButton>
+        <Dialog open={deleteOpen} onClose={() => setDeleteOpen(false)}>
+          <DialogContent>
+            Are you sure you want to delete preset: <b>"{settings.presets[i].label}"</b> ?
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setDeleteOpen(false)}>No</Button>
+            <Button onClick={() => {
+              setSettings({ ...settings, presets: settings.presets.filter((_, j) => j != i) });
+              setDeleteOpen(false);
+            }}>
+              Yes!
+            </Button>
+          </DialogActions>
+        </Dialog>
       </Button>
     );
   }
 
-  return (
-    <div className="Presets">
-      <ButtonGroup variant="outlined">{presets.map(PresetButton)}</ButtonGroup>
-    </div>
-  );
+  if (settings.presets.length != 0) {
+    return (
+      <div className="Presets">
+        <h2>Your Presets</h2>
+        <ButtonGroup fullWidth variant="outlined">
+          {settings.presets.map((p, i) => PresetButton(p, i))}
+        </ButtonGroup>
+      </div>
+    );
+  } else {
+    return (<div></div>);
+  }
 }
 
 export { Presets, SavePresetButton };

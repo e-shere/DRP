@@ -1,6 +1,6 @@
 import { ChangeEvent, SyntheticEvent, useState } from "react";
 import { Switch } from "@mui/material";
-import { Accordion, AccordionSummary, AccordionDetails } from "./accordion";
+import { Accordion, AccordionSummary, AccordionDetails } from "./Accordion";
 import Typography from '@mui/material/Typography';
 
 import { TITLE, Preset, UserSettings } from "./App";
@@ -39,7 +39,7 @@ function Main(settings: UserSettings, preset: Preset, setSettings: (_: UserSetti
   }
 
   return (
-    <div className="Main">
+    <div style={{ height: settings.presets.length == 0 ? "100%" : "77%" }} className="Main">
       <header>
         <div className="header-button">{/* hacky empty div for scaling */}</div>
         <h1>{TITLE}</h1>

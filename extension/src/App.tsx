@@ -55,7 +55,7 @@ function App() {
   return (
     <div className="App">
       {Main(settings, preset, setSettings, setPreset)}
-      {Presets(settings.presets, setPreset)}
+      {Presets(settings, setSettings, setPreset)}
     </div>
   )
 }
