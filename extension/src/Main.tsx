@@ -1,32 +1,31 @@
 import { ChangeEvent, SyntheticEvent, useState } from "react";
 import { Switch } from "@mui/material";
-import { Accordion, AccordionSummary, AccordionDetails } from "./accordion"
+import { Accordion, AccordionSummary, AccordionDetails } from "./accordion";
 import Typography from '@mui/material/Typography';
 
-import { TITLE, UserSettings } from "./App";
+import { TITLE, Preset, UserSettings } from "./App";
+import { SavePresetButton } from "./Preset";
 import { BackgroundSettings, FontSettings } from "./Settings"
 import "./App.css";
 
-function Main(settings: UserSettings, setSettings: (_: UserSettings) => void) {
+function Main(settings: UserSettings, preset: Preset, setSettings: (_: UserSettings) => void, setPreset: (_: Preset) => void) {
   const [expanded, setExpanded] = useState<string | false>(false);
 
-  function ExpanedSetting(
+  function ExpandedSetting(
     label: string,
     changed: boolean,
     onChange: (e: ChangeEvent<HTMLInputElement>) => void,
-    getExpandedContent: (s: UserSettings, _: (_: UserSettings) => void) => JSX.Element
+    getExpandedContent: (s: Preset, _: (_: Preset) => void) => JSX.Element
   ) {
     return (
-      <div className="accordion-element">
+      <div className="accordion">
         <Accordion
           expanded={expanded === label}
           onChange={(_: SyntheticEvent, newExpanded: boolean) => { setExpanded(newExpanded ? label : false) }}
           disabled={!settings.styleChanged}
         >
-          <AccordionSummary aria-controls={`${label}d-content`} id={`${label}d-header`}>
-            <Typography>{label}</Typography>
-          </AccordionSummary>
-          <AccordionDetails>{getExpandedContent(settings, setSettings)}</AccordionDetails>
+          <AccordionSummary><Typography>{label}</Typography></AccordionSummary>
+          <AccordionDetails>{getExpandedContent(preset, setPreset)}</AccordionDetails>
         </Accordion>
         <div className="accordion-overlay">
           <Switch
@@ -48,29 +47,30 @@ function Main(settings: UserSettings, setSettings: (_: UserSettings) => void) {
           <Switch
             onChange={event => {
               setSettings({ ...settings, styleChanged: event.target.checked });
-              setExpanded(false)
+              setExpanded(false);
             }}
             checked={settings.styleChanged}
           />
         </div>
       </header>
-      {ExpanedSetting(
+      {SavePresetButton(settings, preset, setSettings)}
+      {ExpandedSetting(
         "Background",
-        settings.bgChanged,
-        event => { setSettings({ ...settings, bgChanged: event.target.checked }) },
+        preset.bgChanged,
+        event => { setPreset({ ...preset, bgChanged: event.target.checked }) },
         BackgroundSettings
       )}
-      {ExpanedSetting(
+      {ExpandedSetting(
         "Font",
-        settings.fontChanged,
-        event => { setSettings({ ...settings, fontChanged: event.target.checked }) },
+        preset.fontChanged,
+        event => { setPreset({ ...preset, fontChanged: event.target.checked }) },
         FontSettings
       )}
-      {ExpanedSetting(
+      {ExpandedSetting(
         "Punctuation Splitting",
-        settings.punctuationSpacingChanged,
-        event => { setSettings({ ...settings, punctuationSpacingChanged: event.target.checked }) },
-        (settings, setSetting) => { return (<div></div>) }
+        preset.punctuationSpacingChanged,
+        event => { setPreset({ ...preset, punctuationSpacingChanged: event.target.checked }) },
+        (preset, setPreset) => { return (<div></div>) }
       )}
     </div>
   );
