@@ -63,6 +63,8 @@ app.get("/serve-presets", async (_, res) => {
         tableData.push({id: i, freq: await client.get(key), preset: key});
     }
 
+    client.quit();
+
     console.log(tableData);
     res.json(tableData);  
 });
@@ -93,6 +95,7 @@ app.post("/add-preset", async (req, res) => {
         if (err) console.log(err);
         console.log(res);
     });
+    client.quit()
     res.sendStatus(200);
 });
 
