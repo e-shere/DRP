@@ -53,12 +53,15 @@ app.get("/serve-presets", async (_, res) => {
     var keys = await client.keys('*', async (err, keys) => {
         if (err) return console.log(err);
     });
+
+    console.log(keys);
     
     // WARNING: horrid code, I humbly aplogise...
+    var key = keys[0];
     for(var i = 0, len = keys.length; i < len; i++) {
-        var key = keys[i];
-        tableData.push({freq: await client.get(key), preset: key});
-      }
+        key = keys[i];
+        tableData.push({id: i, freq: await client.get(key), preset: key});
+    }
 
     console.log(tableData);
     res.json(tableData);  
@@ -80,16 +83,17 @@ app.post(`/${SUBMIT_EVENT}`, async (req, res) => {
 });
 
 app.post("/add-preset", async (req, res) => {
-    const { preset } = req.body;
+    var preset = JSON.parse(req.body.data);
     client = PRODUCTION || STAGING ? redis.createClient({ url: REDIS_URL }) : redis.createClient();
     await client.connect();
     console.log("Connection to redis client established");
     var gId = preset.gId;
-    console.log(`Adding key "${gId}" to database`);
+    console.log(`Adding to key "${gId}" in database...`);
     client.incr(gId, "0", (err, res) => { 
         if (err) console.log(err);
-        console.log("adding " + res);
+        console.log(res);
     });
+    res.sendStatus(200);
 });
 
 app.listen(PORT, () => {

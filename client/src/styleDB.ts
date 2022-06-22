@@ -4,10 +4,10 @@ async function getAllPresets(): Promise<Style[]> {
   console.log("Fetching presets...");
   const res = await fetch("/serve-presets");
   const presets = await res.json()
-  return presets.map(unpackStyle)
+  return presets.map(toStyle);
 }
 
-function unpackStyle(keyval: {freq: number, preset: string}) {
+function toStyle(keyval: {id: number, freq: number, preset: string}) {
   const settings: string[] = keyval.preset.split(":");
   const bgColour: string = rgbToHex(Number(settings[0]),Number(settings[1]),Number(settings[2]));
 
@@ -27,14 +27,14 @@ function rgbToHex(r: number, g: number, b: number) {
 
 function addPreset(style: Style){
   var font = style.font;
-  var gId = String(assignGroupID(hexToRgb(style.bgColor)));
+  var gId = assignGroupID(hexToRgb(style.bgColor));
   style.gId = gId + ":" + font;
 
   fetch("/add-preset", {
     method: "POST",
     headers: { "Content-Type": "application/json", },
-    body: JSON.stringify({ data: style }), // can add font colour as well here
-  }).then(res => res.json()).catch(() => console.log("Error when submitting preset"));
+    body: JSON.stringify({data : JSON.stringify(style)}) // can add font colour as well here
+  }).catch(() => console.log("Error when submitting preset"));
 }
 
 interface RGB {
@@ -45,17 +45,20 @@ interface RGB {
 
 function hexToRgb(hex: string): RGB {
   var parsedHexVal: RegExpExecArray = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
- 
   return {
     r: parseInt(parsedHexVal[1], 16),
     g: parseInt(parsedHexVal[2], 16),
     b: parseInt(parsedHexVal[3], 16)
   };
- 
 }
 
 function assignGroupID(rgb: RGB) {
-  return String(rgb.b) + ":" + String(rgb.g) + ":" + String(rgb.r);
+  return affixColourRange(rgb.b) + ":" + affixColourRange(rgb.g) + ":" + affixColourRange(rgb.r);
+}
+
+function affixColourRange(colour: number): String {
+  const groupSize = 15
+  return String(Math.floor(colour / groupSize) * groupSize);
 }
 
 export { addPreset, getAllPresets };
