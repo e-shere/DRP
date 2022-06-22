@@ -115,15 +115,6 @@ function FontSettings(preset: Preset, setPreset: (_: Preset) => void) {
         preset.lineSpacing,
         event => { setPreset({ ...preset, lineSpacing: Number(event.target.value) }) }
       )}
-      <div className="setting">
-        <label className="color-input-label">Font Colour</label>
-        <SketchPicker
-          width="91.5%"
-          presetColors={["#ffffff", "#000000"]}
-          color={preset.fontColor}
-          onChange={color => { setPreset({ ...preset, fontColor: color.hex }) }}
-        />
-      </div>
     </FormControl>
   );
 }
