@@ -13,7 +13,7 @@ async function updatePage(settings: UserSettings, preset: Preset) {
         /* Tags for elements to exclude should be uppercase */
         setElementProperty(element, "background-color", p.bgColor, p.bgChanged, bgChangeTags);
         setElementProperty(element, "font-family", p.font, p.fontChanged, ["IMG", "SPAN"]);
-        setElementProperty(element, "color", p.fontColor, p.fontChanged, ["IMG"]);
+        setElementProperty(element, "color", p.fontColor, p.bgChanged, ["IMG"]);
         increaseElementProperty(element, "font-size", p.fontSize, p.fontChanged, ["IMG"], "16px");
         increaseElementProperty(element, "letter-spacing", p.letterSpacing, p.fontChanged, ["IMG"], "2px");
         increaseElementProperty(element, "line-height", p.lineSpacing, p.fontChanged, ["IMG"], "1em");
