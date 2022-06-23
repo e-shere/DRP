@@ -11,6 +11,7 @@ h1 {
 
 
 .popular-cards {
+  padding-top: 1em;
   margin-bottom: 2em;
   width: 90%;
   height: 50vh;
@@ -40,14 +41,8 @@ h1 {
 
 .demo-menu {
   margin-left: 1em;
+  margin-bottom: 1em;
   flex-basis: 30%;
-}
-
-.demo-para {
-  margin: 1em;
-  border: 0.2em solid;
-  flex-basis: 70%;
-  background-color: aqua;
 }
 
 .demo-toggle {
@@ -73,5 +68,56 @@ h1 {
 
 .color-input-label {
   font-size: 1.8em;
+  text-align: center;
+}
+
+/* Demo page */
+
+/* labelled image */
+.demo-labelled-img {
+  text-align: center;
+  display: inline-flex;
+}
+
+.demo-labelled-img img {
+  height: 20%;
+  width: 20%;
+  margin-left: 5%;
+}
+
+.demo-labelled-img p {
+  margin-left: 3%;
+}
+
+/* list and link */
+.demo-list-link p {
+  padding-left: 5%;
+  text-align: left;
+}
+
+.demo-list-link {
+  width: 100%;
+  display: inline-flex;
+  justify-content: space-evenly;
+}
+
+.demo-list-link div {
+  border: 1px solid;
+  flex-basis: 40%;
+  text-align: center;
+}
+
+/* General */
+.demo-page {
+  padding: 1%;
+  text-align: left;
+  margin: 1em;
+  font-size: 0.6em;
+  border: 0.1em solid;
+  flex-basis: 70%;
+}
+
+.demo-page h1 {
+  font-size: 1.5em;
   text-align: center;
 }

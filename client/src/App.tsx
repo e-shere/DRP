@@ -64,7 +64,7 @@ function App() {
       <header className="App-header">
         <div>
           <h1> About </h1>
-          <p> This extension helps to make the web more accessible to everyone, allowing customisation of graphics aspects. </p>
+          <p> Making the web more accessible by allowing customisation of graphics aspects. </p>
         </div>
       </header>
       <div className="popular-cards">
@@ -83,6 +83,31 @@ function App() {
   );
 }
 
+function DemoPage() {
+  return (
+    <div className="demo-page">
+      <h1> This is a demo. Try out the features! </h1>
+      <div className="demo-labelled-img">
+        <p className="demo-lorem"> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. </p>
+        <img src="clarify-logo.png" />
+      </div>
+      <div className="demo-list-link">
+        <div>
+          <p>Here is a list: </p>
+          <ul>
+            <li>I have</li>
+            <li>Got to be</li>
+            <li>Honest</li>
+          </ul>
+        </div>
+        <div>
+          <p>Here is a link: </p>
+          <a href="https://www.imperial.ac.uk/">www.imperial.ac.uk</a>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function Demo(dbPreset: DbPreset) {
   const [expanded, setExpanded] = useState<string | false>();
@@ -145,9 +170,7 @@ function Demo(dbPreset: DbPreset) {
           (preset, setPreset) => { return (<div></div>) }
         )}
       </div>
-      <div className="demo-para">
-        <p> demo here. This is a demo. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. </p>
-      </div>
+      {DemoPage()}
     </div>
   );
 }
