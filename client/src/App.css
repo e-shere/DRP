@@ -1,15 +1,17 @@
 h1 {
+  text-align: center;
   margin: 0;
   padding-top: 1%;
   font-size: 1.5em;
 }
 
 h2 {
+  text-align: center;
   padding-top: 1%;
+  font-size: 1em;
 }
 
 .App {
-  text-align: center;
   background-color: #d9e8fa;
   font-size: calc(10px + 2vmin);
   padding-bottom: 1%;
@@ -56,6 +58,7 @@ h2 {
 }
 
 .demo-toggle {
+  text-align: center;
   padding: 5%;
 }
 
@@ -76,23 +79,24 @@ h2 {
   margin-bottom: 2%;
 }
 
-.color-input-label {
-  font-size: 1.8em;
-  text-align: center;
-}
-
 /* Demo page */
 
 /* labelled image */
 .demo-labelled-img {
   text-align: center;
   display: inline-flex;
+  margin-top: 2%;
+  margin-bottom: 2%;
 }
 
 .demo-labelled-img img {
-  height: 20%;
+  height: 10%;
   width: 20%;
-  margin-left: 5%;
+  margin-left: 2%;
+}
+
+.demo-labelled-img p {
+  margin: auto;
 }
 
 .demo-labelled-img p {
@@ -112,6 +116,10 @@ h2 {
   text-align: left;
 }
 
+.demo-list-link ul {
+  text-align: left;
+}
+
 .demo-list-link div {
   border: 1px solid;
   flex-basis: 40%;
@@ -127,15 +135,15 @@ h2 {
 }
 
 /* General */
+.demo-page h1 {
+  font-size: 1.3em;
+}
+
 .demo-page {
   padding: 1%;
   text-align: left;
   margin: 1em;
-  font-size: 0.6em;
+  font-size: 0.5em;
   border: 0.1em solid;
   flex-basis: 70%;
-}
-
-.demo-page h1 {
-  text-align: center;
 }

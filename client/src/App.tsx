@@ -64,7 +64,7 @@ function App() {
       <header className="App-header">
         <div>
           <h1> About </h1>
-          <p> Making the web more accessible by allowing customisation of graphics aspects. </p>
+          <h2> Making the web more accessible by allowing customisation of graphics aspects. </h2>
         </div>
       </header>
       {Demo(dbPreset)}
@@ -147,15 +147,16 @@ function Demo(dbPreset: DbPreset) {
       <h2>Demo</h2>
       <div className="demo">
         <div className="demo-menu">
-          <ToggleButtonGroup
-            className="demo-toggle"
-            value={alignment}
-            exclusive
-            onChange={(_, x) => setAlignment(x)}
-          >
-            <ToggleButton value="original">Original</ToggleButton>
-            <ToggleButton value="clarify">Clarify</ToggleButton>
-          </ToggleButtonGroup>
+          <div className="demo-toggle">
+            <ToggleButtonGroup
+              value={alignment}
+              exclusive
+              onChange={(_, x) => setAlignment(x)}
+            >
+              <ToggleButton value="original">Original</ToggleButton>
+              <ToggleButton value="clarify">Clarify</ToggleButton>
+            </ToggleButtonGroup>
+          </div>
           {ExpandedSetting(
             "Background",
             preset.bgChanged,
