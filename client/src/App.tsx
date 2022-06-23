@@ -1,6 +1,6 @@
 import { useState, useEffect, SyntheticEvent, ChangeEvent } from "react";
 import "./App.css";
-import { Card, CardContent, CardActionArea, Typography, Grid, Switch } from "@mui/material";
+import { Card, CardContent, CardActionArea, Typography, Grid, Switch, ToggleButtonGroup, ToggleButton } from "@mui/material";
 import { DbPreset, Preset, updatePage, UserSettings } from "./demo-scripts";
 import { BackgroundSettings, FontSettings } from "./DemoSettings";
 import { Accordion, AccordionDetails, AccordionSummary } from "./Accordion";
@@ -19,7 +19,6 @@ const PUSHER_CHANNEL = "clarify";
 const SUBMIT_EVENT = "submit";
 const ADD_TO_EXTENSION = "addex";
 
-export const DEMO_DIV_ID = "demo-div-wrapper";
 const DEFAULT_SETTINGS: UserSettings = {
   styleChanged: true,
   presets: [],
@@ -48,7 +47,7 @@ const DEFAULT_PRESET: Preset = {
 // );
 
 function App() {
-  const [dbPreset, setDbPreset] = useState<DbPreset>({bgColor: 'white', font: 'Arial'});
+  const [dbPreset, setDbPreset] = useState<DbPreset>({ bgColor: 'white', font: 'Arial' });
 
   // Binding to update styles in real time
   // useEffect(() => {
@@ -74,9 +73,12 @@ function App() {
         <div className="card">{BgCard("yellow", "New Times Roman")}</div>
         <div className="card">{BgCard("green", "Sans Serif")}</div>
         <div className="card">{BgCard("red", "Arial")}</div>
+        <div className="card">{BgCard("green", "Sans Serif")}</div>
+        <div className="card">{BgCard("red", "Arial")}</div>
+        <div className="card">{BgCard("red", "Arial")}</div>
+        <div className="card">{BgCard("red", "Arial")}</div>
       </div>
       {Demo(dbPreset)}
-      <button onClick={e => { updatePage(DEFAULT_SETTINGS, DEFAULT_PRESET) }}>Apply current settings</button>
     </div>
   );
 }
@@ -84,7 +86,8 @@ function App() {
 
 function Demo(dbPreset: DbPreset) {
   const [expanded, setExpanded] = useState<string | false>();
-  const [preset, setPreset] = useState<Preset>({...DEFAULT_PRESET, bgColor: dbPreset.bgColor, font: dbPreset.font});
+  const [preset, setPreset] = useState<Preset>({ ...DEFAULT_PRESET, bgColor: dbPreset.bgColor, font: dbPreset.font });
+  const [alignment, setAlignment] = useState("clarify");
 
   function ExpandedSetting(
     label: string,
@@ -112,28 +115,37 @@ function Demo(dbPreset: DbPreset) {
   }
 
   return (
-    <div id={DEMO_DIV_ID}>
-      <div className="demo-menu-div">
-      {ExpandedSetting(
-        "Background",
-        preset.bgChanged,
-        event => { setPreset({ ...preset, bgChanged: event.target.checked }) },
-        BackgroundSettings
-      )}
-      {ExpandedSetting(
-        "Font",
-        preset.fontChanged,
-        event => { setPreset({ ...preset, fontChanged: event.target.checked }) },
-        FontSettings
-      )}
-      {ExpandedSetting(
-        "Punctuation Splitting",
-        preset.punctuationSpacingChanged,
-        event => { setPreset({ ...preset, punctuationSpacingChanged: event.target.checked }) },
-        (preset, setPreset) => { return (<div></div>) }
-      )}
+    <div className="demo">
+      <div className="demo-menu">
+        <ToggleButtonGroup
+          className="demo-toggle"
+          value={alignment}
+          exclusive
+          onChange={(_, x) => setAlignment(x)}
+        >
+          <ToggleButton value="original">Original</ToggleButton>
+          <ToggleButton value="clarify">Clarify</ToggleButton>
+        </ToggleButtonGroup>
+        {ExpandedSetting(
+          "Background",
+          preset.bgChanged,
+          event => { setPreset({ ...preset, bgChanged: event.target.checked }) },
+          BackgroundSettings
+        )}
+        {ExpandedSetting(
+          "Font",
+          preset.fontChanged,
+          event => { setPreset({ ...preset, fontChanged: event.target.checked }) },
+          FontSettings
+        )}
+        {ExpandedSetting(
+          "Punctuation Splitting",
+          preset.punctuationSpacingChanged,
+          event => { setPreset({ ...preset, punctuationSpacingChanged: event.target.checked }) },
+          (preset, setPreset) => { return (<div></div>) }
+        )}
       </div>
-      <div className="demo-display-div" style={{backgroundColor:'red'}}>
+      <div className="demo-para">
         <p> demo here. This is a demo. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. </p>
       </div>
     </div>
