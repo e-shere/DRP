@@ -91,3 +91,29 @@ input[type=submit]:hover {
   font-weight: 500;
   font-size: 2em;
 }
+
+/* Float four columns side by side */
+.cardGridColumn {
+  float: left;
+  width: 300px;
+  padding: 0 10px;
+}
+
+/* Remove extra left and right margins, due to padding */
+.cardGridRow {margin: 0 -5px;}
+
+/* Clear floats after the columns */
+.cardGridRow:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+/* Responsive columns */
+@media screen and (max-width: 600px) {
+  .cardGridColumn {
+    width: 100%;
+    display: block;
+    margin-bottom: 20px;
+  }
+}

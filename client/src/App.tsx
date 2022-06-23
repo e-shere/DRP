@@ -7,12 +7,13 @@ import "./App.css";
 import Button from '@mui/material/Button';
 import DataTable from "./preset-selection";
 import { triggerMessageToExtension } from "./scripts";
-import { Card, Dialog, CardContent, CardActionArea, CardMedia, Typography, Grid } from "@mui/material";
-import { styled } from '@mui/material/styles';
+import { Card, Dialog, CardContent, CardActionArea, CardMedia, Typography, Grid, CardActions } from "@mui/material";
+import { createStyles, makeStyles, styled, Theme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import React from "react";
 import { Preset, updatePage, UserSettings } from "./demo";
+import { fontFamily } from "@mui/system";
 // import { makeStyles } from "@mui/styles";
 
 // this hack is required because env variables are not visible from the frontend
@@ -46,6 +47,16 @@ const DEFAULT_PRESET: Preset = {
   fontColor: "black",
 };
 
+// const useStyles = makeStyles((theme: Theme) =>
+//   createStyles({
+//     title: {
+//       paddingBottom: 0,
+//       fontWeight: 'bolder',
+//       fontFamily: 'Roboto, sans-serif',
+//     },
+//   })
+// );
+
 function App() {
   const [styles, setStyles] = useState<Style[]>([]);
 
@@ -73,25 +84,24 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <Grid container>
-          <Grid item xs={12} container>
-            <div>
-              <h1> About </h1>
-              <p> This extension helps to make the web more accessible to everyone, allowing customisation of graphics aspects. </p>
-            </div>
-          </Grid>
-          <Grid container justifyItems={'center'}>
-            <GridOfCards />
-          </Grid>
-          <Grid>
-            <div id={DEMO_DIV_ID}>
-              <div style={{backgroundColor:'red'}}>
-                <p> demo here. This is a demo. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. </p>
-              </div>
-            </div>
-            <button onClick={e => { updatePage(DEFAULT_SETTINGS, DEFAULT_PRESET) }}>Apply current settings</button>
-          </Grid>
-        </Grid>
+        <div>
+          <h1> About </h1>
+          <p> This extension helps to make the web more accessible to everyone, allowing customisation of graphics aspects. </p>
+        </div>
+        <div className="popularGrid" style={{width: '80%', backgroundColor: 'white', margin: '50 50px'}}>
+          <div className="cardGridRow">
+            <div className="cardGridColumn">{BgCard("orange", "Roboto")}</div>
+            <div className="cardGridColumn">{BgCard("yellow", "New Times Roman")}</div>
+            <div className="cardGridColumn">{BgCard("green", "Sans Serif")}</div>
+            <div className="cardGridColumn">{BgCard("red", "Arial")}</div>
+          </div>
+        </div>
+        <div id={DEMO_DIV_ID}>
+          <div style={{backgroundColor:'red'}}>
+            <p> demo here. This is a demo. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. </p>
+          </div>
+        </div>
+        <button onClick={e => { updatePage(DEFAULT_SETTINGS, DEFAULT_PRESET) }}>Apply current settings</button>
           {/*DataTable(styles)*/}
       </header>
     </div>
@@ -102,38 +112,66 @@ function GridOfCards() {
   return (
     <Grid container spacing={4}>
       <Grid item xs={4} sm={6}>
-        <MyCard />
+        {BgCard("orange", "Roboto")}
       </Grid>
       <Grid item xs={4} sm={6}>
-        <MyCard />
+        {BgCard("yellow", "New Times Roman")}
       </Grid>
       <Grid item xs={4} sm={6}>
-        <MyCard />
+        {BgCard("green", "Sans Serif")}
       </Grid>
       <Grid item xs={4} sm={6}>
-        <MyCard />
+        {BgCard("red", "Arial")}
       </Grid>
     </Grid>
   );
 }
 
-function MyCard() {
+function BgCard(bgColor: string, font: string) {
+  // const classes = useStyles();
   return (
-    <Card>
+    <Card> {/* style={{padding: '16px'}} */}
+      <CardActionArea style={{backgroundColor:bgColor}}>
+        {/* <CardMedia
+          component="img"
+          height="140"
+          image="/static/images/cards/contemplative-reptile.jpg"
+          alt="green iguana"
+        /> */}
+        <CardContent>
+          <Typography gutterBottom variant="h6" component="div" >
+            Recommended by x users 
+            {/* recommend this background color and font */}
+          </Typography>
+          <Typography variant="body1" style={{fontFamily:font}}> {/*color="text.secondary"*/}
+            Font: {font}<br></br>
+            Do you fancy this font and background color? Click me!
+          </Typography>
+        </CardContent>
+      </CardActionArea>
+    </Card>
+  );
+}
+
+function DivCard(bgColor: string, font: string) {
+  // const classes = useStyles();
+  return (
+    <Card> {/* style={{padding: '16px'}} */}
     <CardActionArea>
-      <CardMedia
+      {/* <CardMedia
         component="img"
         height="140"
         image="/static/images/cards/contemplative-reptile.jpg"
         alt="green iguana"
-      />
+      /> */}
       <CardContent>
-        <Typography gutterBottom variant="h5" component="div">
-          Lizard
+        <Typography gutterBottom variant="h6" component="div" >
+          Recommended by x users 
+          {/* recommend this background color and font */}
         </Typography>
-        <Typography variant="body2" color="text.secondary">
-          Lizards are a widespread group of squamate reptiles, with over 6,000
-          species, ranging across all continents except Antarctica
+        <Typography variant="body1" component="div" style={{padding: '0 0px', backgroundColor:bgColor, fontFamily:font}}> {/*color="text.secondary"*/}
+          Font: {font}<br></br>
+          Do you fancy this font and background color? Click me!
         </Typography>
       </CardContent>
     </CardActionArea>
