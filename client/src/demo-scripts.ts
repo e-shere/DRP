@@ -1,12 +1,36 @@
-import { UserSettings, Preset } from "./App";
+/* Copied from the extension. We want these to be  */
+export interface UserSettings {
+  styleChanged: boolean,
+  presets: Preset[];
+}
+  
+export interface Preset {
+  label: string;
+  bgChanged: boolean;
+  fontChanged: boolean;
+  punctuationSpacingChanged: boolean;
+  bgColor: string;
+  font: string;
+  fontSize: number;
+  letterSpacing: number;
+  lineSpacing: number;
+  fontColor: string;
+}
 
-async function updatePage(settings: UserSettings, preset: Preset) {
-  setPageStyle(settings, preset, (s, p) => {
+export interface DbPreset {
+  bgColor: string;
+  font: string;
+}
+
+async function updatePage(s: UserSettings, p: Preset) {
+  // setPageStyle(settings, preset, (s, p) => {
     /* hacky - all tags exclusing those that we want to change the bg for */
-    const bgChangeTags = Array.from(document.querySelectorAll<HTMLElement>("*"))
+    const demoDiv = document.getElementById("demo");
+
+    const bgChangeTags = Array.from(demoDiv.querySelectorAll<HTMLElement>("*"))
       .map(e => e.tagName).filter(t => !["H1", "H2", "A", "P", "HEADER", "LI", "BODY", "FRAMESET"].includes(t));
 
-    document.querySelectorAll<HTMLElement>("*").forEach(element => {
+    demoDiv.querySelectorAll<HTMLElement>("*").forEach(element => {
       if (s.styleChanged) {
         resetPunctuationSpacing(element, "inner-html", p.punctuationSpacingChanged, ["P", "LI", "SPAN"]);
 
@@ -18,21 +42,20 @@ async function updatePage(settings: UserSettings, preset: Preset) {
         increaseElementProperty(element, "letter-spacing", p.letterSpacing, p.fontChanged, ["IMG"], "2px");
         increaseElementProperty(element, "line-height", p.lineSpacing, p.fontChanged, ["IMG"], "1em");
       } else {
-        ["background-color", "font-size", "color", "letter-spacing", "font-family", "inner-html"]
+        ["background-color", "font-size", "color", "letter-spacing", "font-family", "inner-html", "line-height"]
           .forEach(t => resetElementProperty(element, t));
       }
       
     });
     /* Apply punctuation spacing */
     if (s.styleChanged && p.punctuationSpacingChanged) {
-      document.querySelectorAll<HTMLElement>("p").forEach(element => {
-        console.log(element.innerHTML);
+      demoDiv.querySelectorAll<HTMLElement>("p").forEach(element => {
         element.innerHTML = applyPunctuationSpacing(element.innerHTML);
       });
-      document.querySelectorAll<HTMLElement>("li").forEach(element => {
+      demoDiv.querySelectorAll<HTMLElement>("li").forEach(element => {
         element.innerHTML = applyPunctuationSpacing(element.innerHTML);
       });
-      document.querySelectorAll<HTMLElement>("span").forEach(element => {
+      demoDiv.querySelectorAll<HTMLElement>("span").forEach(element => {
         element.innerHTML = applyPunctuationSpacing(element.innerHTML);
       });
     }
@@ -92,16 +115,16 @@ async function updatePage(settings: UserSettings, preset: Preset) {
     function camelCase(str: string) {
       return str.toLowerCase().replace(/[^a-zA-Z0-9]+(.)/g, (_, chr) => chr.toUpperCase());
     }
-  });
+  // });
 }
 
-async function setPageStyle(settings: UserSettings, preset: Preset, updateStyle: (s: UserSettings, p: Preset) => void) {
-  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-  chrome.scripting.executeScript({
-    target: { tabId: tab.id ? tab.id : -1 },
-    func: updateStyle,
-    args: [settings, preset],
-  });
-}
+// async function setPageStyle(settings: UserSettings, preset: Preset, updateStyle: (s: UserSettings, p: Preset) => void) {
+//   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+//   chrome.scripting.executeScript({
+//     target: { tabId: tab.id ? tab.id : -1 },
+//     func: updateStyle,
+//     args: [settings, preset],
+//   });
+// }
 
 export { updatePage };
