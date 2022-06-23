@@ -15,7 +15,7 @@ import { Preset, UserSettings } from "./App";
 
 function SavePresetButton(settings: UserSettings, preset: Preset, setSettings: (_: UserSettings) => void) {
   const [labelOpen, setLabelOpen] = useState(false);
-  const [label, setLabel] = useState("preset");
+  const [label, setLabel] = useState("");
   const [limitAlertOpen, setLimitAlertOpen] = useState(false);
 
   return (
@@ -25,7 +25,7 @@ function SavePresetButton(settings: UserSettings, preset: Preset, setSettings: (
         className="save-preset-button"
         onClick={() => {
           if (settings.presets.length < 3) {
-            setLabel("preset");
+            setLabel("");
             setLabelOpen(true);
           } else {
             setLimitAlertOpen(true);
@@ -41,17 +41,20 @@ function SavePresetButton(settings: UserSettings, preset: Preset, setSettings: (
             inputProps={{ maxLength: 7 }}
             label="Preset Name"
             fullWidth
-            onChange={event => {
-              const l = event.target.value;
-              setLabel(l == "" ? `preset${settings.presets.length + 1}` : l);
-            }}
+            onChange={event => setLabel(event.target.value)}
           />
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setLabelOpen(false)}>Cancel</Button>
           <Button onClick={() => {
             setLabelOpen(false);
-            setSettings({ ...settings, presets: settings.presets.concat({ ...preset, label }) })
+            setSettings({
+              ...settings,
+              presets: settings.presets.concat({
+                ...preset,
+                label: label == "" ? `preset${settings.presets.length + 1}` : label
+              })
+            })
           }}>
             Save
           </Button>
@@ -82,7 +85,10 @@ function Presets(
     return (
       <Button style={{ fontSize: "0.9em" }} onClick={() => setPreset(preset)}>
         {preset.label}
-        <IconButton size="small" onClick={() => setDeleteLabel(preset.label)}>
+        <IconButton
+          size="small"
+          onClick={event => { event.stopPropagation(); setDeleteLabel(preset.label); }}
+        >
           <DeleteIcon />
         </IconButton>
       </Button >
