@@ -1,10 +1,9 @@
 import { useState, useEffect, SyntheticEvent, ChangeEvent } from "react";
-import Pusher from "pusher-js";
-import { getAllPresets } from "./styleDB";
-import Style from "./style";
 import "./App.css";
-import { Card, CardContent, CardActionArea, Typography, Grid, Accordion, AccordionSummary, AccordionDetails, Switch } from "@mui/material";
+import { Card, CardContent, CardActionArea, Typography, Grid, Switch } from "@mui/material";
 import { DbPreset, Preset, updatePage, UserSettings } from "./demo-scripts";
+import { BackgroundSettings, FontSettings } from "./DemoSettings";
+import { Accordion, AccordionDetails, AccordionSummary } from "./Accordion";
 // import { makeStyles } from "@mui/styles";
 
 // this hack is required because env variables are not visible from the frontend
@@ -27,14 +26,14 @@ const DEFAULT_SETTINGS: UserSettings = {
 };
 const DEFAULT_PRESET: Preset = {
   label: "default",
-  bgChanged: true,
-  fontChanged: true,
-  punctuationSpacingChanged: true,
+  bgChanged: false,
+  fontChanged: false,
+  punctuationSpacingChanged: false,
   bgColor: "#faf2d9",
   font: "Arial",
-  fontSize: 2,
-  letterSpacing: 2,
-  lineSpacing: 3,
+  fontSize: 0,
+  letterSpacing: 0,
+  lineSpacing: 0,
   fontColor: "black",
 };
 
@@ -70,6 +69,7 @@ function App() {
         </div>
       </header>
       <div className="popular-cards">
+        {/* onClick on the card, update the dbPreset variable, this will re-render this component */}
         <div className="card">{BgCard("orange", "Roboto")}</div>
         <div className="card">{BgCard("yellow", "New Times Roman")}</div>
         <div className="card">{BgCard("green", "Sans Serif")}</div>
@@ -81,7 +81,35 @@ function App() {
   );
 }
 
+
 function Demo(dbPreset: DbPreset) {
+  const [expanded, setExpanded] = useState<string | false>();
+  const [preset, setPreset] = useState<Preset>({...DEFAULT_PRESET, bgColor: dbPreset.bgColor, font: dbPreset.font});
+
+  function ExpandedSetting(
+    label: string,
+    changed: boolean,
+    onChange: (e: ChangeEvent<HTMLInputElement>) => void,
+    getExpandedContent: (s: Preset, _: (_: Preset) => void) => JSX.Element
+  ) {
+    return (
+      <div className="accordion">
+        <Accordion
+          expanded={expanded === label}
+          onChange={(_: SyntheticEvent, newExpanded: boolean) => { setExpanded(newExpanded ? label : false) }}
+        >
+          <AccordionSummary><Typography>{label}</Typography></AccordionSummary>
+          <AccordionDetails>{getExpandedContent(preset, setPreset)}</AccordionDetails>
+        </Accordion>
+        <div className="accordion-overlay">
+          <Switch
+            onChange={onChange}
+            checked={changed}
+          />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div id={DEMO_DIV_ID}>
@@ -111,34 +139,6 @@ function Demo(dbPreset: DbPreset) {
     </div>
   );
 }
-
-function ExpandedSetting(
-    label: string,
-    changed: boolean,
-    onChange: (e: ChangeEvent<HTMLInputElement>) => void,
-    getExpandedContent: (s: Preset, _: (_: Preset) => void) => JSX.Element
-  ) {
-    return (
-      <div className="accordion">
-        <Accordion
-          expanded={expanded === label}
-          onChange={(_: SyntheticEvent, newExpanded: boolean) => { setExpanded(newExpanded ? label : false) }}
-          disabled={!settings.styleChanged}
-        >
-          <AccordionSummary><Typography>{label}</Typography></AccordionSummary>
-          <AccordionDetails>{getExpandedContent(preset, setPreset)}</AccordionDetails>
-        </Accordion>
-        <div className="accordion-overlay">
-          <Switch
-            onChange={onChange}
-            checked={changed}
-            disabled={!settings.styleChanged}
-          />
-        </div>
-      </div>
-    );
-  }
-
 
 function BgCard(bgColor: string, font: string) {
   // const classes = useStyles();

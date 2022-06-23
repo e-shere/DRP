@@ -39,7 +39,6 @@ h1 {
 }
 
 .demo-menu-div {
-  padding: 1%;
   float:left;
   width: 30%;
   background-color: aquamarine;
@@ -49,5 +48,26 @@ h1 {
 .demo-display-div {
   float:right;
   width: 68%;
-  padding: 1%;
+}
+
+/* Settings */
+
+.accordion {
+  position: relative;
+}
+
+.accordion-overlay {
+  top: 0;
+  right: 0;
+  margin-top: 0.5em;
+  position: absolute;
+}
+
+.setting {
+  margin-bottom: 2em;
+}
+
+.color-input-label {
+  font-size: 1.8em;
+  text-align: center;
 }
