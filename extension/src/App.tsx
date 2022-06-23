@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useChromeStorageSync } from 'use-chrome-storage';
 
 import Main from "./Main";
@@ -41,6 +41,8 @@ export interface Preset {
 }
 
 function App() {
+  const [deleteLabel, setDeleteLabel] = useState("");
+
   const [settings, setSettings] = useChromeStorageSync(
     "settings", {
     styleChanged: true,
@@ -55,7 +57,7 @@ function App() {
   return (
     <div className="App">
       {Main(settings, preset, setSettings, setPreset)}
-      {Presets(settings, setSettings, setPreset)}
+      {Presets(settings, deleteLabel, setSettings, setPreset, setDeleteLabel)}
     </div>
   )
 }
