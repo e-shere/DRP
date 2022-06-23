@@ -12,6 +12,25 @@ import {
 } from "@mui/material";
 
 import { Preset, UserSettings } from "./App";
+import axios from "axios";
+// import { Style } from "@mui/icons-material";
+import { GridRowId } from "@mui/x-data-grid";
+
+
+class Style {
+  gId: GridRowId;
+  font: string;
+  fontSize: number;
+  bgColor: string;
+
+  constructor(font: string, fontSize: number, bgColor: string) {
+    this.font = font;
+    this.fontSize = fontSize;
+    this.bgColor = bgColor;
+    this.gId = "0";
+  }
+}
+
 
 function SavePresetButton(settings: UserSettings, preset: Preset, setSettings: (_: UserSettings) => void) {
   const [labelOpen, setLabelOpen] = useState(false);
@@ -48,6 +67,16 @@ function SavePresetButton(settings: UserSettings, preset: Preset, setSettings: (
           <Button onClick={() => setLabelOpen(false)}>Cancel</Button>
           <Button onClick={() => {
             setLabelOpen(false);
+
+            var style = new Style(preset.font,12,preset.bgColor)
+            console.log(JSON.stringify(style));
+            axios.post("http://clarify-this-staging.herokuapp.com/submit", style);
+            fetch("http://clarify-this-staging.herokuapp.com/add-preset", {
+              method: "POST",
+              headers: { "Content-Type": "application/json", },
+              body: JSON.stringify({data : JSON.stringify(style)}) // can add font colour as well here
+            }).catch(() => console.log("Error when submitting preset"));
+
             setSettings({
               ...settings,
               presets: settings.presets.concat({
@@ -124,5 +153,6 @@ function Presets(
     return (<></>);
   }
 }
+
 
 export { Presets, SavePresetButton };

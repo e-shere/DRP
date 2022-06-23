@@ -86,7 +86,7 @@ async function updatePage(settings: UserSettings, preset: Preset) {
     }
 
     function getDataProperty(element: HTMLElement, property: string) {
-      return element.dataset[camelCase(`initial-${property}`)] ?? "";
+      return element.dataset[camelCase(`initial-${property}`)] ?? window.getComputedStyle(element).getPropertyValue(property);
     }
 
     function camelCase(str: string) {

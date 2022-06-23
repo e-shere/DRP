@@ -1,4 +1,5 @@
 import Style from "./style";
+import axios from "axios";
 
 async function getAllPresets(): Promise<Style[]> {
   console.log("Fetching presets...");
@@ -26,39 +27,12 @@ function rgbToHex(r: number, g: number, b: number) {
 }
 
 function addPreset(style: Style){
-  var font = style.font;
-  var gId = assignGroupID(hexToRgb(style.bgColor));
-  style.gId = gId + ":" + font;
-
+  axios.post(`/submit`, style);
   fetch("/add-preset", {
     method: "POST",
     headers: { "Content-Type": "application/json", },
     body: JSON.stringify({data : JSON.stringify(style)}) // can add font colour as well here
   }).catch(() => console.log("Error when submitting preset"));
-}
-
-interface RGB {
-  r: number;
-  g: number;
-  b: number;
-}
-
-function hexToRgb(hex: string): RGB {
-  var parsedHexVal: RegExpExecArray = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return {
-    r: parseInt(parsedHexVal[1], 16),
-    g: parseInt(parsedHexVal[2], 16),
-    b: parseInt(parsedHexVal[3], 16)
-  };
-}
-
-function assignGroupID(rgb: RGB) {
-  return affixColourRange(rgb.b) + ":" + affixColourRange(rgb.g) + ":" + affixColourRange(rgb.r);
-}
-
-function affixColourRange(colour: number): String {
-  const groupSize = 15
-  return String(Math.floor(colour / groupSize) * groupSize);
 }
 
 export { addPreset, getAllPresets };

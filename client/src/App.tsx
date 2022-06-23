@@ -1,4 +1,8 @@
-import { useState, useEffect, SyntheticEvent, ChangeEvent } from "react";
+import { useState, SyntheticEvent, ChangeEvent } from "react";
+import Pusher from "pusher-js";
+
+import { addPreset, getAllPresets} from "./styleDB";
+import Style from "./style";
 import "./App.css";
 import { Card, CardContent, CardActionArea, Typography, Grid, Switch, ToggleButtonGroup, ToggleButton } from "@mui/material";
 import { DbPreset, Preset, updatePage, UserSettings } from "./demo-scripts";
