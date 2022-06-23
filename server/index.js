@@ -85,12 +85,16 @@ app.post(`/${SUBMIT_EVENT}`, async (req, res) => {
 });
 
 app.post("/add-preset", async (req, res) => {
+    console.log(req.body);
     var preset = JSON.parse(req.body.data);
     client = PRODUCTION || STAGING ? redis.createClient({ url: REDIS_URL }) : redis.createClient();
     await client.connect();
+
+    var gId = assignGroupID(hexToRgb(preset.bgColor)) + ":" + preset.font;
+
     console.log("Connection to redis client established");
-    var gId = preset.gId;
     console.log(`Adding to key "${gId}" in database...`);
+    
     client.incr(gId, "0", (err, res) => { 
         if (err) console.log(err);
         console.log(res);
@@ -104,3 +108,22 @@ app.listen(PORT, () => {
 });
 
 
+  
+  function hexToRgb(hex) {
+    var parsedHexVal = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return {
+      r: parseInt(parsedHexVal[1], 16),
+      g: parseInt(parsedHexVal[2], 16),
+      b: parseInt(parsedHexVal[3], 16)
+    };
+  }
+  
+  function assignGroupID(rgb) {
+    return affixColourRange(rgb.b) + ":" + affixColourRange(rgb.g) + ":" + affixColourRange(rgb.r);
+  }
+  
+  function affixColourRange(colour) {
+    const groupSize = 15
+    return String(Math.floor(colour / groupSize) * groupSize);
+  }
+  
