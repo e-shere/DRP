@@ -8,7 +8,7 @@ async function updatePage(settings: UserSettings, preset: Preset) {
 
     document.querySelectorAll<HTMLElement>("*").forEach(element => {
       if (s.styleChanged) {
-        setPunctuationSpacing(element, "inner-text", p.punctuationSpacingChanged, ["P", "LI"]);
+        resetPunctuationSpacing(element, "inner-html", p.punctuationSpacingChanged, ["P", "LI", "SPAN"]);
 
         /* Tags for elements to exclude should be uppercase */
         setElementProperty(element, "background-color", p.bgColor, p.bgChanged, bgChangeTags);
@@ -18,10 +18,32 @@ async function updatePage(settings: UserSettings, preset: Preset) {
         increaseElementProperty(element, "letter-spacing", p.letterSpacing, p.fontChanged, ["IMG"], "2px");
         increaseElementProperty(element, "line-height", p.lineSpacing, p.fontChanged, ["IMG"], "1em");
       } else {
-        ["background-color", "font-size", "color", "letter-spacing", "font-family"]
+        ["background-color", "font-size", "color", "letter-spacing", "font-family", "inner-html"]
           .forEach(t => resetElementProperty(element, t));
       }
+      
     });
+    /* Apply punctuation spacing */
+    if (s.styleChanged && p.punctuationSpacingChanged) {
+      document.querySelectorAll<HTMLElement>("p").forEach(element => {
+        console.log(element.innerHTML);
+        element.innerHTML = applyPunctuationSpacing(element.innerHTML);
+      });
+      document.querySelectorAll<HTMLElement>("li").forEach(element => {
+        element.innerHTML = applyPunctuationSpacing(element.innerHTML);
+      });
+      document.querySelectorAll<HTMLElement>("span").forEach(element => {
+        element.innerHTML = applyPunctuationSpacing(element.innerHTML);
+      });
+    }
+
+    function applyPunctuationSpacing(str: string) {
+      const SPACES = "&nbsp&nbsp&nbsp&nbsp&nbsp";
+      const doc = new DOMParser().parseFromString(str, 'text/html');
+      const arr = Array.from(doc.body.childNodes)
+        .map(child => (child as HTMLElement).outerHTML || (child.textContent ?? "").split(/(?<=[.?!,;])/).join(SPACES));
+      return arr.join('');
+    }
 
     function increaseElementProperty(element: HTMLElement, property: string, value: number, changed: boolean, tags: string[], defaultValue: string) {
       const dataProperty = getDataProperty(element, property);
@@ -43,14 +65,12 @@ async function updatePage(settings: UserSettings, preset: Preset) {
       }
     }
 
-    function setPunctuationSpacing(element: HTMLElement, property: string, changed: boolean, included: string[]) {
+    function resetPunctuationSpacing(element: HTMLElement, property: string, changed: boolean, included: string[]) {
       if (included.includes(element.tagName)) {
-        storeElementProperty(element, property, element.innerText);
+        storeElementProperty(element, property, element.innerHTML);
 
-        element.innerText = element.dataset.initialInnerText ?? element.innerText;
-        if (changed) {
-          element.innerText = element.innerText.split(/(?<=[.?!,;])/).join("\n");
-        }
+        /* Reset to original spacing */
+        element.innerHTML = element.dataset.initialInnerHtml ?? element.innerHTML;
       }
     }
 
