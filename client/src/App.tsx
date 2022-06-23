@@ -67,18 +67,21 @@ function App() {
           <p> Making the web more accessible by allowing customisation of graphics aspects. </p>
         </div>
       </header>
-      <div className="popular-cards">
-        {/* onClick on the card, update the dbPreset variable, this will re-render this component */}
-        <div className="card">{BgCard("orange", "Roboto")}</div>
-        <div className="card">{BgCard("yellow", "New Times Roman")}</div>
-        <div className="card">{BgCard("green", "Sans Serif")}</div>
-        <div className="card">{BgCard("red", "Arial")}</div>
-        <div className="card">{BgCard("green", "Sans Serif")}</div>
-        <div className="card">{BgCard("red", "Arial")}</div>
-        <div className="card">{BgCard("red", "Arial")}</div>
-        <div className="card">{BgCard("red", "Arial")}</div>
-      </div>
       {Demo(dbPreset)}
+      <div className="popular-cards-header">
+        <h2>Popular Designs</h2>
+        <div className="popular-cards">
+          {/* onClick on the card, update the dbPreset variable, this will re-render this component */}
+          <div className="card">{BgCard("orange", "Roboto")}</div>
+          <div className="card">{BgCard("yellow", "New Times Roman")}</div>
+          <div className="card">{BgCard("green", "Sans Serif")}</div>
+          <div className="card">{BgCard("red", "Arial")}</div>
+          <div className="card">{BgCard("green", "Sans Serif")}</div>
+          <div className="card">{BgCard("red", "Arial")}</div>
+          <div className="card">{BgCard("red", "Arial")}</div>
+          <div className="card">{BgCard("red", "Arial")}</div>
+        </div>
+      </div>
     </div>
   );
 }
@@ -92,7 +95,7 @@ function DemoPage() {
         <img src="clarify-logo.png" />
       </div>
       <div className="demo-list-link">
-        <div>
+        <div className="demo-list">
           <p>Here is a list: </p>
           <ul>
             <li>I have</li>
@@ -100,7 +103,7 @@ function DemoPage() {
             <li>Honest</li>
           </ul>
         </div>
-        <div>
+        <div className="demo-link">
           <p>Here is a link: </p>
           <a href="https://www.imperial.ac.uk/">www.imperial.ac.uk</a>
         </div>
@@ -140,37 +143,40 @@ function Demo(dbPreset: DbPreset) {
   }
 
   return (
-    <div className="demo">
-      <div className="demo-menu">
-        <ToggleButtonGroup
-          className="demo-toggle"
-          value={alignment}
-          exclusive
-          onChange={(_, x) => setAlignment(x)}
-        >
-          <ToggleButton value="original">Original</ToggleButton>
-          <ToggleButton value="clarify">Clarify</ToggleButton>
-        </ToggleButtonGroup>
-        {ExpandedSetting(
-          "Background",
-          preset.bgChanged,
-          event => { setPreset({ ...preset, bgChanged: event.target.checked }) },
-          BackgroundSettings
-        )}
-        {ExpandedSetting(
-          "Font",
-          preset.fontChanged,
-          event => { setPreset({ ...preset, fontChanged: event.target.checked }) },
-          FontSettings
-        )}
-        {ExpandedSetting(
-          "Punctuation Splitting",
-          preset.punctuationSpacingChanged,
-          event => { setPreset({ ...preset, punctuationSpacingChanged: event.target.checked }) },
-          (preset, setPreset) => { return (<div></div>) }
-        )}
+    <div className="demo-header">
+      <h2>Demo</h2>
+      <div className="demo">
+        <div className="demo-menu">
+          <ToggleButtonGroup
+            className="demo-toggle"
+            value={alignment}
+            exclusive
+            onChange={(_, x) => setAlignment(x)}
+          >
+            <ToggleButton value="original">Original</ToggleButton>
+            <ToggleButton value="clarify">Clarify</ToggleButton>
+          </ToggleButtonGroup>
+          {ExpandedSetting(
+            "Background",
+            preset.bgChanged,
+            event => { setPreset({ ...preset, bgChanged: event.target.checked }) },
+            BackgroundSettings
+          )}
+          {ExpandedSetting(
+            "Font",
+            preset.fontChanged,
+            event => { setPreset({ ...preset, fontChanged: event.target.checked }) },
+            FontSettings
+          )}
+          {ExpandedSetting(
+            "Punctuation Splitting",
+            preset.punctuationSpacingChanged,
+            event => { setPreset({ ...preset, punctuationSpacingChanged: event.target.checked }) },
+            (preset, setPreset) => { return (<div></div>) }
+          )}
+        </div>
+        {DemoPage()}
       </div>
-      {DemoPage()}
     </div>
   );
 }

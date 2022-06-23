@@ -1,28 +1,32 @@
 h1 {
   margin: 0;
   padding-top: 1%;
+  font-size: 1.5em;
+}
+
+h2 {
+  padding-top: 1%;
 }
 
 .App {
   text-align: center;
   background-color: #d9e8fa;
   font-size: calc(10px + 2vmin);
+  padding-bottom: 1%;
 }
 
+.popular-cards-header {
+  width: 90%;
+  margin-left: 5%;
+  background-color: white;
+}
 
 .popular-cards {
-  padding-top: 1em;
-  margin-bottom: 2em;
-  width: 90%;
   height: 50vh;
   display: inline-flex;
   flex-wrap: wrap;
   justify-content: space-evenly;
   overflow-y: scroll;
-  border-top: 1em solid;
-  border-bottom: 1em solid;
-  border-color: white;
-  background-color: white;
 }
 
 .card {
@@ -31,9 +35,15 @@ h1 {
   margin-bottom: 2%;
 }
 
-.demo {
+/* Demo */
+.demo-header {
+  background-color: white;
   width: 90%;
-  margin-bottom: 2em;
+  margin-left: 5%;
+  margin-bottom: 2%;
+}
+
+.demo {
   background-color: white;
   display: inline-flex;
   align-items: stretch;
@@ -63,7 +73,7 @@ h1 {
 }
 
 .setting {
-  margin-bottom: 2em;
+  margin-bottom: 2%;
 }
 
 .color-input-label {
@@ -90,10 +100,6 @@ h1 {
 }
 
 /* list and link */
-.demo-list-link p {
-  padding-left: 5%;
-  text-align: left;
-}
 
 .demo-list-link {
   width: 100%;
@@ -101,10 +107,23 @@ h1 {
   justify-content: space-evenly;
 }
 
+.demo-list-link p {
+  padding-left: 5%;
+  text-align: left;
+}
+
 .demo-list-link div {
   border: 1px solid;
   flex-basis: 40%;
   text-align: center;
+}
+
+.demo-list {
+  background-color: rgb(200, 200, 200);
+}
+
+.demo-link {
+  background-color: rgb(180, 180, 180);
 }
 
 /* General */
@@ -118,6 +137,5 @@ h1 {
 }
 
 .demo-page h1 {
-  font-size: 1.5em;
   text-align: center;
 }
