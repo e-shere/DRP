@@ -18,8 +18,8 @@ function Luminance(h: string): number {
   var rgb = [r, g, b].map(function (v) {
     v /= 255;
     return v <= 0.03928
-        ? v / 12.92
-        : Math.pow( (v + 0.055) / 1.055, 2.4 );
+      ? v / 12.92
+      : Math.pow((v + 0.055) / 1.055, 2.4);
   });
   return rgb[0] * 0.2126 + rgb[1] * 0.7152 + rgb[2] * 0.0722;
 }
@@ -67,13 +67,13 @@ function BackgroundSettings(preset: Preset, setPreset: (_: Preset) => void) {
   return (
     <FormControl fullWidth>
       <div className="setting">
-          <SketchPicker
-            width="92.5%"
-            presetColors={PRESET_BG_COLORS}
-            color={preset.bgColor}
-            onChange={color => { setPreset({ ...preset, bgColor: color.hex, fontColor: OptimumFontColour(color.hex)}) }}
-          />
-        </div>
+        <SketchPicker
+          width="91.5%"
+          presetColors={PRESET_BG_COLORS}
+          color={preset.bgColor}
+          onChange={color => { setPreset({ ...preset, bgColor: color.hex, fontColor: OptimumFontColour(color.hex) }) }}
+        />
+      </div>
     </FormControl>
   );
 }

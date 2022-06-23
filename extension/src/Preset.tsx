@@ -1,63 +1,128 @@
 import { useState } from "react";
-import ButtonGroup from "@mui/material/ButtonGroup";
-import Button from "@mui/material/Button";
+import DeleteIcon from '@mui/icons-material/Delete';
+import {
+  Button,
+  ButtonGroup,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  IconButton,
+  TextField,
+} from "@mui/material";
 
 import { Preset, UserSettings } from "./App";
-import { Dialog, DialogActions, DialogContent, TextField } from "@mui/material";
 
 function SavePresetButton(settings: UserSettings, preset: Preset, setSettings: (_: UserSettings) => void) {
   const [labelOpen, setLabelOpen] = useState(false);
-  const [label, setLabel] = useState("preset");
+  const [label, setLabel] = useState("");
+  const [limitAlertOpen, setLimitAlertOpen] = useState(false);
 
   return (
     <div>
       <Button
         variant="text"
         className="save-preset-button"
-        onClick={() => { setLabel("preset"); setLabelOpen(true) }}
+        onClick={() => {
+          if (settings.presets.length < 3) {
+            setLabel("");
+            setLabelOpen(true);
+          } else {
+            setLimitAlertOpen(true);
+          }
+        }}
       >
         Save Preset
       </Button>
-      <Dialog open={labelOpen} onClose={() => setLabelOpen(false)}>
+      <Dialog open={labelOpen}>
         <DialogContent>
           <TextField
             autoFocus
-            placeholder={label}
             inputProps={{ maxLength: 7 }}
             label="Preset Name"
             fullWidth
-            onChange={event => { setLabel(event.target.value) }}
+            onChange={event => setLabel(event.target.value)}
           />
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setLabelOpen(false)}>Cancel</Button>
           <Button onClick={() => {
             setLabelOpen(false);
-            if (settings.presets.length < 3) {
-              const newPreset = { ...preset, label };
-              setSettings({ ...settings, presets: settings.presets.concat(newPreset) })
-            }
-          }}>Save</Button>
+            setSettings({
+              ...settings,
+              presets: settings.presets.concat({
+                ...preset,
+                label: label == "" ? `preset${settings.presets.length + 1}` : label
+              })
+            })
+          }}>
+            Save
+          </Button>
         </DialogActions>
       </Dialog>
-    </div>
+      <Dialog open={limitAlertOpen}>
+        <DialogContent>
+          <DialogContentText>
+            Maximum of 3 presets reached.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setLimitAlertOpen(false)}>Ok</Button>
+        </DialogActions>
+      </Dialog>
+    </div >
   );
 }
 
-function Presets(presets: Preset[], setPreset: (_: Preset) => void) {
+function Presets(
+  settings: UserSettings,
+  deleteLabel: string,
+  setSettings: (_: UserSettings) => void,
+  setPreset: (_: Preset) => void,
+  setDeleteLabel: (_: string) => void
+) {
   function PresetButton(preset: Preset) {
     return (
-      <Button onClick={() => setPreset(preset)} className="preset-button">
+      <Button style={{ fontSize: "0.9em" }} onClick={() => setPreset(preset)}>
         {preset.label}
-      </Button>
+        <IconButton
+          size="small"
+          onClick={event => { event.stopPropagation(); setDeleteLabel(preset.label); }}
+        >
+          <DeleteIcon />
+        </IconButton>
+      </Button >
     );
   }
 
-  return (
-    <div className="Presets">
-      <ButtonGroup variant="outlined">{presets.map(PresetButton)}</ButtonGroup>
-    </div>
-  );
+  if (settings.presets.length != 0) {
+    return (
+      <div className="Presets">
+        <h2>Your Presets</h2>
+        <ButtonGroup fullWidth>
+          {settings.presets.map(PresetButton)}
+        </ButtonGroup>
+        <Dialog open={deleteLabel != ""}>
+          <DialogContent>
+            <DialogContentText>
+              Are you sure you want to delete preset: <b>"{deleteLabel}"</b> ?
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setDeleteLabel("")}>No</Button>
+            <Button onClick={() => {
+              setDeleteLabel("");
+              setSettings({ ...settings, presets: settings.presets.filter(p => p.label != deleteLabel) });
+            }}>
+              Yes!
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </div>
+    );
+  } else {
+    return (<></>);
+  }
 }
 
 export { Presets, SavePresetButton };

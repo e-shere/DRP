@@ -2,8 +2,14 @@
 
 /* General */
 
+.Main::-webkit-scrollbar {
+  display: none;
+}
+
 .Main {
-  height: 87%;
+  overflow-y: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 body {
@@ -29,11 +35,10 @@ h1 {
 }
 
 .App {
-  width: 22em;
-  height: 30em;
+  width: 23em;
+  height: 38em;
   background-color: #f8f2e6;
   padding: 1em;
-  overflow-y: scroll;
 }
 
 /* Settings */
@@ -60,19 +65,7 @@ h1 {
 
 /* Presets */
 
-.preset-button {
-  width: 6.35em;
-  white-space: nowrap;
-}
-
 .save-preset-button {
-  left: 10em;
+  left: 11.8em;
 }
 
-.Presets {
-  margin: 0;
-  margin-top: 1em;
-  height: 10%;
-  width: 92%;
-  position: fixed;
-}

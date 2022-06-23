@@ -39,7 +39,7 @@ function Main(settings: UserSettings, preset: Preset, setSettings: (_: UserSetti
   }
 
   return (
-    <div className="Main">
+    <div style={{ height: settings.presets.length == 0 ? "100%" : "77%" }} className="Main">
       <header>
         <div className="header-button">{/* hacky empty div for scaling */}</div>
         <h1>{TITLE}</h1>
