@@ -39,7 +39,7 @@ async function updatePage(s: UserSettings, p: Preset) {
         increaseElementProperty(element, "letter-spacing", p.letterSpacing, p.fontChanged, ["IMG"], "2px");
         increaseElementProperty(element, "line-height", p.lineSpacing, p.fontChanged, ["IMG"], "1em");
       } else {
-        ["background-color", "font-size", "color", "letter-spacing", "font-family", "inner-html"]
+        ["background-color", "font-size", "color", "letter-spacing", "font-family", "inner-html", "line-height"]
           .forEach(t => resetElementProperty(element, t));
       }
       
@@ -47,7 +47,6 @@ async function updatePage(s: UserSettings, p: Preset) {
     /* Apply punctuation spacing */
     if (s.styleChanged && p.punctuationSpacingChanged) {
       demoDiv.querySelectorAll<HTMLElement>("p").forEach(element => {
-        console.log(element.innerHTML);
         element.innerHTML = applyPunctuationSpacing(element.innerHTML);
       });
       demoDiv.querySelectorAll<HTMLElement>("li").forEach(element => {
@@ -107,7 +106,7 @@ async function updatePage(s: UserSettings, p: Preset) {
     }
 
     function getDataProperty(element: HTMLElement, property: string) {
-      return element.dataset[camelCase(`initial-${property}`)] ?? "";
+      return element.dataset[camelCase(`initial-${property}`)] ?? window.getComputedStyle(element).getPropertyValue(property);
     }
 
     function camelCase(str: string) {

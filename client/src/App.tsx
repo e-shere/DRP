@@ -28,7 +28,7 @@ const PUSHER_CHANNEL = "clarify";
 const SUBMIT_EVENT = "submit";
 const ADD_TO_EXTENSION = "addex";
 
-export const DEMO_DIV_ID = "demo-div";
+export const DEMO_DIV_ID = "demo-div-wrapper";
 const DEFAULT_SETTINGS: UserSettings = {
   styleChanged: true,
   presets: [],
@@ -59,7 +59,7 @@ function App() {
     }
   }, []);
 
-  useEffect(() => {getAllPresets().then(setStyles)}, []);
+  // useEffect(() => {getAllPresets().then(setStyles)}, []);
 
   // <Grid item> <Grid/> creates a grid cell
   // arguments of grid item: 
@@ -84,8 +84,10 @@ function App() {
             <GridOfCards />
           </Grid>
           <Grid>
-            <div id={DEMO_DIV_ID} style={{backgroundColor:'red'}}>
-              <p> demo here. This is a demo. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. </p>
+            <div id={DEMO_DIV_ID}>
+              <div style={{backgroundColor:'red'}}>
+                <p> demo here. This is a demo. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. </p>
+              </div>
             </div>
             <button onClick={e => { updatePage(DEFAULT_SETTINGS, DEFAULT_PRESET) }}>Apply current settings</button>
           </Grid>
