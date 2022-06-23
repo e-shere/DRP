@@ -1,19 +1,10 @@
-import { FormEvent, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Pusher from "pusher-js";
-import axios from "axios";
-import { addPreset, getAllPresets} from "./styleDB";
+import { getAllPresets } from "./styleDB";
 import Style from "./style";
 import "./App.css";
-import Button from '@mui/material/Button';
-import DataTable from "./preset-selection";
-import { triggerMessageToExtension } from "./scripts";
-import { Card, Dialog, CardContent, CardActionArea, CardMedia, Typography, Grid, CardActions } from "@mui/material";
-import { createStyles, makeStyles, styled, Theme } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
-import React from "react";
+import { Card, CardContent, CardActionArea, Typography, Grid } from "@mui/material";
 import { Preset, updatePage, UserSettings } from "./demo";
-import { fontFamily } from "@mui/system";
 // import { makeStyles } from "@mui/styles";
 
 // this hack is required because env variables are not visible from the frontend
@@ -88,21 +79,19 @@ function App() {
           <h1> About </h1>
           <p> This extension helps to make the web more accessible to everyone, allowing customisation of graphics aspects. </p>
         </div>
-        <div className="popularGrid" style={{width: '80%', backgroundColor: 'white', margin: '50 50px'}}>
-          <div className="cardGridRow">
-            <div className="cardGridColumn">{BgCard("orange", "Roboto")}</div>
-            <div className="cardGridColumn">{BgCard("yellow", "New Times Roman")}</div>
-            <div className="cardGridColumn">{BgCard("green", "Sans Serif")}</div>
-            <div className="cardGridColumn">{BgCard("red", "Arial")}</div>
-          </div>
+        <div className="popular-grid">
+          <div className="card">{BgCard("orange", "Roboto")}</div>
+          <div className="card">{BgCard("yellow", "New Times Roman")}</div>
+          <div className="card">{BgCard("green", "Sans Serif")}</div>
+          <div className="card">{BgCard("red", "Arial")}</div>
         </div>
         <div id={DEMO_DIV_ID}>
-          <div style={{backgroundColor:'red'}}>
+          <div style={{ backgroundColor: 'red' }}>
             <p> demo here. This is a demo. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. </p>
           </div>
         </div>
         <button onClick={e => { updatePage(DEFAULT_SETTINGS, DEFAULT_PRESET) }}>Apply current settings</button>
-          {/*DataTable(styles)*/}
+        {/*DataTable(styles)*/}
       </header>
     </div>
   );
@@ -131,7 +120,7 @@ function BgCard(bgColor: string, font: string) {
   // const classes = useStyles();
   return (
     <Card> {/* style={{padding: '16px'}} */}
-      <CardActionArea style={{backgroundColor:bgColor}}>
+      <CardActionArea style={{ backgroundColor: bgColor }}>
         {/* <CardMedia
           component="img"
           height="140"
@@ -140,10 +129,10 @@ function BgCard(bgColor: string, font: string) {
         /> */}
         <CardContent>
           <Typography gutterBottom variant="h6" component="div" >
-            Recommended by x users 
+            Recommended by x users
             {/* recommend this background color and font */}
           </Typography>
-          <Typography variant="body1" style={{fontFamily:font}}> {/*color="text.secondary"*/}
+          <Typography variant="body1" style={{ fontFamily: font }}> {/*color="text.secondary"*/}
             Font: {font}<br></br>
             Do you fancy this font and background color? Click me!
           </Typography>
@@ -157,25 +146,25 @@ function DivCard(bgColor: string, font: string) {
   // const classes = useStyles();
   return (
     <Card> {/* style={{padding: '16px'}} */}
-    <CardActionArea>
-      {/* <CardMedia
+      <CardActionArea>
+        {/* <CardMedia
         component="img"
         height="140"
         image="/static/images/cards/contemplative-reptile.jpg"
         alt="green iguana"
       /> */}
-      <CardContent>
-        <Typography gutterBottom variant="h6" component="div" >
-          Recommended by x users 
-          {/* recommend this background color and font */}
-        </Typography>
-        <Typography variant="body1" component="div" style={{padding: '0 0px', backgroundColor:bgColor, fontFamily:font}}> {/*color="text.secondary"*/}
-          Font: {font}<br></br>
-          Do you fancy this font and background color? Click me!
-        </Typography>
-      </CardContent>
-    </CardActionArea>
-  </Card>
+        <CardContent>
+          <Typography gutterBottom variant="h6" component="div" >
+            Recommended by x users
+            {/* recommend this background color and font */}
+          </Typography>
+          <Typography variant="body1" component="div" style={{ padding: '0 0px', backgroundColor: bgColor, fontFamily: font }}> {/*color="text.secondary"*/}
+            Font: {font}<br></br>
+            Do you fancy this font and background color? Click me!
+          </Typography>
+        </CardContent>
+      </CardActionArea>
+    </Card>
   );
 }
 
