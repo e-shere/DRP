@@ -19,6 +19,11 @@ export interface Preset {
   fontColor: string;
 }
 
+export interface DbPreset {
+  bgColor: string;
+  font: string;
+}
+
 async function updatePage(s: UserSettings, p: Preset) {
   // setPageStyle(settings, preset, (s, p) => {
     /* hacky - all tags exclusing those that we want to change the bg for */
