@@ -9,9 +9,6 @@ h1 {
   font-size: calc(10px + 2vmin);
 }
 
-.popular-cards::-webkit-scrollbar {
-  display: none;
-}
 
 .popular-cards {
   margin-bottom: 2em;
@@ -36,15 +33,19 @@ h1 {
 .demo {
   width: 90%;
   margin-bottom: 2em;
+  background-color: white;
   display: inline-flex;
   align-items: stretch;
 }
 
 .demo-menu {
+  margin-left: 1em;
   flex-basis: 30%;
 }
 
 .demo-para {
+  margin: 1em;
+  border: 0.2em solid;
   flex-basis: 70%;
   background-color: aqua;
 }
