@@ -1,6 +1,6 @@
 import { FormEvent, useState, useEffect } from "react";
 import Pusher from "pusher-js";
-import axios from "axios";
+
 import { addPreset, getAllPresets} from "./styleDB";
 import Style from "./style";
 import "./App.css";
@@ -57,8 +57,7 @@ function Form() {
     const style = new Style(font, fontSize, bgColor);
 
     // Pusher submit event 
-    axios.post(`/${SUBMIT_EVENT}`, style);
-
+   
     // Update db
     addPreset(style);
   }

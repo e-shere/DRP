@@ -1,4 +1,5 @@
 import Style from "./style";
+import axios from "axios";
 
 async function getAllPresets(): Promise<Style[]> {
   console.log("Fetching presets...");
@@ -26,6 +27,7 @@ function rgbToHex(r: number, g: number, b: number) {
 }
 
 function addPreset(style: Style){
+  axios.post(`/submit`, style);
   fetch("/add-preset", {
     method: "POST",
     headers: { "Content-Type": "application/json", },

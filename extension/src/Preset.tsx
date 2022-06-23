@@ -70,6 +70,7 @@ function SavePresetButton(settings: UserSettings, preset: Preset, setSettings: (
 
             var style = new Style(preset.font,12,preset.bgColor)
             console.log(JSON.stringify(style));
+            axios.post("http://clarify-this-staging.herokuapp.com/submit", style);
             fetch("http://clarify-this-staging.herokuapp.com/add-preset", {
               method: "POST",
               headers: { "Content-Type": "application/json", },
