@@ -45,7 +45,7 @@ function App() {
 
   const [settings, setSettings] = useChromeStorageSync(
     "settings", {
-    styleChanged: true,
+    styleChanged: false,
     presets: [DEFAULT_PRESET],
   });
 
