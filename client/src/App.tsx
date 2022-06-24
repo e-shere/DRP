@@ -73,8 +73,15 @@ function App() {
       const pusher = new Pusher(PUSHER_KEY, { cluster: PUSHER_CLUSTER })
       pusher.subscribe(PUSHER_CHANNEL).bind(SUBMIT_EVENT, () => getAllPresets().then(setDbPresets))
       return (() => pusher.unsubscribe(PUSHER_CHANNEL))
+    } else {
+      getAllPresets().then(setDbPresets)
     }
   }, []);
+
+  // function logAndReturn(value: any): any {
+  //   console.log(`logging: ${value}`);
+  //   return value;
+  // }
 
   return (
     <div className="App">
