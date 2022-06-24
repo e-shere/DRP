@@ -68,29 +68,17 @@ function App() {
 
   // Binding to update styles in real time
   useEffect(() => {
-    console.log("checkpoint 1");
     if (PRODUCTION || STAGING) {
       // subscribe to pusher only in production (to be isolated when runnig locally)
-      console.log("checkpoint 2");
       const pusher = new Pusher(PUSHER_KEY, { cluster: PUSHER_CLUSTER })
-      console.log("checkpoint 3");
+      /* Pull from database */
       getAllPresets().then(setDbPresets);
-      console.log("checkpoint 4");
       pusher.subscribe(PUSHER_CHANNEL).bind(SUBMIT_EVENT, () => getAllPresets().then(setDbPresets))
-      console.log("checkpoint 8");
       return (() => pusher.unsubscribe(PUSHER_CHANNEL))
     } else {
-      console.log("checkpoint 5");
       getAllPresets().then(setDbPresets)
-      console.log("checkpoint 6");
     }
-    console.log("checkpoint 7");
-  }, [{bgColor: DEFAULT_PRESET.bgColor, font: DEFAULT_PRESET.font}]);
-
-  function logAndReturn(value: any): any {
-    console.log(`logging: ${value}`);
-    return value;
-  }
+  }, []);
 
   return (
     <div className="App">
@@ -113,9 +101,9 @@ function App() {
           <div className="card">{BgCard("red", "Arial", preset, setPreset)}</div>
           <div className="card">{BgCard("red", "Arial", preset, setPreset)}</div>
           <div className="card">{BgCard("red", "Arial", preset, setPreset)}</div> */}
-          {logAndReturn(dbPresets.map(style => {
-            return (<div className="card">{BgCard(style.bgColor, style.font, preset, setPreset)}</div>);
-          }))}
+          {dbPresets.sort((s1: Style, s2: Style) => {return s2.gId - s1.gId;} ).map(style => {
+            return (<div className="card">{BgCard(style.bgColor, style.font, style.gId, preset, setPreset)}</div>);
+          })}
         </div>
       </div>
     </div>
@@ -220,13 +208,13 @@ function Demo(preset: Preset, setPreset: (_: Preset) => void, styleChanged: bool
   );
 }
 
-function BgCard(bgColor: string, font: string, preset: Preset, setPreset: (_: Preset) => void) {
+function BgCard(bgColor: string, font: string, freq: number, preset: Preset, setPreset: (_: Preset) => void) {
   return (
     <Card>
       <CardActionArea style={{ backgroundColor: bgColor }} onClick={(e) => setPreset({...preset, bgColor: bgColor, font: font})}>
         <CardContent>
           <Typography gutterBottom variant="h6" component="div" >
-            Recommended by x users
+            Recommended by {freq} users
             {/* recommend this background color and font */}
           </Typography>
           <Typography variant="body1" style={{ fontFamily: font }}> {/*color="text.secondary"*/}
