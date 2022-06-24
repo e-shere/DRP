@@ -74,8 +74,10 @@ function App() {
       console.log("checkpoint 2");
       const pusher = new Pusher(PUSHER_KEY, { cluster: PUSHER_CLUSTER })
       console.log("checkpoint 3");
-      pusher.subscribe(PUSHER_CHANNEL).bind(SUBMIT_EVENT, () => getAllPresets().then(setDbPresets))
+      getAllPresets().then(setDbPresets);
       console.log("checkpoint 4");
+      pusher.subscribe(PUSHER_CHANNEL).bind(SUBMIT_EVENT, () => getAllPresets().then(setDbPresets))
+      console.log("checkpoint 8");
       return (() => pusher.unsubscribe(PUSHER_CHANNEL))
     } else {
       console.log("checkpoint 5");
