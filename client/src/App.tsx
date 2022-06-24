@@ -76,7 +76,7 @@ function App() {
     } else {
       getAllPresets().then(setDbPresets)
     }
-  }, []);
+  }, [{bgColor: DEFAULT_PRESET.bgColor, font: DEFAULT_PRESET.font}]);
 
   function logAndReturn(value: any): any {
     console.log(`logging: ${value}`);
