@@ -68,14 +68,21 @@ function App() {
 
   // Binding to update styles in real time
   useEffect(() => {
+    console.log("checkpoint 1");
     if (PRODUCTION || STAGING) {
       // subscribe to pusher only in production (to be isolated when runnig locally)
+      console.log("checkpoint 2");
       const pusher = new Pusher(PUSHER_KEY, { cluster: PUSHER_CLUSTER })
+      console.log("checkpoint 3");
       pusher.subscribe(PUSHER_CHANNEL).bind(SUBMIT_EVENT, () => getAllPresets().then(setDbPresets))
+      console.log("checkpoint 4");
       return (() => pusher.unsubscribe(PUSHER_CHANNEL))
     } else {
+      console.log("checkpoint 5");
       getAllPresets().then(setDbPresets)
+      console.log("checkpoint 6");
     }
+    console.log("checkpoint 7");
   }, [{bgColor: DEFAULT_PRESET.bgColor, font: DEFAULT_PRESET.font}]);
 
   function logAndReturn(value: any): any {
