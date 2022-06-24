@@ -23,6 +23,8 @@ const PUSHER_CHANNEL = "clarify";
 const SUBMIT_EVENT = "submit";
 const ADD_TO_EXTENSION = "addex";
 
+export const ROOT_DEMO_PAGE = "root-demo-page";
+
 const DEFAULT_PRESET: Preset = {
   label: "default",
   bgChanged: false,
@@ -35,30 +37,6 @@ const DEFAULT_PRESET: Preset = {
   lineSpacing: 0,
   fontColor: "black",
 };
-
-const DEFAULT_SETTINGS: DemoSettings = {
-  styleChanged: true,
-  preset: DEFAULT_PRESET,
-};
-
-// const useStyles = makeStyles((theme: Theme) =>
-//   createStyles({
-//     title: {
-//       paddingBottom: 0,
-//       fontWeight: 'bolder',
-//       fontFamily: 'Roboto, sans-serif',
-//     },
-//   })
-// );
-
-// function styleToDbPreset(style: Style): {
-  
-// }
-
-// async function getDbPresets(): [DbPreset] {
-//   await getAllPresets().then(styles => styles.map(s => { bgColor: s.bgColor, font: s.font}));
-//   return [{bgColor: DEFAULT_PRESET.bgColor, font: DEFAULT_PRESET.font}];
-// }
 
 function App() {
 
@@ -79,6 +57,10 @@ function App() {
       getAllPresets().then(setDbPresets)
     }
   }, []);
+
+  useEffect(() => { 
+    updatePage({styleChanged: styleChanged, preset: preset}, preset);
+  }, [preset, styleChanged]);
 
   return (
     <div className="App">
@@ -113,31 +95,32 @@ function App() {
 
 function DemoPage(preset: Preset, styleChanged: boolean) {
   
-  return (<p> {JSON.stringify({preset: preset, styleChanged: styleChanged}).replaceAll(",", ", ")} </p>)
-  // return (
-    
-  //   <div className="demo-page">
-  //     <h1> This is a demo. Try out the features! </h1>
-  //     <div className="demo-labelled-img">
-  //       <p className="demo-lorem"> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. </p>
-  //       <img src="clarify-logo.png" />
-  //     </div>
-  //     <div className="demo-list-link">
-  //       <div className="demo-list">
-  //         <p>Here is a list: </p>
-  //         <ul>
-  //           <li>I have</li>
-  //           <li>Got to be</li>
-  //           <li>Honest</li>
-  //         </ul>
-  //       </div>
-  //       <div className="demo-link">
-  //         <p>Here is a link: </p>
-  //         <a href="https://www.imperial.ac.uk/">www.imperial.ac.uk</a>
-  //       </div>
-  //     </div>
-  //   </div>
-  // );
+  // return (<p> {JSON.stringify({preset: preset, styleChanged: styleChanged}).replaceAll(",", ", ")} </p>)
+  return (
+    <div id={ROOT_DEMO_PAGE}>
+      <div className="demo-page">
+        <h1> This is a demo. Try out the features! </h1>
+        <div className="demo-labelled-img">
+          <p className="demo-lorem"> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. </p>
+          <img src="clarify-logo.png" />
+        </div>
+        <div className="demo-list-link">
+          <div className="demo-list">
+            <p>Here is a list: </p>
+            <ul>
+              <li key={1}>I have</li>
+              <li key={2}>Got to be</li>
+              <li key={3}>Honest</li>
+            </ul>
+          </div>
+          <div className="demo-link">
+            <p>Here is a link: </p>
+            <a href="https://www.imperial.ac.uk/">www.imperial.ac.uk</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 function Demo(preset: Preset, setPreset: (_: Preset) => void, styleChanged: boolean, setStyleChanged: (_: boolean) => void) {
@@ -226,58 +209,5 @@ function BgCard(bgColor: string, font: string, freq: number, preset: Preset, set
     </Card>
   );
 }
-
-// function Form() {
-//   const [font, setFont] = useState("Open Sans");
-//   const [fontSize, setFontSize] = useState(12);
-//   const [bgColor, setBgColor] = useState("#FFFFFF");
-
-//   function handleSubmit(event: FormEvent) {
-//     event.preventDefault(); // Stop page refresh
-//     const style = new Style(font, fontSize, bgColor);
-
-//     // Pusher submit event 
-//     axios.post(`/${SUBMIT_EVENT}`, style);
-
-//     // Update db
-//     addPreset(style);
-//   }
-
-//   return (
-//     <div> 
-//       <p>Nothing to display... </p>
-//     </div>      
-//   );
-// }
-
-/*
-<form className="preset-form" onSubmit={handleSubmit}>
-      <label  >Font</label>
-      <select value={font} onChange={event => setFont(event.target.value)}>
-        <option value="Open Sans">Open Sans</option>
-        <option value="Comic Sans">Comic Sans</option>
-        <option value="Roboto">Roboto</option>
-      </select>
-      <label>Font Size</label>
-      <input
-        type="number"
-        width={"50%"}
-        value={fontSize}
-        onChange={event => setFontSize(Number(event.target.value))} placeholder="font size"
-      />
-      <label>Background Colour</label>
-      <input
-        type="color"
-        value={bgColor}
-        onChange={event => setBgColor(event.target.value)}
-      />
-      <input type="submit" value="SAVE STYLE TO YOUR PRESETS" style={{width:500, height: 50, fontSize: 20, font: "Courier New (monospace)"}}/>  
-      {/* <div> {[
-      <Button className="style-submission" variant="contained" onClick={handleSubmit}
-       style={{width:500, height: 50, fontSize: 20, font: "Courier New (monospace)"}}>
-        Save style to your presets</Button>]}
-        </div> * /}
-        </form>  
-*/
 
 export default App;

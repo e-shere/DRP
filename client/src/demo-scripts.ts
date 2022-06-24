@@ -1,3 +1,5 @@
+import { ROOT_DEMO_PAGE } from "./App";
+
 /* Copied from the extension. We want these to be  */
 export interface DemoSettings {
   styleChanged: boolean,
@@ -25,7 +27,7 @@ export interface DbPreset {
 async function updatePage(s: DemoSettings, p: Preset) {
   // setPageStyle(settings, preset, (s, p) => {
     /* hacky - all tags exclusing those that we want to change the bg for */
-    const demoDiv = document.getElementById("demo");
+    const demoDiv = document.getElementById(ROOT_DEMO_PAGE);
 
     const bgChangeTags = Array.from(demoDiv.querySelectorAll<HTMLElement>("*"))
       .map(e => e.tagName).filter(t => !["H1", "H2", "A", "P", "HEADER", "LI", "BODY", "FRAMESET"].includes(t));
