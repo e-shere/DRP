@@ -1,13 +1,13 @@
-import { useState, SyntheticEvent, ChangeEvent } from "react";
+import { useState, SyntheticEvent, ChangeEvent, useEffect } from "react";
 import Pusher from "pusher-js";
 
 import { addPreset, getAllPresets} from "./styleDB";
-import Style from "./style";
 import "./App.css";
 import { Card, CardContent, CardActionArea, Typography, Grid, Switch, ToggleButtonGroup, ToggleButton } from "@mui/material";
-import { DbPreset, Preset, updatePage, UserSettings } from "./demo-scripts";
+import { DbPreset, Preset, updatePage, DemoSettings } from "./demo-scripts";
 import { BackgroundSettings, FontSettings } from "./DemoSettings";
 import { Accordion, AccordionDetails, AccordionSummary } from "./Accordion";
+import Style from "./style";
 // import { makeStyles } from "@mui/styles";
 
 // this hack is required because env variables are not visible from the frontend
@@ -23,10 +23,6 @@ const PUSHER_CHANNEL = "clarify";
 const SUBMIT_EVENT = "submit";
 const ADD_TO_EXTENSION = "addex";
 
-const DEFAULT_SETTINGS: UserSettings = {
-  styleChanged: true,
-  presets: [],
-};
 const DEFAULT_PRESET: Preset = {
   label: "default",
   bgChanged: false,
@@ -40,6 +36,11 @@ const DEFAULT_PRESET: Preset = {
   fontColor: "black",
 };
 
+const DEFAULT_SETTINGS: DemoSettings = {
+  styleChanged: true,
+  preset: DEFAULT_PRESET,
+};
+
 // const useStyles = makeStyles((theme: Theme) =>
 //   createStyles({
 //     title: {
@@ -50,18 +51,30 @@ const DEFAULT_PRESET: Preset = {
 //   })
 // );
 
+// function styleToDbPreset(style: Style): {
+  
+// }
+
+// async function getDbPresets(): [DbPreset] {
+//   await getAllPresets().then(styles => styles.map(s => { bgColor: s.bgColor, font: s.font}));
+//   return [{bgColor: DEFAULT_PRESET.bgColor, font: DEFAULT_PRESET.font}];
+// }
+
 function App() {
-  const [dbPreset, setDbPreset] = useState<DbPreset>({ bgColor: 'white', font: 'Arial' });
+
+  const [preset, setPreset] = useState<Preset>(DEFAULT_PRESET);
+  const [styleChanged, setStyleChanged] = useState<boolean>(true);
+  const [dbPresets, setDbPresets] = useState<Style[]>([]);
 
   // Binding to update styles in real time
-  // useEffect(() => {
-  //   if (PRODUCTION || STAGING) {
-  //     // subscribe to pusher only in production (to be isolated when runnig locally)
-  //     const pusher = new Pusher(PUSHER_KEY, { cluster: PUSHER_CLUSTER })
-  //     pusher.subscribe(PUSHER_CHANNEL).bind(SUBMIT_EVENT, () => getAllPresets().then(setStyles))
-  //     return (() => pusher.unsubscribe(PUSHER_CHANNEL))
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (PRODUCTION || STAGING) {
+      // subscribe to pusher only in production (to be isolated when runnig locally)
+      const pusher = new Pusher(PUSHER_KEY, { cluster: PUSHER_CLUSTER })
+      pusher.subscribe(PUSHER_CHANNEL).bind(SUBMIT_EVENT, () => getAllPresets().then(setDbPresets))
+      return (() => pusher.unsubscribe(PUSHER_CHANNEL))
+    }
+  }, []);
 
   return (
     <div className="App">
@@ -71,55 +84,60 @@ function App() {
           <h2> Making the web more accessible by allowing customisation of graphics aspects. </h2>
         </div>
       </header>
-      {Demo(dbPreset)}
+      {Demo(preset, setPreset, styleChanged, setStyleChanged)}
       <div className="popular-cards-header">
         <h2>Popular Designs</h2>
         <div className="popular-cards">
           {/* onClick on the card, update the dbPreset variable, this will re-render this component */}
-          <div className="card">{BgCard("orange", "Roboto")}</div>
-          <div className="card">{BgCard("yellow", "New Times Roman")}</div>
-          <div className="card">{BgCard("green", "Sans Serif")}</div>
-          <div className="card">{BgCard("red", "Arial")}</div>
-          <div className="card">{BgCard("green", "Sans Serif")}</div>
-          <div className="card">{BgCard("red", "Arial")}</div>
-          <div className="card">{BgCard("red", "Arial")}</div>
-          <div className="card">{BgCard("red", "Arial")}</div>
+          {/* <div className="card">{BgCard("orange", "Roboto", preset, setPreset)}</div>
+          <div className="card">{BgCard("yellow", "New Times Roman", preset, setPreset)}</div>
+          <div className="card">{BgCard("green", "Sans Serif", preset, setPreset)}</div>
+          <div className="card">{BgCard("red", "Arial", preset, setPreset)}</div>
+          <div className="card">{BgCard("green", "Sans Serif", preset, setPreset)}</div>
+          <div className="card">{BgCard("red", "Arial", preset, setPreset)}</div>
+          <div className="card">{BgCard("red", "Arial", preset, setPreset)}</div>
+          <div className="card">{BgCard("red", "Arial", preset, setPreset)}</div> */}
+          {dbPresets.map(style => {
+            return (<div className="card">{BgCard(style.bgColor, style.font, preset, setPreset)}</div>);
+          })}
         </div>
       </div>
     </div>
   );
+  
 }
 
-function DemoPage() {
-  return (
-    <div className="demo-page">
-      <h1> This is a demo. Try out the features! </h1>
-      <div className="demo-labelled-img">
-        <p className="demo-lorem"> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. </p>
-        <img src="clarify-logo.png" />
-      </div>
-      <div className="demo-list-link">
-        <div className="demo-list">
-          <p>Here is a list: </p>
-          <ul>
-            <li>I have</li>
-            <li>Got to be</li>
-            <li>Honest</li>
-          </ul>
-        </div>
-        <div className="demo-link">
-          <p>Here is a link: </p>
-          <a href="https://www.imperial.ac.uk/">www.imperial.ac.uk</a>
-        </div>
-      </div>
-    </div>
-  );
+function DemoPage(preset: Preset, styleChanged: boolean) {
+  
+  return (<p> {JSON.stringify({preset: preset, styleChanged: styleChanged}).replaceAll(",", ", ")} </p>)
+  // return (
+    
+  //   <div className="demo-page">
+  //     <h1> This is a demo. Try out the features! </h1>
+  //     <div className="demo-labelled-img">
+  //       <p className="demo-lorem"> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. </p>
+  //       <img src="clarify-logo.png" />
+  //     </div>
+  //     <div className="demo-list-link">
+  //       <div className="demo-list">
+  //         <p>Here is a list: </p>
+  //         <ul>
+  //           <li>I have</li>
+  //           <li>Got to be</li>
+  //           <li>Honest</li>
+  //         </ul>
+  //       </div>
+  //       <div className="demo-link">
+  //         <p>Here is a link: </p>
+  //         <a href="https://www.imperial.ac.uk/">www.imperial.ac.uk</a>
+  //       </div>
+  //     </div>
+  //   </div>
+  // );
 }
 
-function Demo(dbPreset: DbPreset) {
-  const [expanded, setExpanded] = useState<string | false>();
-  const [preset, setPreset] = useState<Preset>({ ...DEFAULT_PRESET, bgColor: dbPreset.bgColor, font: dbPreset.font });
-  const [alignment, setAlignment] = useState("clarify");
+function Demo(preset: Preset, setPreset: (_: Preset) => void, styleChanged: boolean, setStyleChanged: (_: boolean) => void) {
+  const [expanded, setExpanded] = useState<string | false>(false);
 
   function ExpandedSetting(
     label: string,
@@ -153,9 +171,9 @@ function Demo(dbPreset: DbPreset) {
         <div className="demo-menu">
           <div className="demo-toggle">
             <ToggleButtonGroup
-              value={alignment}
+              value={styleChanged ? "clarify" : "original"}
               exclusive
-              onChange={(_, x) => setAlignment(x)}
+              onChange={(_, x) => setStyleChanged(x === "clarify")}
             >
               <ToggleButton value="original">Original</ToggleButton>
               <ToggleButton value="clarify">Clarify</ToggleButton>
@@ -180,23 +198,16 @@ function Demo(dbPreset: DbPreset) {
             (preset, setPreset) => { return (<div></div>) }
           )}
         </div>
-        {DemoPage()}
+        {DemoPage(preset, styleChanged)}
       </div>
     </div>
   );
 }
 
-function BgCard(bgColor: string, font: string) {
-  // const classes = useStyles();
+function BgCard(bgColor: string, font: string, preset: Preset, setPreset: (_: Preset) => void) {
   return (
-    <Card> {/* style={{padding: '16px'}} */}
-      <CardActionArea style={{ backgroundColor: bgColor }}>
-        {/* <CardMedia
-          component="img"
-          height="140"
-          image="/static/images/cards/contemplative-reptile.jpg"
-          alt="green iguana"
-        /> */}
+    <Card>
+      <CardActionArea style={{ backgroundColor: bgColor }} onClick={(e) => setPreset({...preset, bgColor: bgColor, font: font})}>
         <CardContent>
           <Typography gutterBottom variant="h6" component="div" >
             Recommended by x users
