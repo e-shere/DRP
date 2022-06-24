@@ -78,10 +78,10 @@ function App() {
     }
   }, []);
 
-  // function logAndReturn(value: any): any {
-  //   console.log(`logging: ${value}`);
-  //   return value;
-  // }
+  function logAndReturn(value: any): any {
+    console.log(`logging: ${value}`);
+    return value;
+  }
 
   return (
     <div className="App">
@@ -104,9 +104,9 @@ function App() {
           <div className="card">{BgCard("red", "Arial", preset, setPreset)}</div>
           <div className="card">{BgCard("red", "Arial", preset, setPreset)}</div>
           <div className="card">{BgCard("red", "Arial", preset, setPreset)}</div> */}
-          {dbPresets.map(style => {
+          {logAndReturn(dbPresets.map(style => {
             return (<div className="card">{BgCard(style.bgColor, style.font, preset, setPreset)}</div>);
-          })}
+          }))}
         </div>
       </div>
     </div>
