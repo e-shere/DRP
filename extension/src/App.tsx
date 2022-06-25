@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useChromeStorageSync } from 'use-chrome-storage';
+import { logHello } from "common";
 
 import Main from "./Main";
 import "./App.css";
@@ -41,8 +42,8 @@ export interface Preset {
 }
 
 function App() {
+  logHello();
   const [deleteLabel, setDeleteLabel] = useState("");
-
   const [settings, setSettings] = useChromeStorageSync(
     "settings", {
     styleChanged: false,

@@ -1,7 +1,8 @@
 import { useState, SyntheticEvent, ChangeEvent, useEffect } from "react";
 import Pusher from "pusher-js";
+import { logHello } from "common";
 
-import { addPreset, getAllPresets} from "./styleDB";
+import { addPreset, getAllPresets } from "./styleDB";
 import "./App.css";
 import { Card, CardContent, CardActionArea, Typography, Grid, Switch, ToggleButtonGroup, ToggleButton } from "@mui/material";
 import { DbPreset, Preset, updatePage, DemoSettings } from "./demo-scripts";
@@ -39,7 +40,7 @@ const DEFAULT_PRESET: Preset = {
 };
 
 function App() {
-
+  logHello();
   const [preset, setPreset] = useState<Preset>(DEFAULT_PRESET);
   const [styleChanged, setStyleChanged] = useState<boolean>(true);
   const [dbPresets, setDbPresets] = useState<Style[]>([]);
@@ -58,8 +59,8 @@ function App() {
     }
   }, []);
 
-  useEffect(() => { 
-    updatePage({styleChanged: styleChanged, preset: preset}, preset);
+  useEffect(() => {
+    updatePage({ styleChanged: styleChanged, preset: preset }, preset);
   }, [preset, styleChanged]);
 
   return (
@@ -83,18 +84,18 @@ function App() {
           <div className="card">{BgCard("red", "Arial", preset, setPreset)}</div>
           <div className="card">{BgCard("red", "Arial", preset, setPreset)}</div>
           <div className="card">{BgCard("red", "Arial", preset, setPreset)}</div> */}
-          {dbPresets.sort((s1: Style, s2: Style) => {return s2.gId - s1.gId;} ).map(style => {
+          {dbPresets.sort((s1: Style, s2: Style) => { return s2.gId - s1.gId; }).map(style => {
             return (<div className="card">{BgCard(style.bgColor, style.font, style.gId, preset, setPreset)}</div>);
           })}
         </div>
       </div>
     </div>
   );
-  
+
 }
 
 function DemoPage(preset: Preset, styleChanged: boolean) {
-  
+
   // return (<p> {JSON.stringify({preset: preset, styleChanged: styleChanged}).replaceAll(",", ", ")} </p>)
   return (
     <div id={ROOT_DEMO_PAGE}>
@@ -194,7 +195,7 @@ function Demo(preset: Preset, setPreset: (_: Preset) => void, styleChanged: bool
 function BgCard(bgColor: string, font: string, freq: number, preset: Preset, setPreset: (_: Preset) => void) {
   return (
     <Card>
-      <CardActionArea style={{ backgroundColor: bgColor }} onClick={(e) => setPreset({...preset, bgColor: bgColor, font: font})}>
+      <CardActionArea style={{ backgroundColor: bgColor }} onClick={(e) => setPreset({ ...preset, bgColor: bgColor, font: font })}>
         <CardContent>
           <Typography gutterBottom variant="h6" component="div" >
             Recommended by {freq} users
