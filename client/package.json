@@ -23,8 +23,9 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "npm run link-common && react-scripts start",
+    "build": "npm run link-common && react-scripts build",
+    "link-common": "cd ../common && npm link && cd ../client && npm link \"common\"",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

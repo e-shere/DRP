@@ -4,20 +4,10 @@ stages:
 
 image: node:latest
 
-services:
-  - redis:latest
-
-test-async:
+test:
   stage: test 
   script:
-    - npm init -y
-    - npm install --save-dev typescript
-
-test-db:
-  stage: test 
-  script:
-    - npm init -y
-    - npm install --save-dev typescript
+    - echo "Running tests"
 
 # deploys to production
 deploy-production:
