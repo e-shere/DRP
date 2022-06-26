@@ -19,7 +19,7 @@ const pusher = new Pusher({
 
 // === end of retrieve env variables ===
 
-const BUILD_DIR = "../client/build/";
+const BUILD_DIR = "/../../client/build/";
 const PUSHER_CHANNEL = "clarify";
 const SUBMIT_EVENT = "submit";
 const ADD_TO_EXTENSION = "addex";
