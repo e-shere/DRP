@@ -1,6 +1,6 @@
 /* global chrome */
 
-const extensionId = "ejhehfgbdmmcdjolnagplbkjppnfhkhk";
+const extensionId = "cmekghnleekldjcclkdccdeoppjlenbp";
 
 export function triggerMessageToExtension(event, style) {
     console.log("Nick dw, it's gonna be alrighty");
