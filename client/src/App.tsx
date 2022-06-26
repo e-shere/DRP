@@ -4,7 +4,7 @@ import { Card, CardContent, CardActionArea, Typography, ToggleButtonGroup, Toggl
 import Pusher from "pusher-js";
 
 import "./App.css";
-import { Preset } from "./common/domain";
+import { Preset, Spacing } from "./common/domain";
 import { getAllPresets } from "./styleDB";
 import { updatePage } from "./pageStyle";
 import Style from "./style";
@@ -33,6 +33,7 @@ const DEFAULT_PRESET: Preset = {
   letterSpacing: 0,
   lineSpacing: 0,
   fontColor: "black",
+  punctuationSpace: Spacing.Spaces,
 };
 
 function App() {

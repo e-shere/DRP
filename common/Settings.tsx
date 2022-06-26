@@ -1,8 +1,8 @@
 import { ChangeEvent, SyntheticEvent } from "react";
 import { Accordion, AccordionDetails, AccordionSummary } from "./Accordion";
-import { TextField, MenuItem, FormControl, Typography, Switch } from "@mui/material";
+import { TextField, MenuItem, FormControl, RadioGroup, FormLabel, FormControlLabel, Radio, Switch, Typography } from "@mui/material";
 import { SketchPicker } from 'react-color';
-import { Preset } from "./domain";
+import { Preset, Spacing } from "./domain";
 
 const PRESET_BG_COLORS = [
   "#faf2d9",
@@ -116,6 +116,21 @@ function FontSettings(preset: Preset, setPreset: (_: Preset) => void) {
         preset.lineSpacing,
         event => { setPreset({ ...preset, lineSpacing: Number(event.target.value) }) }
       )}
+    </FormControl>
+  );
+}
+
+function SpacingSettings(preset: Preset, setPreset: (_: Preset) => void) {
+  return (
+    <FormControl>
+      <FormLabel>Split with</FormLabel>
+      <RadioGroup
+        value={preset.punctuationSpace.valueOf()}
+        onChange={(_, val) => setPreset({...preset, punctuationSpace: val === Spacing.Spaces.valueOf() ? Spacing.Spaces : Spacing.NewLine})}
+      >
+        <FormControlLabel value={Spacing.Spaces.valueOf()} control={<Radio />} label="spaces" />
+        <FormControlLabel value={Spacing.NewLine.valueOf()} control={<Radio />} label="new line" />
+      </RadioGroup>
     </FormControl>
   );
 }

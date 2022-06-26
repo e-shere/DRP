@@ -3,6 +3,11 @@ export interface UserSettings {
   presets: Preset[];
 }
 
+export enum Spacing {
+  Spaces = "&nbsp&nbsp&nbsp&nbsp&nbsp",
+  NewLine = "<br><br/>"
+};
+  
 export interface Preset {
   label: string;
   bgChanged: boolean;
@@ -14,4 +19,5 @@ export interface Preset {
   letterSpacing: number;
   lineSpacing: number;
   fontColor: string;
+  punctuationSpace: Spacing;
 }
