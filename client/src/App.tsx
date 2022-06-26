@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
-import { StyleSettings } from "./common/Settings"
 import { Card, CardContent, CardActionArea, Typography, ToggleButtonGroup, ToggleButton } from "@mui/material";
 import Pusher from "pusher-js";
 
 import "./App.css";
-import { Preset, Spacing, DEFAULT_PRESET } from "./common/domain";
+import { StyleSettings } from "./common/Settings"
+import { Preset, DEFAULT_PRESET } from "./common/domain";
 import { getAllPresets } from "./styleDB";
 import { updatePage } from "./pageStyle";
 import Style from "./style";
+import { triggerMessageToExtension } from "./scripts";
 
 // this hack is required because env variables are not visible from the frontend
 const url = window.location.href;
@@ -47,6 +48,7 @@ function App() {
 
   return (
     <div className="App">
+      {/* <button onClick={e => triggerMessageToExtension(e, undefined)}>This button triggers a message</button> */}
       <header className="App-header">
         <div>
           <h1> Clarify </h1>
