@@ -4,9 +4,12 @@
     "version": "1.0",
     "manifest_version": 3,
     "permissions": [
-        "activeTab", "storage", "tabs", "scripting"
-      ],
-      "host_permissions": [
+        "activeTab",
+        "storage",
+        "tabs",
+        "scripting"
+    ],
+    "host_permissions": [
         "http://clarify-this.com/*",
         "http://localhost:4001/*"
     ],
@@ -14,10 +17,18 @@
         "default_popup": "index.html",
         "default_title": "Clarify"
     },
-    "devtools_page": "../index.html",
+    "icons": {
+        "16": "logo-16.png",
+        "48": "logo-48.png",
+        "128": "logo-128.png"
+    },
     "externally_connectable": {
-        "matches": ["http://clarify-this.com/", "https://clarify-this.herokuapp.com/",
-            "https://clarify-this-staging.herokuapp.com/", "http://localhost:4001/"]
+        "matches": [
+            "http://clarify-this.com/",
+            "https://clarify-this.herokuapp.com/",
+            "https://clarify-this-staging.herokuapp.com/",
+            "http://localhost:4001/"
+        ]
     },
     "background": {
         "service_worker": "background.js"
