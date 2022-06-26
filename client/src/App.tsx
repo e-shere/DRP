@@ -4,7 +4,7 @@ import { Card, CardContent, CardActionArea, Typography, ToggleButtonGroup, Toggl
 import Pusher from "pusher-js";
 
 import "./App.css";
-import { Preset, Spacing } from "./common/domain";
+import { Preset, Spacing, DEFAULT_PRESET } from "./common/domain";
 import { getAllPresets } from "./styleDB";
 import { updatePage } from "./pageStyle";
 import Style from "./style";
@@ -21,20 +21,6 @@ const PUSHER_CHANNEL = "clarify";
 const SUBMIT_EVENT = "submit";
 
 export const ROOT_DEMO_PAGE = "root-demo-page";
-
-const DEFAULT_PRESET: Preset = {
-  label: "default",
-  bgChanged: false,
-  fontChanged: false,
-  punctuationSpacingChanged: false,
-  bgColor: "#faf2d9",
-  font: "Arial",
-  fontSize: 0,
-  letterSpacing: 0,
-  lineSpacing: 0,
-  fontColor: "black",
-  punctuationSpace: Spacing.Spaces,
-};
 
 function App() {
   const [preset, setPreset] = useState<Preset>(DEFAULT_PRESET);

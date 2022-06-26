@@ -21,3 +21,17 @@ export interface Preset {
   fontColor: string;
   punctuationSpace: Spacing;
 }
+
+export const DEFAULT_PRESET: Preset = {
+  label: "default",
+  bgChanged: false,
+  fontChanged: false,
+  punctuationSpacingChanged: false,
+  bgColor: "#faf2d9",
+  font: "Arial",
+  fontSize: 0,
+  letterSpacing: 0,
+  lineSpacing: 0,
+  fontColor: "black",
+  punctuationSpace: Spacing.Spaces,
+};

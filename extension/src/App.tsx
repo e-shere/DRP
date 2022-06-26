@@ -5,22 +5,10 @@ import Main from "./Main";
 import "./App.css";
 import { updatePage } from "./pageStyle";
 import { Presets } from "./Preset";
+import { DEFAULT_PRESET } from "./common/domain";
 
 export const TITLE = "Clarify.";
 export const WEBAPP_URL = "https://clarify-this.herokuapp.com/";
-
-const DEFAULT_PRESET = {
-  label: "default",
-  bgChanged: true,
-  fontChanged: true,
-  punctuationSpacingChanged: true,
-  bgColor: "#faf2d9",
-  font: "Arial",
-  fontSize: 2,
-  letterSpacing: 2,
-  lineSpacing: 3,
-  fontColor: "black",
-};
 
 function App() {
   const [deleteLabel, setDeleteLabel] = useState("");
