@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
-import { StyleSettings } from "./common/common/Settings"
+import { StyleSettings } from "./common/Settings"
 import { Card, CardContent, CardActionArea, Typography, ToggleButtonGroup, ToggleButton } from "@mui/material";
 import Pusher from "pusher-js";
 
 import "./App.css";
-import { Preset, Spacing } from "./common/common/domain";
+import { Preset, Spacing } from "./common/domain";
 import { getAllPresets } from "./styleDB";
 import { updatePage } from "./pageStyle";
 import Style from "./style";
