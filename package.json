@@ -3,8 +3,11 @@
   "description": "Making the web accessible for everyone",
   "version": "1.0.0",
   "main": "",
+  "engines": {
+    "node": "16.13.1"
+  },
   "scripts": {
-      "start": "npm start --prefix server",
-      "heroku-postbuild": "cd client && npm install && npm run build && cd ../server && npm install"
+    "start": "npm start --prefix server",
+    "heroku-postbuild": "cd client && npm install && npm run build && cd ../server && npm install"
   }
 }
