@@ -1,5 +1,5 @@
 {
-  "name": "clarify-this",
+  "name": "server",
   "version": "0.1.0",
   "private": true,
   "description": "Making the web accessible for everyone",
@@ -8,9 +8,7 @@
     "node": "16.13.1"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server/index.js",
-    "heroku-postbuild": "cd client && npm install && npm run build"
+    "start": "node src/index.js"
   },
   "keywords": [],
   "dependencies": {

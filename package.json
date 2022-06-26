@@ -1,0 +1,10 @@
+{
+  "name": "clarify",
+  "description": "Making the web accessible for everyone",
+  "version": "1.0.0",
+  "main": "",
+  "scripts": {
+      "start": "npm start --prefix server",
+      "heroku-postbuild": "cd client && npm install && npm run build && cd ../server && npm install"
+  }
+}
