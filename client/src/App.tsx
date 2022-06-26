@@ -1,13 +1,12 @@
-import { useState, SyntheticEvent, ChangeEvent, useEffect } from "react";
-import { Card, CardContent, CardActionArea, Typography, Switch, ToggleButtonGroup, ToggleButton } from "@mui/material";
+import { useState, useEffect } from "react";
+import { StyleSettings } from "./common/Settings"
+import { Card, CardContent, CardActionArea, Typography, ToggleButtonGroup, ToggleButton } from "@mui/material";
 import Pusher from "pusher-js";
 
 import "./App.css";
-import { Accordion, AccordionDetails, AccordionSummary } from "./common/Accordion";
 import { Preset } from "./common/domain";
 import { getAllPresets } from "./styleDB";
 import { updatePage } from "./pageStyle";
-import { BackgroundSettings, FontSettings } from "./DemoSettings";
 import Style from "./style";
 
 // this hack is required because env variables are not visible from the frontend
@@ -18,10 +17,8 @@ const PRODUCTION = !url.includes("staging") && !url.includes("localhost");
 // TODO: Fetch env vars from the server (they are public so should not be security problem for now)
 var PUSHER_KEY = PRODUCTION ? "6dbf0a6609c4bb0901fb" : "f3244147a7aa2248499d";
 const PUSHER_CLUSTER = "eu";
-
 const PUSHER_CHANNEL = "clarify";
 const SUBMIT_EVENT = "submit";
-const ADD_TO_EXTENSION = "addex";
 
 export const ROOT_DEMO_PAGE = "root-demo-page";
 
@@ -66,7 +63,7 @@ function App() {
       <header className="App-header">
         <div>
           <h1> About </h1>
-          <h2> Making the web more accessible by allowing customisation of graphics aspects. </h2>
+          <h2> Making the web accessible for everyone with custom styles and layouts. </h2>
         </div>
       </header>
       {Demo(preset, setPreset, styleChanged, setStyleChanged)}
@@ -81,7 +78,6 @@ function App() {
       </div>
     </div>
   );
-
 }
 
 function DemoPage() {
@@ -115,31 +111,6 @@ function DemoPage() {
 function Demo(preset: Preset, setPreset: (_: Preset) => void, styleChanged: boolean, setStyleChanged: (_: boolean) => void) {
   const [expanded, setExpanded] = useState<string | false>(false);
 
-  function ExpandedSetting(
-    label: string,
-    changed: boolean,
-    onChange: (e: ChangeEvent<HTMLInputElement>) => void,
-    getExpandedContent: (s: Preset, _: (_: Preset) => void) => JSX.Element
-  ) {
-    return (
-      <div className="accordion">
-        <Accordion
-          expanded={expanded === label}
-          onChange={(_: SyntheticEvent, newExpanded: boolean) => { setExpanded(newExpanded ? label : false) }}
-        >
-          <AccordionSummary><Typography>{label}</Typography></AccordionSummary>
-          <AccordionDetails>{getExpandedContent(preset, setPreset)}</AccordionDetails>
-        </Accordion>
-        <div className="accordion-overlay">
-          <Switch
-            onChange={onChange}
-            checked={changed}
-          />
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="demo-header">
       <h2>Demo</h2>
@@ -155,24 +126,7 @@ function Demo(preset: Preset, setPreset: (_: Preset) => void, styleChanged: bool
               <ToggleButton value="clarify">Clarify</ToggleButton>
             </ToggleButtonGroup>
           </div>
-          {ExpandedSetting(
-            "Background",
-            preset.bgChanged,
-            event => { setPreset({ ...preset, bgChanged: event.target.checked }) },
-            BackgroundSettings
-          )}
-          {ExpandedSetting(
-            "Font",
-            preset.fontChanged,
-            event => { setPreset({ ...preset, fontChanged: event.target.checked }) },
-            FontSettings
-          )}
-          {ExpandedSetting(
-            "Punctuation Splitting",
-            preset.punctuationSpacingChanged,
-            event => { setPreset({ ...preset, punctuationSpacingChanged: event.target.checked }) },
-            (preset, setPreset) => { return (<div></div>) }
-          )}
+          {StyleSettings(preset, setPreset, expanded, setExpanded)}
         </div>
         {DemoPage()}
       </div>
@@ -183,15 +137,15 @@ function Demo(preset: Preset, setPreset: (_: Preset) => void, styleChanged: bool
 function BgCard(bgColor: string, font: string, freq: number, preset: Preset, setPreset: (_: Preset) => void) {
   return (
     <Card>
-      <CardActionArea style={{ backgroundColor: bgColor }} onClick={(e) => setPreset({ ...preset, bgColor: bgColor, font: font })}>
+      <CardActionArea style={{ backgroundColor: bgColor }} onClick={e => setPreset({ ...preset, bgColor: bgColor, font: font })}>
         <CardContent>
           <Typography gutterBottom variant="h6" component="div" >
             Recommended by {freq} users
             {/* recommend this background color and font */}
           </Typography>
-          <Typography variant="body1" style={{ fontFamily: font }}> {/*color="text.secondary"*/}
-            Font: {font}<br></br>
-            Do you fancy this font and background color? Click me!
+          <Typography variant="body1" style={{ fontFamily: font }}>
+            {font}<br/>
+            Click to apply!
           </Typography>
         </CardContent>
       </CardActionArea>

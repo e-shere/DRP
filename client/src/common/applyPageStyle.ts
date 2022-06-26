@@ -1,7 +1,7 @@
 import { UserSettings, Preset } from "./domain";
 
 function applyPageStyle(s: UserSettings, p: Preset, getRootElement?: (_: Document) => HTMLElement) {
-  const rootElement: HTMLElement = getRootElement != undefined ? getRootElement(document) : document.body;
+  const rootElement: HTMLElement = getRootElement !== undefined ? getRootElement(document) : document.body;
 
   /* hacky - all tags exclusing those that we want to change the bg for */
   const bgChangeTags = Array.from(rootElement.querySelectorAll<HTMLElement>("*"))

@@ -1,7 +1,8 @@
-import { TextField, MenuItem, FormControl } from "@mui/material";
-import { ChangeEvent } from "react";
+import { ChangeEvent, SyntheticEvent } from "react";
+import { Accordion, AccordionDetails, AccordionSummary } from "./Accordion";
+import { TextField, MenuItem, FormControl, Typography, Switch } from "@mui/material";
 import { SketchPicker } from 'react-color';
-import { Preset } from "./common/domain";
+import { Preset } from "./domain";
 
 const PRESET_BG_COLORS = [
   "#faf2d9",
@@ -12,10 +13,10 @@ const PRESET_BG_COLORS = [
 /* Formula from: https://www.w3.org/TR/WCAG21/#dfn-relative-luminance */
 /* Takes colour hex as parameter */
 function Luminance(h: string): number {
-  var r: number = parseInt("0x" + h[1] + h[2]);
-  var g: number = parseInt("0x" + h[3] + h[4]);
-  var b: number = parseInt("0x" + h[5] + h[6]);
-  var rgb = [r, g, b].map(function (v) {
+  const r: number = parseInt("0x" + h[1] + h[2]);
+  const g: number = parseInt("0x" + h[3] + h[4]);
+  const b: number = parseInt("0x" + h[5] + h[6]);
+  const rgb = [r, g, b].map(function (v) {
     v /= 255;
     return v <= 0.03928
       ? v / 12.92
@@ -27,21 +28,21 @@ function Luminance(h: string): number {
 /* Formula from:https://www.w3.org/TR/WCAG21/#dfn-contrast-ratio */
 /* Takes colour hexes as parameter */
 function Contrast(c1: string, c2: string): number {
-  var lum1 = Luminance(c1);
-  var lum2 = Luminance(c2);
-  var lighter = Math.max(lum1, lum2);
-  var darker = Math.min(lum1, lum2);
+  const lum1 = Luminance(c1);
+  const lum2 = Luminance(c2);
+  const lighter = Math.max(lum1, lum2);
+  const darker = Math.min(lum1, lum2);
   return (lighter + 0.05) / (darker + 0.05);
 }
 
 /* For now will return either white or black */
 /* Takes colour hex as parameter */
 function OptimumFontColour(background: string): string {
-  var white: string = "#ffffff";
-  var black: string = "#000000";
-  const contrastThreshold = 4.5; /* https://www.w3.org/TR/WCAG21/#contrast-minimum */
+  const white: string = "#ffffff";
+  const black: string = "#000000";
+  // const contrastThreshold = 4.5; /* https://www.w3.org/TR/WCAG21/#contrast-minimum */
 
-  var contrast: number = Contrast(white, background);
+  const contrast: number = Contrast(white, background);
 
   return (contrast >= 4.5) ? white : black;
 }
@@ -119,5 +120,53 @@ function FontSettings(preset: Preset, setPreset: (_: Preset) => void) {
   );
 }
 
+function StyleSettings(preset: Preset, setPreset: (p: Preset) => void, expanded: string | false, setExpanded: (e: string | false) => void) {
+  function ExpandedSetting(
+    label: string,
+    changed: boolean,
+    onChange: (e: ChangeEvent<HTMLInputElement>) => void,
+    getExpandedContent: (s: Preset, _: (_: Preset) => void) => JSX.Element
+  ) {
+    return (
+      <div className="accordion">
+        <Accordion
+          expanded={expanded === label}
+          onChange={(_: SyntheticEvent, newExpanded: boolean) => { setExpanded(newExpanded ? label : false) }}
+        >
+          <AccordionSummary><Typography>{label}</Typography></AccordionSummary>
+          <AccordionDetails>{getExpandedContent(preset, setPreset)}</AccordionDetails>
+        </Accordion>
+        <div className="accordion-overlay">
+          <Switch
+            onChange={onChange}
+            checked={changed}
+          />
+        </div>
+      </div>
+    );
+  }
+  return (
+    <div>
+      {ExpandedSetting(
+        "Background",
+        preset.bgChanged,
+        event => { setPreset({ ...preset, bgChanged: event.target.checked }) },
+        BackgroundSettings
+      )}
+      {ExpandedSetting(
+        "Font",
+        preset.fontChanged,
+        event => { setPreset({ ...preset, fontChanged: event.target.checked }) },
+        FontSettings
+      )}
+      {ExpandedSetting(
+        "Punctuation Splitting",
+        preset.punctuationSpacingChanged,
+        event => { setPreset({ ...preset, punctuationSpacingChanged: event.target.checked }) },
+        (preset, setPreset) => { return (<div></div>) }
+      )}
+    </div>
+  );
+}
 
-export { BackgroundSettings, FontSettings };
+export { BackgroundSettings, FontSettings, StyleSettings };

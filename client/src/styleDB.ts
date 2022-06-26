@@ -4,7 +4,7 @@ import axios from "axios";
 async function getAllPresets(): Promise<Style[]> {
   console.log("Fetching presets...");
   const res = await fetch("/serve-presets");
-  const presets = await res.json()
+  const presets = await res.json();
   return presets.map(toStyle);
 }
 
