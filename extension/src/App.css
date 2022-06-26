@@ -29,6 +29,16 @@ h1 {
   color: rgb(50, 50, 50);
 }
 
+.header-button button {
+  margin: 0 auto;
+  display: flex;
+}
+
+.header-button input {
+  margin: 0 auto;
+  display: flex;
+}
+
 .header-button {
   flex-basis: 25%;
   margin-top: 1em;
