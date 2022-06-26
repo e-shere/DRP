@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { Switch } from "@mui/material";
+import { Switch, IconButton } from "@mui/material";
+import InfoIcon from "@mui/icons-material/Info";
 
 import { UserSettings, Preset } from "./common/domain";
 import { StyleSettings } from "./common/Settings";
-import { TITLE } from "./App";
 import { SavePresetButton } from "./Preset";
+import { TITLE } from "./App";
 import "./App.css";
 
 function Main(settings: UserSettings, preset: Preset, setSettings: (_: UserSettings) => void, setPreset: (_: Preset) => void) {
@@ -13,7 +14,11 @@ function Main(settings: UserSettings, preset: Preset, setSettings: (_: UserSetti
   return (
     <div style={{ height: settings.presets.length == 0 ? "100%" : "77%" }} className="Main">
       <header>
-        <div className="header-button">{/* hacky empty div for scaling */}</div>
+        <div className="header-button">
+          <IconButton color="primary" target="_blank" href="https://clarify-this.herokuapp.com">
+            <InfoIcon />
+          </IconButton>
+        </div>
         <h1>{TITLE}</h1>
         <div className="header-button">
           <Switch
