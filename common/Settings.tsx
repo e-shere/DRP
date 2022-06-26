@@ -178,7 +178,7 @@ function StyleSettings(preset: Preset, setPreset: (p: Preset) => void, expanded:
         "Punctuation Splitting",
         preset.punctuationSpacingChanged,
         event => { setPreset({ ...preset, punctuationSpacingChanged: event.target.checked }) },
-        (preset, setPreset) => { return (<div></div>) }
+        SpacingSettings
       )}
     </div>
   );
