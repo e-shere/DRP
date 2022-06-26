@@ -49,7 +49,7 @@ function App() {
     <div className="App">
       <header className="App-header">
         <div>
-          <h1> About </h1>
+          <h1> Clarify </h1>
           <h2> Making the web accessible for everyone with custom styles and layouts. </h2>
         </div>
       </header>
