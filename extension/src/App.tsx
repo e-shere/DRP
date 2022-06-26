@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useChromeStorageSync } from 'use-chrome-storage';
-import { logHello } from "common";
 
 import Main from "./Main";
 import "./App.css";
@@ -23,26 +22,7 @@ const DEFAULT_PRESET = {
   fontColor: "black",
 };
 
-export interface UserSettings {
-  styleChanged: boolean,
-  presets: Preset[];
-}
-
-export interface Preset {
-  label: string;
-  bgChanged: boolean;
-  fontChanged: boolean;
-  punctuationSpacingChanged: boolean;
-  bgColor: string;
-  font: string;
-  fontSize: number;
-  letterSpacing: number;
-  lineSpacing: number;
-  fontColor: string;
-}
-
 function App() {
-  logHello();
   const [deleteLabel, setDeleteLabel] = useState("");
   const [settings, setSettings] = useChromeStorageSync(
     "settings", {

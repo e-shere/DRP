@@ -1,7 +1,7 @@
 import { TextField, MenuItem, FormControl } from "@mui/material";
 import { ChangeEvent } from "react";
 import { SketchPicker } from 'react-color';
-import { Preset } from "./App";
+import { Preset } from "./common/domain";
 
 const PRESET_BG_COLORS = [
   "#faf2d9",

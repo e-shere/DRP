@@ -1,5 +1,7 @@
 import { useState } from "react";
 import DeleteIcon from '@mui/icons-material/Delete';
+import axios from "axios";
+import { GridRowId } from "@mui/x-data-grid";
 import {
   Button,
   ButtonGroup,
@@ -11,11 +13,7 @@ import {
   TextField,
 } from "@mui/material";
 
-import { Preset, UserSettings } from "./App";
-import axios from "axios";
-// import { Style } from "@mui/icons-material";
-import { GridRowId } from "@mui/x-data-grid";
-
+import { Preset, UserSettings } from "./common/domain";
 
 class Style {
   gId: GridRowId;

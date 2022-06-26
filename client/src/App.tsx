@@ -1,15 +1,14 @@
 import { useState, SyntheticEvent, ChangeEvent, useEffect } from "react";
+import { Card, CardContent, CardActionArea, Typography, Switch, ToggleButtonGroup, ToggleButton } from "@mui/material";
 import Pusher from "pusher-js";
-import { logHello } from "common";
 
-import { addPreset, getAllPresets } from "./styleDB";
 import "./App.css";
-import { Card, CardContent, CardActionArea, Typography, Grid, Switch, ToggleButtonGroup, ToggleButton } from "@mui/material";
-import { DbPreset, Preset, updatePage, DemoSettings } from "./demo-scripts";
+import { Accordion, AccordionDetails, AccordionSummary } from "./common/Accordion";
+import { Preset } from "./common/domain";
+import { getAllPresets } from "./styleDB";
+import { updatePage } from "./pageStyle";
 import { BackgroundSettings, FontSettings } from "./DemoSettings";
-import { Accordion, AccordionDetails, AccordionSummary } from "./Accordion";
 import Style from "./style";
-// import { makeStyles } from "@mui/styles";
 
 // this hack is required because env variables are not visible from the frontend
 const url = window.location.href;
@@ -40,7 +39,6 @@ const DEFAULT_PRESET: Preset = {
 };
 
 function App() {
-  logHello();
   const [preset, setPreset] = useState<Preset>(DEFAULT_PRESET);
   const [styleChanged, setStyleChanged] = useState<boolean>(true);
   const [dbPresets, setDbPresets] = useState<Style[]>([]);
@@ -52,15 +50,15 @@ function App() {
       const pusher = new Pusher(PUSHER_KEY, { cluster: PUSHER_CLUSTER })
       /* Pull from database */
       getAllPresets().then(setDbPresets);
-      pusher.subscribe(PUSHER_CHANNEL).bind(SUBMIT_EVENT, () => getAllPresets().then(setDbPresets))
-      return (() => pusher.unsubscribe(PUSHER_CHANNEL))
+      pusher.subscribe(PUSHER_CHANNEL).bind(SUBMIT_EVENT, () => getAllPresets().then(setDbPresets));
+      return (() => pusher.unsubscribe(PUSHER_CHANNEL));
     } else {
-      getAllPresets().then(setDbPresets)
+      getAllPresets().then(setDbPresets);
     }
   }, []);
 
   useEffect(() => {
-    updatePage({ styleChanged: styleChanged, preset: preset }, preset);
+    updatePage({ styleChanged: styleChanged, presets: [preset] }, preset);
   }, [preset, styleChanged]);
 
   return (
@@ -76,14 +74,6 @@ function App() {
         <h2>Popular Designs</h2>
         <div className="popular-cards">
           {/* onClick on the card, update the dbPreset variable, this will re-render this component */}
-          {/* <div className="card">{BgCard("orange", "Roboto", preset, setPreset)}</div>
-          <div className="card">{BgCard("yellow", "New Times Roman", preset, setPreset)}</div>
-          <div className="card">{BgCard("green", "Sans Serif", preset, setPreset)}</div>
-          <div className="card">{BgCard("red", "Arial", preset, setPreset)}</div>
-          <div className="card">{BgCard("green", "Sans Serif", preset, setPreset)}</div>
-          <div className="card">{BgCard("red", "Arial", preset, setPreset)}</div>
-          <div className="card">{BgCard("red", "Arial", preset, setPreset)}</div>
-          <div className="card">{BgCard("red", "Arial", preset, setPreset)}</div> */}
           {dbPresets.sort((s1: Style, s2: Style) => { return s2.gId - s1.gId; }).map(style => {
             return (<div className="card">{BgCard(style.bgColor, style.font, style.gId, preset, setPreset)}</div>);
           })}
@@ -94,9 +84,7 @@ function App() {
 
 }
 
-function DemoPage(preset: Preset, styleChanged: boolean) {
-
-  // return (<p> {JSON.stringify({preset: preset, styleChanged: styleChanged}).replaceAll(",", ", ")} </p>)
+function DemoPage() {
   return (
     <div id={ROOT_DEMO_PAGE}>
       <div className="demo-page">
@@ -186,7 +174,7 @@ function Demo(preset: Preset, setPreset: (_: Preset) => void, styleChanged: bool
             (preset, setPreset) => { return (<div></div>) }
           )}
         </div>
-        {DemoPage(preset, styleChanged)}
+        {DemoPage()}
       </div>
     </div>
   );

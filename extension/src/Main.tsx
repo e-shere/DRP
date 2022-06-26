@@ -1,9 +1,10 @@
 import { ChangeEvent, SyntheticEvent, useState } from "react";
 import { Switch } from "@mui/material";
-import { Accordion, AccordionSummary, AccordionDetails } from "./Accordion";
 import Typography from '@mui/material/Typography';
 
-import { TITLE, Preset, UserSettings } from "./App";
+import { Accordion, AccordionSummary, AccordionDetails } from './common/Accordion';
+import { UserSettings, Preset } from "./common/domain";
+import { TITLE } from "./App";
 import { SavePresetButton } from "./Preset";
 import { BackgroundSettings, FontSettings } from "./Settings"
 import "./App.css";

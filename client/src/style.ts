@@ -1,5 +1,3 @@
-import { GridRowId } from "@mui/x-data-grid";
-
 class Style {
   gId: number;
   font: string;
