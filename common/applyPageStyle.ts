@@ -9,8 +9,6 @@ function applyPageStyle(s: UserSettings, p: Preset, getRootElement?: (_: Documen
 
   rootElement.querySelectorAll<HTMLElement>("*").forEach(element => {
     if (s.styleChanged) {
-      resetPunctuationSpacing(element, "inner-html", p.punctuationSpacingChanged, ["P", "LI", "SPAN"]);
-
       /* Tags for elements to exclude should be uppercase */
       setElementProperty(element, "background-color", p.bgColor, p.bgChanged, bgChangeTags);
       setElementProperty(element, "font-family", p.font, p.fontChanged, ["IMG", "SPAN"]);
@@ -19,30 +17,24 @@ function applyPageStyle(s: UserSettings, p: Preset, getRootElement?: (_: Documen
       increaseElementProperty(element, "letter-spacing", p.letterSpacing, p.fontChanged, ["IMG"], "2px");
       increaseElementProperty(element, "line-height", p.lineSpacing, p.fontChanged, ["IMG"], "1em");
     } else {
-      ["background-color", "font-size", "color", "letter-spacing", "font-family", "inner-html"]
+      ["background-color", "font-size", "color", "letter-spacing", "font-family", "inner-html", "line-height"]
         .forEach(t => resetElementProperty(element, t));
     }
-
+    
   });
-  /* Apply punctuation spacing */
-  if (s.styleChanged && p.punctuationSpacingChanged) {
-    rootElement.querySelectorAll<HTMLElement>("p").forEach(element => {
-      console.log(element.innerHTML);
-      element.innerHTML = applyPunctuationSpacing(element.innerHTML);
-    });
-    rootElement.querySelectorAll<HTMLElement>("li").forEach(element => {
-      element.innerHTML = applyPunctuationSpacing(element.innerHTML);
-    });
-    rootElement.querySelectorAll<HTMLElement>("span").forEach(element => {
-      element.innerHTML = applyPunctuationSpacing(element.innerHTML);
-    });
-  }
 
-  function applyPunctuationSpacing(str: string) {
-    const SPACES = "&nbsp&nbsp&nbsp&nbsp&nbsp";
-    const arr = Array.from(new DOMParser().parseFromString(str, 'text/html').body.childNodes)
-      .map(child => (child as HTMLElement).outerHTML || (child.textContent ?? "")
-        .split(/(?<=[.?!,;])/).join(SPACES));
+  /* Apply punctuation spacing */
+  rootElement.querySelectorAll<HTMLElement>("li,p,span").forEach(element => {
+    resetPunctuationSpacing(element, "inner-html", p.punctuationSpacingChanged, ["P", "LI", "SPAN"]);
+    if (s.styleChanged && p.punctuationSpacingChanged) {
+      element.innerHTML = applyPunctuationSpacing(element.innerHTML, p.punctuationSpace);
+    }
+  });
+
+  function applyPunctuationSpacing(str: string, spacingType: string) {
+    const doc = new DOMParser().parseFromString(str, 'text/html');
+    const arr = Array.from(doc.body.childNodes)
+      .map(child => (child as HTMLElement).outerHTML || (child.textContent ?? "").split(/(?<=[.?!,;])/).join(spacingType));
     return arr.join('');
   }
 

@@ -15,9 +15,9 @@
     "react-scripts": "4.0.3"
   },
   "scripts": {
-    "start": "rm -rf ./src/common/ && mkdir ./src/common && cp -a ../common/ ./src/common && react-scripts start && rm -rf ./src/common/",
-    "build": "rm -rf ./src/common/ && mkdir ./src/common && cp -a ../common/ ./src/common && react-scripts build && rm -rf ./src/common/",
-    "test": "rm -rf ./src/common/ && mkdir ./src/common && cp -a ../common/ ./src/common && react-scripts test && rm -rf ./src/common/",
+    "start": "rm -rf ./src/common/ && cp -a ../common/ ./src && react-scripts start && rm -rf ./src/common/",
+    "build": "rm -rf ./src/common/ && cp -a ../common/ ./src && react-scripts build && rm -rf ./src/common/",
+    "test": "rm -rf ./src/common/ && cp -a ../common/ ./src && react-scripts test && rm -rf ./src/common/",
     "eject": "react-scripts eject"
   },
   "proxy": "http://localhost:4001",
