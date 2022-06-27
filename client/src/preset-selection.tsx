@@ -4,7 +4,7 @@ import Radio from "@mui/material/Radio";
 import Style from "./style";
 import Button from '@mui/material/Button';
 import { Tooltip } from "@mui/material";
-import { triggerMessageToExtension } from "./scripts";
+import { sendPresetToExtension } from "./scripts";
 
 interface Row {
   freq: GridRowId,
@@ -76,7 +76,7 @@ export default function DataTable(styles: Style[]) {
         }}
       />
       <Button className="style-submission" onClick={(e) => {
-        triggerMessageToExtension(e, styles[(Number(selectedRow[0].id) - 1)])
+        sendPresetToExtension(styles[(Number(selectedRow[0].id) - 1)])
       }}
       variant="contained" style={{width:500, height: 50, fontSize: 20, font: "Courier New (monospace)"}}>Submit preset to extension</Button>
     </div>

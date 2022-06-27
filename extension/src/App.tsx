@@ -18,8 +18,8 @@ function App() {
     presets: [DEFAULT_PRESET],
   });
 
-  const [preset, setPreset] = useChromeStorageSync("preset", DEFAULT_PRESET);
-
+  const [preset, setPreset] = useChromeStorageSync('preset', DEFAULT_PRESET);
+  
   /* Refresh page on any settings change */
   useEffect(() => { updatePage(settings, preset) }, [settings, preset]);
 
