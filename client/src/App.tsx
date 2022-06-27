@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Card, CardContent, CardActionArea, Typography, ToggleButtonGroup, ToggleButton, Button } from "@mui/material";
+import { Card, CardContent, CardActionArea, Typography, ToggleButtonGroup, ToggleButton, Button, Box } from "@mui/material";
 import Pusher from "pusher-js";
 
 import "./App.css";
@@ -104,11 +104,6 @@ function Demo(preset: Preset, setPreset: (_: Preset) => void, styleChanged: bool
       <h2>Demo</h2>
       <div className="demo">
         <div className="demo-menu">
-          <div className="demo-button-send-to-extension">
-            <Button variant="outlined" size="medium" onClick={_ => sendPresetToExtension(preset)} color="secondary">
-              Send configuration to extension
-            </Button>
-          </div>
           <div className="demo-toggle">
             <ToggleButtonGroup
               value={styleChanged ? "clarify" : "original"}
@@ -118,6 +113,14 @@ function Demo(preset: Preset, setPreset: (_: Preset) => void, styleChanged: bool
               <ToggleButton value="original">Original</ToggleButton>
               <ToggleButton value="clarify">Clarify</ToggleButton>
             </ToggleButtonGroup>
+          </div>
+          <div className="demo-download">
+            <Button
+              variant="outlined"
+              onClick={() => sendPresetToExtension(preset)}
+            >
+              Download this preset
+            </Button>
           </div>
           {StyleSettings(preset, setPreset, expanded, setExpanded)}
         </div>
@@ -137,7 +140,7 @@ function BgCard(bgColor: string, font: string, freq: number, preset: Preset, set
             {/* recommend this background color and font */}
           </Typography>
           <Typography variant="body1" style={{ fontFamily: font }}>
-            {font}<br/>
+            {font}<br />
             Click to apply!
           </Typography>
         </CardContent>
