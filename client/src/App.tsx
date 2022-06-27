@@ -114,14 +114,14 @@ function Demo(preset: Preset, setPreset: (_: Preset) => void, styleChanged: bool
               <ToggleButton value="clarify">Clarify</ToggleButton>
             </ToggleButtonGroup>
           </div>
-          <Box className="demo-download" textAlign="center">
+          <div className="demo-download">
             <Button
               variant="outlined"
-              onClick={_ => sendPresetToExtension(preset)}
+              onClick={() => sendPresetToExtension(preset)}
             >
               Download this preset
             </Button>
-          </Box>
+          </div>
           {StyleSettings(preset, setPreset, expanded, setExpanded)}
         </div>
         {DemoPage()}
