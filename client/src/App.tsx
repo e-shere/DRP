@@ -48,7 +48,7 @@ function App() {
 
   return (
     <div className="App">
-      {/* <button onClick={e => triggerMessageToExtension(e, undefined)}>This button triggers a message</button> */}
+      <button onClick={e => triggerMessageToExtension(e, preset)}>This button triggers a message</button>
       <header className="App-header">
         <div>
           <h1> Clarify </h1>

@@ -5,9 +5,15 @@ let tabPorts = {};
 
 chrome.runtime.onMessageExternal.addListener(
   function (message, sender, sendResponse) {
-    console.log(message + "SUCCESS!");
-    console.log(message.data);
     sendResponse({ success: true, message: "PUXA SACO" });
+
+    /* Send the 'SendPresetToExtension' message to the frontend code, passing
+    the preset in the data field. */
+    chrome.runtime.sendMessage({
+      msg: "SendPresetToExtension", 
+      data: message.data
+    });
+
   }
 )
 

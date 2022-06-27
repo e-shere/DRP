@@ -17,9 +17,17 @@ function App() {
     styleChanged: false,
     presets: [DEFAULT_PRESET],
   });
-
+  
   const [preset, setPreset] = useChromeStorageSync("preset", DEFAULT_PRESET);
 
+  chrome.runtime.onMessage.addListener(
+    function(request, sender, sendResponse) {
+      if (request.msg === "SendPresetToExtension") {
+        /* Store the preset from the webapp into the current extension configuration */
+        setPreset({...request.data});
+      }
+  });
+  
   /* Refresh page on any settings change */
   useEffect(() => { updatePage(settings, preset) }, [settings, preset]);
 
