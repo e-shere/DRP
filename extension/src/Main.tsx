@@ -8,7 +8,12 @@ import { SavePresetButton } from "./Preset";
 import { TITLE } from "./App";
 import "./App.css";
 
-function Main(settings: UserSettings, preset: Preset, setSettings: (_: UserSettings) => void, setPreset: (_: Preset) => void) {
+function Main(
+  settings: UserSettings,
+  preset: Preset,
+  setSettings: (_: UserSettings) => void,
+  setPreset: (_: Preset) => void
+) {
   const [expanded, setExpanded] = useState<string | false>(false);
 
   return (
