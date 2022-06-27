@@ -8,18 +8,22 @@ chrome.runtime.onMessageExternal.addListener(
 
     /* Send the 'SendPresetToExtension' message to the frontend code, passing
     the preset in the data field. */
-    chrome.runtime.sendMessage({
-      msg: "SendPresetToExtension", 
-      data: message.data,
-      sender: sender.url
-    }, (response) => {
-      if (response.success) {
-        console.log("successful");
-        sendResponse({ success: true, message: "transmitted successfully" });
-      } else {
-        console.log("failure");
-        sendResponse({ success: false, message: "something went wrong" });
-      }
+    // chrome.runtime.sendMessage({
+    //   msg: "SendPresetToExtension", 
+    //   data: message.data,
+    //   sender: sender.url
+    // }, (response) => {
+    //   if (response.success) {
+    //     console.log("successful");
+    //     sendResponse({ success: true, message: "transmitted successfully" });
+    //   } else {
+    //     console.log("failure");
+    //     sendResponse({ success: false, message: "something went wrong" });
+    //   }
+    // });
+
+    chrome.storage.sync.set({preset: {...message.data}}, function() {
+      console.log('Value is set to ' + JSON.stringify(message.data) + ' in the background script.');
     });
     
   }
