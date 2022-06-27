@@ -5,7 +5,7 @@ export interface UserSettings {
 
 export enum Spacing {
   Spaces = "&nbsp&nbsp&nbsp&nbsp&nbsp",
-  NewLine = "<br><br/>"
+  NewLine = "<br>"
 };
   
 export interface Preset {
