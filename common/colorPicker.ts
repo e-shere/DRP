@@ -43,11 +43,11 @@ function bestAuxFontColor(bg: string, font: string): string {
     var maxFontContrast: number = 0;
     for (let i = 0; i < colors.length; i++) {
         var c: string = colors[i];
-        var bgContrast: number = Contrast(bg, c);
-        var fontContrast: number = Contrast(font, c);
+        const bgContrast: number = Contrast(bg, c);
+        const fontContrast: number = Contrast(font, c);
 
         if (bgContrast >= 3.5 && fontContrast >= 2 && 
-            bgContrast > maxBgContrast && fontContrast > maxFontContrast) { //WCAG guidelines
+            bgContrast > maxBgContrast && fontContrast > maxFontContrast) { // WCAG guidelines
             color = c;
             maxBgContrast = bgContrast;
             maxFontContrast = fontContrast;
