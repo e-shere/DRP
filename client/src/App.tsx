@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Card, CardContent, CardActionArea, Typography, ToggleButtonGroup, ToggleButton } from "@mui/material";
+import { Card, CardContent, CardActionArea, Typography, ToggleButtonGroup, ToggleButton, Button } from "@mui/material";
 import Pusher from "pusher-js";
 
 import "./App.css";
@@ -8,7 +8,7 @@ import { Preset, DEFAULT_PRESET } from "./common/domain";
 import { getAllPresets } from "./styleDB";
 import { updatePage } from "./pageStyle";
 import Style from "./style";
-import { triggerMessageToExtension } from "./scripts";
+import { sendPresetToExtension } from "./scripts";
 
 // this hack is required because env variables are not visible from the frontend
 const url = window.location.href;
@@ -48,7 +48,6 @@ function App() {
 
   return (
     <div className="App">
-      <button onClick={e => triggerMessageToExtension(e, preset)}>This button triggers a message</button>
       <header className="App-header">
         <div>
           <h1> Clarify </h1>
@@ -105,6 +104,11 @@ function Demo(preset: Preset, setPreset: (_: Preset) => void, styleChanged: bool
       <h2>Demo</h2>
       <div className="demo">
         <div className="demo-menu">
+          <div className="demo-button-send-to-extension">
+            <Button variant="outlined" size="medium" onClick={_ => sendPresetToExtension(preset)} color="secondary">
+              Send configuration to extension
+            </Button>
+          </div>
           <div className="demo-toggle">
             <ToggleButtonGroup
               value={styleChanged ? "clarify" : "original"}

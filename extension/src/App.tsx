@@ -25,6 +25,7 @@ function App() {
       if (request.msg === "SendPresetToExtension") {
         /* Store the preset from the webapp into the current extension configuration */
         setPreset({...request.data});
+        sendResponse({ success: true });
       }
   });
   
