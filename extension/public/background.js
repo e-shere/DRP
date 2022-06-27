@@ -5,25 +5,33 @@ let tabPorts = {};
 
 chrome.runtime.onMessageExternal.addListener(
   function (message, sender, sendResponse) {
-    sendResponse({ success: true, message: "PUXA SACO" });
 
     /* Send the 'SendPresetToExtension' message to the frontend code, passing
     the preset in the data field. */
     chrome.runtime.sendMessage({
       msg: "SendPresetToExtension", 
-      data: message.data
+      data: message.data,
+      sender: sender.url
+    }, (response) => {
+      if (response.success) {
+        console.log("successful");
+        sendResponse({ success: true, message: "transmitted successfully" });
+      } else {
+        console.log("failure");
+        sendResponse({ success: false, message: "something went wrong" });
+      }
     });
-
+    
   }
 )
 
-chrome.runtime.onMessage.addListener((message, sender) => {
-  const port = sender.tab && sender.tab.id !== undefined && tabPorts[sender.tab.id];
-  if (port) {
-    port.postMessage(message);
-  }
-  return true;
-});
+// chrome.runtime.onMessage.addListener((message, sender) => {
+//   const port = sender.tab && sender.tab.id !== undefined && tabPorts[sender.tab.id];
+//   if (port) {
+//     port.postMessage(message);
+//   }
+//   return true;
+// });
 
 // chrome.runtime.onConnect.addListener((port /*: chrome.runtime.Port */) => { 
 //   let tabId;
