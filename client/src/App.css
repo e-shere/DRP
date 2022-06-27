@@ -51,10 +51,6 @@ h2 {
   display: inline-flex;
 }
 
-.demo-download {
-  margin-bottom: 2%;
-}
-
 .demo-menu {
   min-width: 30%;
   margin-left: 1em;
@@ -64,6 +60,10 @@ h2 {
 .demo-toggle {
   text-align: center;
   padding: 5%;
+}
+
+.demo-download {
+  margin-bottom: 5%;
 }
 
 /* Settings */
