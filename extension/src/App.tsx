@@ -19,27 +19,8 @@ function App() {
     styleChanged: false,
     presets: [DEFAULT_PRESET],
   });
-  // chrome.storage.sync.clear();
+  
   const [preset, setPreset] = useChromeStorageSync('preset', DEFAULT_PRESET);
-
-  // chrome.runtime.onMessage.addListener(
-  //   function(request, sender, sendResponse) {
-  //     if (request.msg === "SendPresetToExtension") {
-  //       console.log(`Sender is ${JSON.stringify(request.sender)}`);
-  //       wasTriggeredByDemoWebapp = true;
-  //       /* Store the preset from the webapp into the current extension configuration */
-  //       console.log("Updating");
-
-  //       chrome.storage.sync.get('preset', function(result) {
-  //         console.log('Value currently is ' + result.key);
-  //       });
-
-  //       // setPreset(request.data);
-  //       // console.log(`Setting the preset... ${JSON.stringify(request.data)}`);
-  //       sendResponse({ success: true });
-  //     }
-  //     return true;
-  // });
   
   /* Refresh page on any settings change */
   useEffect(() => { 
