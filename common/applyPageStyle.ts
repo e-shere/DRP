@@ -11,7 +11,7 @@ function applyPageStyle(s: UserSettings, p: Preset, getRootElement?: (_: Documen
   }
 
   /* Reset page */
-  rootElement.innerHTML = rootElement.dataset.initialHtml ?? "£££ Selling personal data to Google...";
+  rootElement.innerHTML = rootElement.dataset.initialHtml ?? "Error: Clarify could not load page";
 
   /* Apply punctuation spacing */
   if (s.styleChanged) {
