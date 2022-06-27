@@ -19,6 +19,7 @@ export interface Preset {
   letterSpacing: number;
   lineSpacing: number;
   fontColor: string;
+  auxFontColor: string;
   punctuationSpace: Spacing;
 }
 
@@ -33,5 +34,6 @@ export const DEFAULT_PRESET: Preset = {
   letterSpacing: 0,
   lineSpacing: 0,
   fontColor: "black",
+  auxFontColor: "blue",
   punctuationSpace: Spacing.Spaces,
 };

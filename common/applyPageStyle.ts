@@ -12,7 +12,7 @@ function applyPageStyle(s: UserSettings, p: Preset, getRootElement?: (_: Documen
       /* Tags for elements to exclude should be uppercase */
       setElementProperty(element, "background-color", p.bgColor, p.bgChanged, bgChangeTags);
       setElementProperty(element, "font-family", p.font, p.fontChanged, ["IMG", "SPAN"]);
-      setElementProperty(element, "color", p.fontColor, p.bgChanged, ["IMG"]);
+      setElementProperty(element, "color", p.fontColor, p.bgChanged, ["IMG", "A"]);
       increaseElementProperty(element, "font-size", p.fontSize, p.fontChanged, ["IMG"], "16px");
       increaseElementProperty(element, "letter-spacing", p.letterSpacing, p.fontChanged, ["IMG"], "2px");
       increaseElementProperty(element, "line-height", p.lineSpacing, p.fontChanged, ["IMG"], "1em");
@@ -21,6 +21,12 @@ function applyPageStyle(s: UserSettings, p: Preset, getRootElement?: (_: Documen
         .forEach(t => resetElementProperty(element, t));
     }
     
+  });
+
+  rootElement.querySelectorAll<HTMLElement>("a").forEach(element => {
+    if (s.styleChanged) {
+      setElementProperty(element, "color", p.auxFontColor, p.bgChanged, []);
+    }
   });
 
   /* Apply punctuation spacing */
