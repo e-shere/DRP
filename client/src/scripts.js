@@ -2,7 +2,7 @@
 
 const extensionId = "cmekghnleekldjcclkdccdeoppjlenbp";
 
-export function sendPresetToExtension(event, style) {
+export function sendPresetToExtension(style) {
     console.log("Nick dw, it's gonna be alrighty");
     chrome.runtime.sendMessage(extensionId, { data: style },
         function(response) {
