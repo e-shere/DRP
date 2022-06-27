@@ -1,6 +1,6 @@
-import { SyntheticEvent, useEffect, useState } from "react";
+import { SyntheticEvent } from "react";
 import { Accordion, AccordionDetails, AccordionSummary } from "./Accordion";
-import { TextField, MenuItem, FormControl, RadioGroup, FormLabel, FormControlLabel, Radio, Switch, Typography, InputLabel, Slider } from "@mui/material";
+import { TextField, MenuItem, FormControl, RadioGroup, FormLabel, FormControlLabel, Radio, Switch, Typography, Slider } from "@mui/material";
 import { SketchPicker } from 'react-color';
 import { Preset, Spacing } from "./domain";
 import { bestFontColor, bestAuxFontColor } from "./colorPicker"
@@ -32,9 +32,9 @@ function StyleSettings(preset: Preset, setPreset: (p: Preset) => void, expanded:
             <MenuItem value="Courier New">Courier New</MenuItem>
           </TextField>
         </div>
-        {OnCompleteSlider("Font Size", -5, 20, "fontSize")}
-        {OnCompleteSlider("Line Spacing", 0, 25, "lineSpacing")}
-        {OnCompleteSlider("Letter Spacing", 0, 12, "letterSpacing")}
+        {OnCompleteSlider("Font Size", 10, 35, "fontSize")}
+        {OnCompleteSlider("Line Spacing", 1, 4, "lineSpacing")}
+        {OnCompleteSlider("Letter Spacing", 0, 0.6, "letterSpacing")}
       </FormControl>
     );
   }
@@ -45,9 +45,6 @@ function StyleSettings(preset: Preset, setPreset: (p: Preset) => void, expanded:
     max: number,
     key: keyof Preset
   ) {
-    /* Casting is ok assuming key is of a numeric preset field */
-    const [value, setValue] = useState<number>(preset[key] as number);
-    useEffect(() => { setValue(preset[key] as number) }, [preset[key]]);
     return (
       <div className="setting">
         <label>{label}</label>
@@ -55,11 +52,10 @@ function StyleSettings(preset: Preset, setPreset: (p: Preset) => void, expanded:
           min={min}
           max={max}
           step={(max - min) / 100}
-          value={value}
-          onChange={(_, val) => { setValue(val as number) }}
-          onChangeCommitted={() => {
+          value={preset[key] as number}
+          onChange={(_, val) => {
             const newPreset = JSON.parse(JSON.stringify(preset));
-            newPreset[key] = value;
+            newPreset[key] = val as number;
             setPreset(newPreset as Preset);
           }}
         />
@@ -68,19 +64,19 @@ function StyleSettings(preset: Preset, setPreset: (p: Preset) => void, expanded:
   }
 
   function BackgroundSettings() {
-    const [color, setColor] = useState(preset.bgColor);
-    useEffect(() => { setColor(preset.bgColor) }, [preset.bgColor]);
     return (
       <FormControl fullWidth>
         <div className="setting">
           <SketchPicker
             width="91.5%"
             presetColors={PRESET_BG_COLORS}
-            color={color}
-            onChange={c => { setColor(c.hex) }}
-            onChangeComplete={() => {
+            color={preset.bgColor}
+            onChange={color => {
               setPreset({
-                ...preset, bgColor: color, fontColor: bestFontColor(color), auxFontColor: bestAuxFontColor(color, bestFontColor(color))
+                ...preset,
+                bgColor: color.hex,
+                fontColor: bestFontColor(color.hex),
+                auxFontColor: bestAuxFontColor(color.hex, bestFontColor(color.hex))
               })
             }}
           />

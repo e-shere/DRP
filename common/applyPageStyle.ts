@@ -1,94 +1,88 @@
 import { UserSettings, Preset } from "./domain";
 
 function applyPageStyle(s: UserSettings, p: Preset, getRootElement?: (_: Document) => HTMLElement) {
+  const HEADINGS = ["H1", "H2", "H3", "H4", "H5", "H6"];
+  const HEADING_SCALING = 1.5;
   const rootElement: HTMLElement = getRootElement !== undefined ? getRootElement(document) : document.body;
 
-  /* hacky - all tags exclusing those that we want to change the bg for */
-  const bgChangeTags = Array.from(rootElement.querySelectorAll<HTMLElement>("*"))
-    .map(e => e.tagName).filter(t => !["H1", "H2", "A", "P", "HEADER", "LI", "BODY", "FRAMESET"].includes(t));
+  /* Store initial html */
+  if (!rootElement.hasAttribute("data-initial-html")) {
+    rootElement.setAttribute("data-initial-html", rootElement.innerHTML);
+  }
 
-  const linkChangeTags = Array.from(rootElement.querySelectorAll<HTMLElement>("*"))
-    .map(e => e.tagName).filter(t => !["A"].includes(t));
+  /* Reset page */
+  rootElement.innerHTML = rootElement.dataset.initialHtml ?? "£££ Selling personal data to Google...";
 
   /* Apply punctuation spacing */
-  rootElement.querySelectorAll<HTMLElement>("li,p,span").forEach(element => {
-    resetPunctuationSpacing(element, "inner-html", p.punctuationSpacingChanged, ["P", "LI", "SPAN"]);
-    if (s.styleChanged && p.punctuationSpacingChanged) {
-      element.innerHTML = applyPunctuationSpacing(element.innerHTML, p.punctuationSpace);
-    }
-  });
-
-  rootElement.querySelectorAll<HTMLElement>("*").forEach(element => {
-    if (s.styleChanged) {
+  if (s.styleChanged) {
+    rootElement.querySelectorAll<HTMLElement>("*").forEach(element => {
       /* Tags for elements to exclude should be uppercase */
-      setElementProperty(element, "background-color", p.bgColor, p.bgChanged, bgChangeTags);
-      setElementProperty(element, "font-family", p.font, p.fontChanged, ["IMG", "SPAN"]);
-      setElementProperty(element, "color", p.fontColor, p.bgChanged, ["IMG", "A"]);
-      setElementProperty(element, "color", p.auxFontColor, p.bgChanged, linkChangeTags);
-      increaseElementProperty(element, "font-size", p.fontSize, p.fontChanged, ["IMG"], "16px");
-      increaseElementProperty(element, "letter-spacing", p.letterSpacing, p.fontChanged, ["IMG"], "2px");
-      increaseElementProperty(element, "line-height", p.lineSpacing, p.fontChanged, ["IMG"], "1em");
-    } else {
-      ["background-color", "font-size", "color", "letter-spacing", "font-family", "inner-html", "line-height"]
-        .forEach(t => resetElementProperty(element, t));
-    }
-  });
+      setElementProperty(element, "background-color", p.bgColor, p.bgChanged,
+        includeTags([...HEADINGS, "A", "P", "HEADER", "LI", "BODY", "FRAMESET"])
+      );
+      setElementProperty(element, "font-family", p.font, p.fontChanged,
+        excludeTags(["IMG", "SPAN"])
+      );
+      setElementProperty(element, "color", p.fontColor, p.bgChanged,
+        excludeTags(["IMG", "A"])
+      );
+      setElementProperty(element, "color", p.auxFontColor, p.bgChanged,
+        includeTags(["A"])
+      );
 
+      setElementProperty(element, "font-size", `${p.fontSize}px`, p.fontChanged,
+        excludeTags([...HEADINGS, "IMG"])
+      );
+      setElementProperty(element, "font-size", `${p.fontSize * HEADING_SCALING}px`, p.fontChanged,
+        includeTags(HEADINGS)
+      );
 
-  function applyPunctuationSpacing(str: string, spacingType: string) {
-    const doc = new DOMParser().parseFromString(str, 'text/html');
-    const arr = Array.from(doc.body.childNodes)
-      .map(child => (child as HTMLElement).outerHTML || (child.textContent ?? "").split(/(?<=[.?!,;])/).join(spacingType));
-    return arr.join('');
+      setElementProperty(element, "line-height", `${p.lineSpacing * p.fontSize}px`, p.fontChanged,
+        excludeTags([...HEADINGS, "IMG"])
+      );
+      setElementProperty(element, "line-height", `${p.lineSpacing * p.fontSize * HEADING_SCALING}px`, p.fontChanged,
+        includeTags(HEADINGS)
+      );
+
+      setElementProperty(element, "letter-spacing", `${p.letterSpacing * p.fontSize}px`, p.fontChanged,
+        excludeTags([...HEADINGS, "IMG"])
+      );
+      setElementProperty(element, "letter-spacing", `${p.letterSpacing * p.fontSize * HEADING_SCALING}px`, p.fontChanged,
+        includeTags(HEADINGS)
+      );
+
+      setPunctuationSpacing(element, ["P", "LI", "SPAN"]);
+    });
   }
 
-  function increaseElementProperty(element: HTMLElement, property: string, value: number, changed: boolean, tags: string[], defaultValue: string) {
-    const dataProperty = getDataProperty(element, property);
-    const initialValue = dataProperty.includes("px") ? dataProperty : defaultValue;
-    const increasedValue = `calc(${initialValue} + ${value}px)`;
-    setElementProperty(element, property, increasedValue, changed, tags);
-  }
-
-  function setElementProperty(element: HTMLElement, property: string, value: string, changed: boolean, excluded: string[]) {
-    if (!excluded.includes(element.tagName)) {
-      const initialValue = window.getComputedStyle(element).getPropertyValue(property);
-      storeElementProperty(element, property, initialValue)
-
-      if (changed) {
-        console.log(property + ": " + value);
-        element.style.setProperty(property, value);
-      } else {
-        resetElementProperty(element, property);
-      }
-    }
-  }
-
-  function resetPunctuationSpacing(element: HTMLElement, property: string, changed: boolean, included: string[]) {
-    if (included.includes(element.tagName)) {
-      storeElementProperty(element, property, element.innerHTML);
-
-      /* Reset to original spacing */
-      element.innerHTML = element.dataset.initialInnerHtml ?? element.innerHTML;
+  function setPunctuationSpacing(element: HTMLElement, includedTags: string[]) {
+    if (p.punctuationSpacingChanged && includedTags.includes(element.tagName)) {
+      const doc = new DOMParser().parseFromString(element.innerHTML, 'text/html');
+      const arr = Array.from(doc.body.childNodes)
+        .map(child => (child as HTMLElement).outerHTML || (child.textContent ?? "")
+          .split(/(?<=[.?!,;])/).join(p.punctuationSpace));
+      element.innerHTML = arr.join('');
     }
   }
 
-  function storeElementProperty(element: HTMLElement, property: string, value: string) {
-    const dataProperty = `data-initial-${property}`;
-    if (!element.hasAttribute(dataProperty)) {
-      element.setAttribute(dataProperty, value);
+  function setElementProperty(
+    element: HTMLElement,
+    property: string,
+    value: string,
+    changed: boolean,
+    applyOnTag: (_: HTMLElement) => boolean
+  ) {
+    if (applyOnTag(element) && changed) {
+      element.style.setProperty(property, value);
     }
   }
 
-  function resetElementProperty(element: HTMLElement, property: string) {
-    element.style.setProperty(property, getDataProperty(element, property));
+  function excludeTags(tags: string[]) {
+    return ((element: HTMLElement) => !includeTags(tags)(element));
   }
 
-  function getDataProperty(element: HTMLElement, property: string) {
-    return element.dataset[camelCase(`initial-${property}`)] ?? window.getComputedStyle(element).getPropertyValue(property);
-  }
-
-  function camelCase(str: string) {
-    return str.toLowerCase().replace(/[^a-zA-Z0-9]+(.)/g, (_, chr) => chr.toUpperCase());
+  function includeTags(tags: string[]) {
+    return (element: HTMLElement) => tags.includes(element.tagName);
   }
 };
 
