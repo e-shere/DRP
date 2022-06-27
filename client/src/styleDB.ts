@@ -31,7 +31,7 @@ function addPreset(style: Style){
   fetch("/add-preset", {
     method: "POST",
     headers: { "Content-Type": "application/json", },
-    body: JSON.stringify({data : JSON.stringify(style)}) // can add font colour as well here
+    body: JSON.stringify({data : JSON.stringify(style)})
   }).catch(() => console.log("Error when submitting preset"));
 }
 

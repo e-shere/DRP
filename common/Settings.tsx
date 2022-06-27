@@ -1,6 +1,6 @@
-import { ChangeEvent, SyntheticEvent } from "react";
+import { ChangeEvent, SyntheticEvent, useState } from "react";
 import { Accordion, AccordionDetails, AccordionSummary } from "./Accordion";
-import { TextField, MenuItem, FormControl, RadioGroup, FormLabel, FormControlLabel, Radio, Switch, Typography } from "@mui/material";
+import { TextField, MenuItem, FormControl, RadioGroup, FormLabel, FormControlLabel, Radio, Switch, Typography, InputLabel, Slider } from "@mui/material";
 import { SketchPicker } from 'react-color';
 import { Preset, Spacing } from "./domain";
 
@@ -47,32 +47,17 @@ function OptimumFontColour(background: string): string {
   return (contrast >= 4.5) ? white : black;
 }
 
-function NumberField(label: string, min: number, max: number, value: number, onChange: (_: ChangeEvent<HTMLInputElement>) => void) {
-  return (
-    <div className="setting">
-      <TextField
-        fullWidth
-        InputProps={{ inputProps: { min, max } }}
-        onWheel={event => event.target instanceof HTMLElement && event.target.blur()}
-        label={label}
-        variant="outlined"
-        type="number"
-        value={value}
-        onChange={onChange}
-      />
-    </div>
-  );
-}
-
 function BackgroundSettings(preset: Preset, setPreset: (_: Preset) => void) {
+  const [color, setColor] = useState(preset.bgColor);
   return (
     <FormControl fullWidth>
       <div className="setting">
         <SketchPicker
           width="91.5%"
           presetColors={PRESET_BG_COLORS}
-          color={preset.bgColor}
-          onChange={color => { setPreset({ ...preset, bgColor: color.hex, fontColor: OptimumFontColour(color.hex) }) }}
+          color={color}
+          onChange={c => { setColor(c.hex) }}
+          onChangeComplete={() => { setPreset({ ...preset, bgColor: color, fontColor: OptimumFontColour(color) }) }}
         />
       </div>
     </FormControl>
@@ -80,6 +65,29 @@ function BackgroundSettings(preset: Preset, setPreset: (_: Preset) => void) {
 }
 
 function FontSettings(preset: Preset, setPreset: (_: Preset) => void) {
+  function OnCompleteSlider(
+    label: string,
+    min: number,
+    max: number,
+    initialValue: number,
+    onComplete: (_: number) => void
+  ) {
+    const [value, setValue] = useState(initialValue);
+    return (
+      <div className="setting">
+        <label>{label}</label>
+        <Slider
+          min={min}
+          max={max}
+          step={(max - min) / 100}
+          value={value}
+          onChange={(_, val) => { setValue(val as number) }}
+          onChangeCommitted={() => { onComplete(value) }}
+        />
+      </div>
+    );
+  }
+
   return (
     <FormControl fullWidth>
       <div className="setting">
@@ -91,31 +99,17 @@ function FontSettings(preset: Preset, setPreset: (_: Preset) => void) {
           onChange={event => { setPreset({ ...preset, font: event.target.value }) }}
         >
           <MenuItem value="Arial">Arial</MenuItem>
+          <MenuItem value="Verdana">Verdana</MenuItem>
+          <MenuItem value="Helvetica">Helvetica</MenuItem>
+          <MenuItem value="Tahoma">Tahoma New</MenuItem>
+          <MenuItem value="Trebuchet MS">Trebuchet MS</MenuItem>
+          <MenuItem value="Gill Sans">Gill Sans</MenuItem>
           <MenuItem value="Courier New">Courier New</MenuItem>
-          <MenuItem value="Roboto">Roboto</MenuItem>
         </TextField>
       </div>
-      {NumberField(
-        "Font Size",
-        -5,
-        50,
-        preset.fontSize,
-        event => { setPreset({ ...preset, fontSize: Number(event.target.value) }) }
-      )}
-      {NumberField(
-        "Letter Spacing",
-        0,
-        20,
-        preset.letterSpacing,
-        event => { setPreset({ ...preset, letterSpacing: Number(event.target.value) }) }
-      )}
-      {NumberField(
-        "Line Spacing",
-        0,
-        30,
-        preset.lineSpacing,
-        event => { setPreset({ ...preset, lineSpacing: Number(event.target.value) }) }
-      )}
+      {OnCompleteSlider("Font Size", -5, 20, preset.fontSize, v => { setPreset({ ...preset, fontSize: v }) } )}
+      {OnCompleteSlider("Line Spacing", 0, 25, preset.lineSpacing, v => { setPreset({ ...preset, lineSpacing: v }) } )}
+      {OnCompleteSlider("Letter Spacing", 0, 12, preset.letterSpacing, v => { setPreset({ ...preset, letterSpacing: v }) } )}
     </FormControl>
   );
 }
@@ -126,10 +120,10 @@ function SpacingSettings(preset: Preset, setPreset: (_: Preset) => void) {
       <FormLabel>Split with</FormLabel>
       <RadioGroup
         value={preset.punctuationSpace.valueOf()}
-        onChange={(_, val) => setPreset({...preset, punctuationSpace: val === Spacing.Spaces.valueOf() ? Spacing.Spaces : Spacing.NewLine})}
+        onChange={(_, val) => setPreset({ ...preset, punctuationSpace: val === Spacing.Spaces.valueOf() ? Spacing.Spaces : Spacing.NewLine })}
       >
-        <FormControlLabel value={Spacing.Spaces.valueOf()} control={<Radio />} label="spaces" />
-        <FormControlLabel value={Spacing.NewLine.valueOf()} control={<Radio />} label="new line" />
+        <FormControlLabel value={Spacing.Spaces.valueOf()} control={<Radio />} label="Spaces" />
+        <FormControlLabel value={Spacing.NewLine.valueOf()} control={<Radio />} label="New line" />
       </RadioGroup>
     </FormControl>
   );
