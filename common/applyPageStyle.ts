@@ -7,21 +7,8 @@ function applyPageStyle(s: UserSettings, p: Preset, getRootElement?: (_: Documen
   const bgChangeTags = Array.from(rootElement.querySelectorAll<HTMLElement>("*"))
     .map(e => e.tagName).filter(t => !["H1", "H2", "A", "P", "HEADER", "LI", "BODY", "FRAMESET"].includes(t));
 
-  rootElement.querySelectorAll<HTMLElement>("*").forEach(element => {
-    if (s.styleChanged) {
-      /* Tags for elements to exclude should be uppercase */
-      setElementProperty(element, "background-color", p.bgColor, p.bgChanged, bgChangeTags);
-      setElementProperty(element, "font-family", p.font, p.fontChanged, ["IMG", "SPAN"]);
-      setElementProperty(element, "color", p.fontColor, p.bgChanged, ["IMG"]);
-      increaseElementProperty(element, "font-size", p.fontSize, p.fontChanged, ["IMG"], "16px");
-      increaseElementProperty(element, "letter-spacing", p.letterSpacing, p.fontChanged, ["IMG"], "2px");
-      increaseElementProperty(element, "line-height", p.lineSpacing, p.fontChanged, ["IMG"], "1em");
-    } else {
-      ["background-color", "font-size", "color", "letter-spacing", "font-family", "inner-html", "line-height"]
-        .forEach(t => resetElementProperty(element, t));
-    }
-    
-  });
+  const linkChangeTags = Array.from(rootElement.querySelectorAll<HTMLElement>("*"))
+    .map(e => e.tagName).filter(t => !["A"].includes(t));
 
   /* Apply punctuation spacing */
   rootElement.querySelectorAll<HTMLElement>("li,p,span").forEach(element => {
@@ -30,6 +17,23 @@ function applyPageStyle(s: UserSettings, p: Preset, getRootElement?: (_: Documen
       element.innerHTML = applyPunctuationSpacing(element.innerHTML, p.punctuationSpace);
     }
   });
+
+  rootElement.querySelectorAll<HTMLElement>("*").forEach(element => {
+    if (s.styleChanged) {
+      /* Tags for elements to exclude should be uppercase */
+      setElementProperty(element, "background-color", p.bgColor, p.bgChanged, bgChangeTags);
+      setElementProperty(element, "font-family", p.font, p.fontChanged, ["IMG", "SPAN"]);
+      setElementProperty(element, "color", p.fontColor, p.bgChanged, ["IMG", "A"]);
+      setElementProperty(element, "color", p.auxFontColor, p.bgChanged, linkChangeTags);
+      increaseElementProperty(element, "font-size", p.fontSize, p.fontChanged, ["IMG"], "16px");
+      increaseElementProperty(element, "letter-spacing", p.letterSpacing, p.fontChanged, ["IMG"], "2px");
+      increaseElementProperty(element, "line-height", p.lineSpacing, p.fontChanged, ["IMG"], "1em");
+    } else {
+      ["background-color", "font-size", "color", "letter-spacing", "font-family", "inner-html", "line-height"]
+        .forEach(t => resetElementProperty(element, t));
+    }
+  });
+
 
   function applyPunctuationSpacing(str: string, spacingType: string) {
     const doc = new DOMParser().parseFromString(str, 'text/html');
@@ -51,6 +55,7 @@ function applyPageStyle(s: UserSettings, p: Preset, getRootElement?: (_: Documen
       storeElementProperty(element, property, initialValue)
 
       if (changed) {
+        console.log(property + ": " + value);
         element.style.setProperty(property, value);
       } else {
         resetElementProperty(element, property);
