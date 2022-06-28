@@ -12,7 +12,8 @@ const PRESET_BG_COLORS = [
 ];
 
 function StyleSettings(preset: Preset, setPreset: (p: Preset) => void, expanded: string | false, setExpanded: (e: string | false) => void) {
-  const SUPPORTED_FONTS = ["Arial", "Verdana",  "Helvetica", "Tahoma", "Trebuchet MS", "Gill Sans", "Courier New"];
+  const SUPPORTED_FONTS = ["Arial", "Comic Sans", "Calibri", "Open Sans", "Gill Sans", "Courier New"];
+  // "Verdana", "Tahoma", "Century Gothic", "Trebuchet MS", "Helvetica",-> not applied to page (?)
 
   function FontSettings() {
     return (
