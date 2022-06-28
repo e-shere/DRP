@@ -6,21 +6,17 @@ function applyPageStyle(s: UserSettings, p: Preset, getRootElement?: (_: Documen
   const HEADING_SCALING = 1.5;
   const rootElement: HTMLElement = getRootElement !== undefined ? getRootElement(document) : document.body;
 
-  /* Store initial html */
+  /* Store initial page */
   if (!rootElement.hasAttribute("data-initial-html")) {
     rootElement.setAttribute("data-initial-html", rootElement.innerHTML);
+    rootElement.setAttribute("data-initial-bg-color", rootElement.style.backgroundColor);
   }
 
   /* Reset page */
   rootElement.innerHTML = rootElement.dataset.initialHtml ?? "Error: Clarify could not load page";
+  rootElement.style.setProperty("background-color", rootElement.dataset.backgroundColor ?? "")
 
   if (s.styleChanged) {
-    if (p.punctuationSpacingChanged) {
-      rootElement.querySelectorAll<HTMLElement>("P, LI, SPAN").forEach(element => {
-        setPunctuationSpacing(element);
-      });
-    }
-
     rootElement.querySelectorAll<HTMLElement>("*").forEach(element => {
       if (p.bgChanged) {
         document.body.style.backgroundColor = p.bgColor;
@@ -56,14 +52,19 @@ function applyPageStyle(s: UserSettings, p: Preset, getRootElement?: (_: Documen
         );
       }
     });
+
+    if (p.punctuationSpacingChanged) {
+      rootElement.querySelectorAll<HTMLElement>("P, SPAN").forEach(element => {
+        setPunctuationSpacing(element);
+      });
+    }
   }
 
   function setPunctuationSpacing(element: HTMLElement) {
-    const doc = new DOMParser().parseFromString(element.innerHTML, 'text/html');
-    const arr = Array.from(doc.body.childNodes)
+    element.innerHTML = Array.from(element.childNodes)
       .map(child => (child as HTMLElement).outerHTML || (child.textContent ?? "")
-        .split(/(?<=[.?!,;])/).join(p.punctuationSpace));
-    element.innerHTML = arr.join('');
+        .split(/(?<=[.?!,;])/).join(p.punctuationSpace))
+      .join("");
   }
 
   function setElementProperty(
