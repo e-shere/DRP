@@ -12,6 +12,9 @@ const PRESET_BG_COLORS = [
 ];
 
 function StyleSettings(preset: Preset, setPreset: (p: Preset) => void, expanded: string | false, setExpanded: (e: string | false) => void) {
+  const SUPPORTED_FONTS = ["Arial", "Comic Sans", "Calibri", "Open Sans", "Gill Sans", "Courier New"];
+  // "Verdana", "Tahoma", "Century Gothic", "Trebuchet MS", "Helvetica",-> not applied to page (?)
+
   function FontSettings() {
     return (
       <FormControl fullWidth>
@@ -23,13 +26,9 @@ function StyleSettings(preset: Preset, setPreset: (p: Preset) => void, expanded:
             value={preset.font}
             onChange={event => { setPreset({ ...preset, font: event.target.value }) }}
           >
-            <MenuItem value="Arial">Arial</MenuItem>
-            <MenuItem value="Verdana">Verdana</MenuItem>
-            <MenuItem value="Helvetica">Helvetica</MenuItem>
-            <MenuItem value="Tahoma">Tahoma New</MenuItem>
-            <MenuItem value="Trebuchet MS">Trebuchet MS</MenuItem>
-            <MenuItem value="Gill Sans">Gill Sans</MenuItem>
-            <MenuItem value="Courier New">Courier New</MenuItem>
+            {
+              SUPPORTED_FONTS.map(f => <MenuItem value={f} style={{fontFamily: f}}> {f} </MenuItem> )
+            }
           </TextField>
         </div>
         {OnCompleteSlider("Font Size", 10, 35, "fontSize")}
