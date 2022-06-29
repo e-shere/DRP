@@ -1,6 +1,6 @@
 /* global chrome */
 
-const extensionId = "ejhehfgbdmmcdjolnagplbkjppnfhkhk"
+const extensionId = "cmekghnleekldjcclkdccdeoppjlenbp"
 
 var message = "test"
 

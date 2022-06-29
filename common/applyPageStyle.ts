@@ -19,7 +19,7 @@ function applyPageStyle(s: UserSettings, p: Preset, getRootElement?: (_: Documen
   if (s.styleChanged) {
     rootElement.querySelectorAll<HTMLElement>("*").forEach(element => {
       if (p.bgChanged) {
-        document.body.style.backgroundColor = p.bgColor;
+        rootElement.style.backgroundColor = p.bgColor;
         setElementProperty(element, "background-color", p.bgColor,
           includeTags([...HEADINGS, "A", "P", "HEADER", "LI"])
         );

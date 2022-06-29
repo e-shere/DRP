@@ -12,8 +12,7 @@ const PRESET_BG_COLORS = [
 ];
 
 function StyleSettings(preset: Preset, setPreset: (p: Preset) => void, expanded: string | false, setExpanded: (e: string | false) => void) {
-  const SUPPORTED_FONTS = ["Arial", "Comic Sans", "Calibri", "Open Sans", "Gill Sans", "Courier New"];
-  // "Verdana", "Tahoma", "Century Gothic", "Trebuchet MS", "Helvetica",-> not applied to page (?)
+  const FONTS = ["Arial", "Tahoma", "Trebuchet MS", "Gill Sans", "Courier New"];
 
   function FontSettings() {
     return (
@@ -27,7 +26,7 @@ function StyleSettings(preset: Preset, setPreset: (p: Preset) => void, expanded:
             onChange={event => { setPreset({ ...preset, font: event.target.value }) }}
           >
             {
-              SUPPORTED_FONTS.map(f => <MenuItem value={f} style={{fontFamily: f}}> {f} </MenuItem> )
+              FONTS.map(f => <MenuItem value={f} style={{fontFamily: f}}> {f} </MenuItem> )
             }
           </TextField>
         </div>
