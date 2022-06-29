@@ -7,33 +7,20 @@
     "@emotion/styled": "^11.9.3",
     "@mui/icons-material": "^5.8.3",
     "@mui/material": "^5.8.3",
-    "@testing-library/jest-dom": "^5.16.4",
-    "@testing-library/react": "^13.3.0",
-    "@testing-library/user-event": "^13.5.0",
-    "@types/jest": "^27.5.2",
-    "@types/node": "^16.11.39",
+    "@mui/x-data-grid": "^5.12.2",
     "@types/react": "^18.0.12",
+    "@types/react-color": "^3.0.6",
     "@types/react-dom": "^18.0.5",
     "axios": "^0.27.2",
     "react": "^18.1.0",
     "react-color": "^2.19.3",
     "react-dom": "^18.1.0",
     "react-scripts": "5.0.1",
-    "typescript": "^4.7.3",
-    "use-chrome-storage": "^1.0.7",
-    "web-vitals": "^2.1.4"
+    "use-chrome-storage": "^1.0.7"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "build": "rm -rf ./src/common/ && mkdir ./src/common && cp -r ../common/*.ts ./src/common && cp -r ../common/*.tsx ./src/common && react-scripts build && rm -rf ./src/common/",
     "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
   },
   "browserslist": {
     "production": [
@@ -49,6 +36,6 @@
   },
   "devDependencies": {
     "@types/chrome": "^0.0.190",
-    "@types/react-color": "^3.0.6"
+    "@types/jest": "^28.1.3"
   }
 }

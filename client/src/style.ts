@@ -1,4 +1,5 @@
 class Style {
+  gId: number;
   font: string;
   fontSize: number;
   bgColor: string;

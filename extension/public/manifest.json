@@ -1,33 +1,36 @@
 {
-    "name": "clarify-this",
-    "description": "Making the Web accessible for everyone",
+    "name": "Clarify",
+    "description": "Making the web accessible for everyone",
     "version": "1.0",
     "manifest_version": 3,
     "permissions": [
-        "activeTab", "storage", "tabs", "scripting"
-      ],
-      "host_permissions": [
+        "activeTab",
+        "storage",
+        "tabs",
+        "scripting"
+    ],
+    "host_permissions": [
         "http://clarify-this.com/*",
-        "http://localhost:3000/*"
+        "http://localhost:4001/*"
     ],
     "action": {
         "default_popup": "index.html",
-        "default_title": "Open the popup"
+        "default_title": "Clarify"
     },
-    "devtools_page": "../index.html",
+    "icons": {
+        "16": "logo-16.png",
+        "48": "logo-48.png",
+        "128": "logo-128.png"
+    },
     "externally_connectable": {
-        "matches": ["http://clarify-this.com/", "https://clarify-this.herokuapp.com/",
-            "https://clarify-this-staging.herokuapp.com/", "http://localhost:3000/"]
+        "matches": [
+            "http://clarify-this.com/",
+            "https://clarify-this.herokuapp.com/",
+            "https://clarify-this-staging.herokuapp.com/",
+            "http://localhost:4001/"
+        ]
     },
     "background": {
         "service_worker": "background.js"
-    },
-
-    "content_scripts": [ 
-      { 
-        "matches": [ "<all_urls>" ], 
-        "js": [ "content.js" ], 
-        "run_at": "document_start" 
-      } 
-    ] 
+    }
 }

@@ -1,30 +1,13 @@
 {
-  "name": "clarify-this",
-  "version": "0.1.0",
-  "private": true,
-  "description": "Designing for Real People project.",
-  "main": "index.js",
+  "name": "clarify",
+  "description": "Making the web accessible for everyone",
+  "version": "1.0.0",
+  "main": "",
   "engines": {
     "node": "16.13.1"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server/index.js",
-    "heroku-postbuild": "cd client && npm install && npm run build"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git@gitlab.doc.ic.ac.uk:nf20/drp.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "body-parser": "^1.20.0",
-    "cors": "^2.8.5",
-    "dotenv": "^16.0.1",
-    "express": "^4.18.1",
-    "pusher": "^5.1.0-beta",
-    "redis": "^4.1.0"
+    "start": "npm start --prefix server",
+    "heroku-postbuild": "cd client && npm install && npm run build && cd ../server && npm install"
   }
 }

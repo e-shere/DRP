@@ -1,13 +1,14 @@
-import { FormEvent, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import { Card, CardContent, CardActionArea, Typography, ToggleButtonGroup, ToggleButton, Button, Box } from "@mui/material";
 import Pusher from "pusher-js";
-import axios from "axios";
-import { getDbStyle, setDbStyle, getAllStyles } from "./styleDB";
-import Style from "./style";
+
 import "./App.css";
-import Button from '@mui/material/Button';
-import DataTable from "./preset-selection";
-import { triggerMessageToExtension } from "./scripts";
-import { Dialog } from "@mui/material";
+import { StyleSettings } from "./common/Settings"
+import { Preset, DEFAULT_PRESET } from "./common/domain";
+import { getAllPresets } from "./styleDB";
+import { updatePage } from "./pageStyle";
+import Style from "./style";
+import { sendPresetToExtension } from "./scripts";
 
 // this hack is required because env variables are not visible from the frontend
 const url = window.location.href;
@@ -17,83 +18,134 @@ const PRODUCTION = !url.includes("staging") && !url.includes("localhost");
 // TODO: Fetch env vars from the server (they are public so should not be security problem for now)
 var PUSHER_KEY = PRODUCTION ? "6dbf0a6609c4bb0901fb" : "f3244147a7aa2248499d";
 const PUSHER_CLUSTER = "eu";
-
 const PUSHER_CHANNEL = "clarify";
 const SUBMIT_EVENT = "submit";
-const ADD_TO_EXTENSION = "addex";
+
+export const ROOT_DEMO_PAGE = "root-demo-page";
 
 function App() {
-  const [styles, setStyles] = useState<Style[]>([]);
+  const [preset, setPreset] = useState<Preset>(DEFAULT_PRESET);
+  const [styleChanged, setStyleChanged] = useState<boolean>(true);
+  const [dbPresets, setDbPresets] = useState<Style[]>([]);
 
   // Binding to update styles in real time
   useEffect(() => {
     if (PRODUCTION || STAGING) {
       // subscribe to pusher only in production (to be isolated when runnig locally)
       const pusher = new Pusher(PUSHER_KEY, { cluster: PUSHER_CLUSTER })
-      pusher.subscribe(PUSHER_CHANNEL).bind(SUBMIT_EVENT, () => getAllStyles().then(setStyles))
-      return (() => pusher.unsubscribe(PUSHER_CHANNEL))
+      /* Pull from database */
+      getAllPresets().then(setDbPresets);
+      pusher.subscribe(PUSHER_CHANNEL).bind(SUBMIT_EVENT, () => getAllPresets().then(setDbPresets));
+      return (() => pusher.unsubscribe(PUSHER_CHANNEL));
+    } else {
+      getAllPresets().then(setDbPresets);
     }
   }, []);
 
-  useEffect(() => {getAllStyles().then(setStyles)}, []);
+  useEffect(() => {
+    updatePage({ styleChanged: styleChanged, presets: [preset] }, preset);
+  }, [preset, styleChanged]);
 
   return (
     <div className="App">
       <header className="App-header">
-          {Form()}
-          {DataTable(styles)}
+        <div>
+          <h1> Clarify </h1>
+          <h2> Making the web accessible for everyone with custom styles and layouts. </h2>
+        </div>
       </header>
+      {Demo(preset, setPreset, styleChanged, setStyleChanged)}
+      <div className="popular-cards-header">
+        <h2>Popular Designs</h2>
+        <div className="popular-cards">
+          {/* onClick on the card, update the dbPreset variable, this will re-render this component */}
+          {dbPresets.sort((s1: Style, s2: Style) => { return s2.gId - s1.gId; }).map(style => {
+            return (<div className="card">{BgCard(style.bgColor, style.font, style.gId, preset, setPreset)}</div>);
+          })}
+        </div>
+      </div>
     </div>
   );
 }
 
-function Form() {
-  const [font, setFont] = useState("Open Sans");
-  const [fontSize, setFontSize] = useState(12);
-  const [bgColor, setBgColor] = useState("#FFFFFF");
+function DemoPage() {
+  return (
+    <div id={ROOT_DEMO_PAGE}>
+      <div className="demo-page">
+        <h1> This is a demo. Try out the features! </h1>
+        <div className="demo-labelled-img">
+          <p className="demo-lorem"> Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. </p>
+          <img src="logo.png" />
+        </div>
+        <div className="demo-list-link">
+          <div className="demo-list">
+            <p>Here is a list: </p>
+            <ul>
+              <li key={1}>I have</li>
+              <li key={2}>Got to be</li>
+              <li key={3}>Honest</li>
+            </ul>
+          </div>
+          <div className="demo-link">
+            <p>Here is a link: </p>
+            <a href="https://www.imperial.ac.uk/">www.imperial.ac.uk</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
-  function handleSubmit(event: FormEvent) {
-    event.preventDefault(); // Stop page refresh
-    const style = new Style(font, fontSize, bgColor);
-
-    // Pusher submit event 
-    axios.post(`/${SUBMIT_EVENT}`, style);
-
-    // Update db
-    setDbStyle(style);
-  }
+function Demo(preset: Preset, setPreset: (_: Preset) => void, styleChanged: boolean, setStyleChanged: (_: boolean) => void) {
+  const [expanded, setExpanded] = useState<string | false>(false);
 
   return (
-    <div>
-    <form className="preset-form" onSubmit={handleSubmit}>
-      <label  >Font</label>
-      <select value={font} onChange={event => setFont(event.target.value)}>
-        <option value="Open Sans">Open Sans</option>
-        <option value="Comic Sans">Comic Sans</option>
-        <option value="Roboto">Roboto</option>
-      </select>
-      <label>Font Size</label>
-      <input
-        type="number"
-        width={"50%"}
-        value={fontSize}
-        onChange={event => setFontSize(Number(event.target.value))} placeholder="font size"
-      />
-      <label>Background Colour</label>
-      <input
-        type="color"
-        value={bgColor}
-        onChange={event => setBgColor(event.target.value)}
-      />
-      <input type="submit" value="SAVE STYLE TO YOUR PRESETS" style={{width:500, height: 50, fontSize: 20, font: "Courier New (monospace)"}}/>  
-      {/* <div> {[
-      <Button className="style-submission" variant="contained" onClick={handleSubmit}
-       style={{width:500, height: 50, fontSize: 20, font: "Courier New (monospace)"}}>
-        Save style to your presets</Button>]}
-        </div> */}
-    </form>   
-    
-    </div>      
+    <div className="demo-header">
+      <h2>Demo</h2>
+      <div className="demo">
+        <div className="demo-menu">
+          <div className="demo-toggle">
+            <ToggleButtonGroup
+              value={styleChanged ? "clarify" : "original"}
+              exclusive
+              onChange={(_, x) => setStyleChanged(x === "clarify")}
+            >
+              <ToggleButton value="original">Original</ToggleButton>
+              <ToggleButton value="clarify">Clarify</ToggleButton>
+            </ToggleButtonGroup>
+          </div>
+          <div className="demo-download">
+            <Button
+              variant="outlined"
+              onClick={() => sendPresetToExtension(preset)}
+            >
+              Download this preset
+            </Button>
+          </div>
+          {StyleSettings(preset, setPreset, expanded, setExpanded)}
+        </div>
+        {DemoPage()}
+      </div>
+    </div>
+  );
+}
+
+function BgCard(bgColor: string, font: string, freq: number, preset: Preset, setPreset: (_: Preset) => void) {
+  return (
+    <Card>
+      <CardActionArea style={{ backgroundColor: bgColor }} onClick={e => setPreset({ ...preset, bgColor: bgColor, font: font })}>
+        <CardContent>
+          <Typography gutterBottom variant="h6" component="div" >
+            Recommended by {freq} users
+            {/* recommend this background color and font */}
+          </Typography>
+          <Typography variant="body1" style={{ fontFamily: font }}>
+            {font}<br />
+            Click to apply!
+          </Typography>
+        </CardContent>
+      </CardActionArea>
+    </Card>
   );
 }
 

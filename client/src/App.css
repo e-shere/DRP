@@ -1,81 +1,153 @@
+h1 {
+  text-align: center;
+  margin: 0;
+  padding-top: 1%;
+  font-size: 1.5em;
+}
+
+h2 {
+  text-align: center;
+  padding-top: 1%;
+  font-size: 1em;
+}
+
 .App {
-  text-align: center;
-}
-
-.App-header {
-  padding: 0;
   background-color: #d9e8fa;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
   font-size: calc(10px + 2vmin);
+  padding-bottom: 1%;
 }
 
-.preset-form {
-  margin-top: 2em;
-  border-radius: 5px;
-  background-color: #f2f2f2;
-  padding: 20px;
+.popular-cards-header {
+  width: 90%;
+  margin-left: 5%;
+  padding-bottom: 2%;
+  background-color: white;
+}
+
+.popular-cards {
+  height: 50vh;
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  overflow-y: scroll;
+}
+
+.card {
+  flex-basis: 25%;
+  margin-inline: 2%;
+  margin-bottom: 2%;
+}
+
+/* Demo */
+.demo-header {
+  background-color: white;
+  width: 90%;
+  margin-left: 5%;
+  margin-bottom: 2%;
+}
+
+.demo {
+  background-color: white;
+  display: inline-flex;
+}
+
+.demo-menu {
+  min-width: 30%;
+  margin-left: 1em;
+  margin-bottom: 1em;
+}
+
+.demo-toggle {
   text-align: center;
-  background-color: #f8f2e6;
+  padding: 5%;
 }
 
-.style-selection {
-  margin-top: 2em;
-  width: 58%;
+.demo-download {
+  margin-bottom: 5%;
   text-align: center;
 }
 
-.table-title {
-  text-align: center;
+/* Settings */
+
+.accordion {
+  position: relative;
 }
 
-.style-table {
-  margin-bottom: 2em;
-  text-align: center;
-  background-color: #f8f2e6;
-  font-size:25px;
+.accordion-overlay {
+  top: 0;
+  right: 0;
+  margin-top: 0.3em;
+  position: absolute;
 }
 
-.style-submission{
-  text-align: center;
-  font-size:25px;
-  background-color: rgb(169, 226, 226);
-  margin-bottom: 2em;
+.setting {
+  margin-bottom: 10%;
 }
 
+/* Demo page */
 
-input[type=text],
-input[type=color],
-input[type=number],
-select {
+/* labelled image */
+.demo-labelled-img {
+  text-align: center;
+  display: inline-flex;
+  margin-top: 2%;
+  margin-bottom: 2%;
+}
+
+.demo-labelled-img img {
+  height: 10%;
+  width: 20%;
+  margin-left: 2%;
+}
+
+.demo-labelled-img p {
+  margin: auto 0;
+}
+
+.demo-labelled-img p {
+  margin-left: 3%;
+}
+
+/* list and link */
+
+.demo-list-link {
   width: 100%;
-  padding: 12px 20px;
-  margin: 8px 0;
-  display: inline-block;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
-  font-size:25px;
+  display: inline-flex;
+  justify-content: space-evenly;
 }
 
-input[type=color] {
-  padding: 2px 2px;
+.demo-list-link p {
+  padding-left: 5%;
+  text-align: left;
 }
 
-input[type=submit] {
-  width: 100%;
-  background-color: #1976d2;
-  color: rgb(255, 255, 255);
-  padding: 14px 20px;
-  margin: 8px 0;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+.demo-list-link ul {
+  text-align: left;
 }
 
-input[type=submit]:hover {
-  background-color: #42a5f5;
+.demo-list-link div {
+  border: 1px solid;
+  flex-basis: 40%;
+  text-align: center;
+}
+
+.demo-list {
+  background-color: rgb(200, 200, 200);
+}
+
+.demo-link {
+  background-color: rgb(180, 180, 180);
+}
+
+/* General */
+.demo-page h1 {
+  font-size: 1.3em;
+}
+
+.demo-page {
+  padding: 1%;
+  text-align: left;
+  margin: 1em;
+  font-size: 0.5em;
+  border: 0.1em solid;
 }

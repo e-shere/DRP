@@ -1,48 +1,54 @@
-import { useEffect } from "react";
+import { useLayoutEffect, useState } from "react";
 import { useChromeStorageSync } from 'use-chrome-storage';
 
 import Main from "./Main";
 import "./App.css";
 import { updatePage } from "./pageStyle";
+import { Presets } from "./Preset";
+import { DEFAULT_PRESET } from "./common/domain";
+import { Dialog, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
 
 export const TITLE = "Clarify.";
 export const WEBAPP_URL = "https://clarify-this.herokuapp.com/";
 
-export interface UserSettings {
-  styleChanged: boolean,
-  bgChanged: boolean;
-  fontChanged: boolean;
-  bgColor: string;
-  font: string;
-  fontSize: number;
-  letterSpacing: number;
-  lineSpacing: number;
-  fontColor: string;
-}
-
 function App() {
+  const [deleteLabel, setDeleteLabel] = useState("");
   const [settings, setSettings] = useChromeStorageSync(
     "settings", {
-    styleChanged: true,
-    bgChanged: false,
-    fontChanged: false,
-    bgColor: "#ffffff", /* white */
-    font: "Arial",
-    fontSize: 0,
-    letterSpacing: 0,
-    lineSpacing: 0,
-    fontColor: "black",
+    styleChanged: false,
+    presets: [DEFAULT_PRESET],
   });
 
-  /* Load settings from chrome sync */
-  useChromeStorageSync("settings", setSettings);
+  const [preset, setPreset] = useChromeStorageSync('preset', DEFAULT_PRESET);
+  const [tab, setTab] = useState("error");
+  const [disbaled, setDisabled] = useState(false);
+
+  useLayoutEffect(() => {
+    chrome.tabs.query({ active: true, currentWindow: true },
+      tab => { setTab(tab[0].url ?? "error") }
+    );
+  }, []);
 
   /* Refresh page on any settings change */
-  useEffect(() => { updatePage(settings) }, [settings]);
+  useLayoutEffect(() => {
+    if (tab.includes("clarify")) {
+      setDisabled(true);
+    } else {
+      updatePage(settings, preset);
+    }
+  }, [settings, preset]);
+
 
   return (
     <div className="App">
-      {Main(settings, setSettings)}
+      <Dialog open={disbaled}>
+        <DialogTitle>Extension Disabled</DialogTitle>
+        <DialogContent>
+          <DialogContentText>Disable on Clarify for demonstration purposes.</DialogContentText>
+        </DialogContent>
+      </Dialog>
+      {Main(settings, preset, setSettings, setPreset)}
+      {Presets(settings, deleteLabel, setSettings, setPreset, setDeleteLabel)}
     </div>
   )
 }
