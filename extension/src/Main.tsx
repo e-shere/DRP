@@ -20,7 +20,7 @@ function Main(
     <div style={{ height: settings.presets.length == 0 ? "100%" : "77%" }} className="Main">
       <header>
         <div className="header-button">
-          <IconButton color="primary" target="_blank" href="https://clarify-this.herokuapp.com">
+          <IconButton color="primary" target="_blank" href="https://clarify-this-staging.herokuapp.com">
             <InfoIcon />
           </IconButton>
         </div>
