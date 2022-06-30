@@ -119,7 +119,7 @@ app.listen(PORT, () => {
   }
   
   function assignGroupID(rgb) {
-    return affixColourRange(rgb.b) + ":" + affixColourRange(rgb.g) + ":" + affixColourRange(rgb.r);
+    return affixColourRange(rgb.r) + ":" + affixColourRange(rgb.g) + ":" + affixColourRange(rgb.b);
   }
   
   function affixColourRange(colour) {
