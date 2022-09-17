@@ -9,5 +9,8 @@
   "scripts": {
     "start": "npm start --prefix server",
     "heroku-postbuild": "cd client && npm install && npm run build && cd ../server && npm install"
+  },
+  "devDependencies": {
+    "@types/react-color": "^3.0.6"
   }
 }
